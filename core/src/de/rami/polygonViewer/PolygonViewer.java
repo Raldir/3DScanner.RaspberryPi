@@ -59,7 +59,7 @@ public class PolygonViewer implements ApplicationListener {
 	public int pictureCounter = 0;
 	public boolean readHoehe = true;
 	public Bildpunkte.Line l = new Bildpunkte.Line();
-	
+	public ArrayList<File> bilder = new ArrayList<>();
 	
 	/**
 	 * Intiialisierung der Anwendung: Einrichten der libgdx Umgebung, starten des Servers
@@ -104,14 +104,15 @@ public class PolygonViewer implements ApplicationListener {
 					}
 					readHoehe = false;
 				}
-				int number = pictureCounter;
+				bilder.add(f);
+//				int number = pictureCounter;
 				pictureCounter++;
 				//Die aus dem Bild ausgewerten Punkte werden abgespeichert
 				ArrayList<Vec2> points = Bildpunkte.getGesamtPoints(f, l);
 				
-				if(pictureData.size() == number){
+//				if(pictureData.size() == number){
 					pictureData.add(points);
-				}
+//				}
 			});
 			server.setCloseAction(() -> {
 				setupModel(VerticesGeneration.genVerticesTest(pictureData));

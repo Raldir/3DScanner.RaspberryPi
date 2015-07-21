@@ -10,6 +10,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import de.rami.polygonViewer.Exec;
 import de.rami.polygonViewer.PolygonViewer;
+import de.rami.polygonViewer.desktop.DesktopLauncher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,9 +49,12 @@ public class UIController implements Initializable  {
 	private Text lastCalibrationDate;
 	
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
+	
+	public static int bilderZahl = 32;
+	
+	
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
-	private int bilderZahl = 32;
 	
 	/**
 	 * handles the calibration provides a popup window with further information.
@@ -94,12 +98,10 @@ public class UIController implements Initializable  {
 			case 'h': bilderZahl = 64;
 		}
 		System.out.println(bilderZahl);
-		
 		qualityChoose.setText("Qualit‰t: "+ selectedMenuItem.getText());
 		//System.out.println(qualitySelected + " Qualit√§t Selektiert");	
 		System.out.println(selectedMenuItem.getText() + qualitySelected );
 	}
-	
 	/**
 	 * Handles the Start Button so that it changes the text from  Start to Abbrechen and back.
 	 * @param e
@@ -107,8 +109,7 @@ public class UIController implements Initializable  {
 	@FXML
 	private void handleStart(ActionEvent e){
 		if(startButton.getText() == "Start"){
-			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-			new LwjglApplication(new PolygonViewer(), config);
+			DesktopLauncher.main(null);
 			try {
 				Exec.connectfromPItoServer(bilderZahl);
 			} catch (IOException e1) {

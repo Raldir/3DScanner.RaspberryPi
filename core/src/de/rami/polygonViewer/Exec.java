@@ -1,8 +1,10 @@
 package de.rami.polygonViewer;
+
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
@@ -17,14 +19,13 @@ public class Exec {
 		
     public static void connectfromPItoServer(int fotosAnzahl)
             throws IOException {
-    	
     	final String ipServer = Inet4Address.getLocalHost().getHostAddress();
-    	System.out.println(ipServer);
-    	System.out.println(fotosAnzahl);
+//    	System.out.println(ipServer);
+//    	System.out.println(fotosAnzahl);
         final SSHClient ssh = new SSHClient();
         ssh.addHostKeyVerifier(new NullHostKeyVerifier());
        
-        ssh.connect("192.168.1.10", 22);
+        ssh.connect(InetAddress.getByName("raspberrypi").getHostAddress(), 22);
        
         try {
          ssh.authPassword("pi", "raspberry");
@@ -41,5 +42,14 @@ public class Exec {
         } finally {
             ssh.disconnect();
         }
+    }
+    
+    public static void main(String[] args){
+    	try {
+			connectfromPItoServer(16);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

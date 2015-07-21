@@ -27,6 +27,14 @@ public class Main extends Application {
     }
  
     public static void main(String[] args) {
+//    	9,99999
+//    	9 + 9 * 1/10^1
+//    	9/ 9- 1/10
+//    	9* 1/10 ^1 + 9 * 1/10 ^2 = 9 * (1/10^1 + 1/10 ^2....)
+//    	0,1 + 0,01 + 0,001 + 1000 = sum(10i) = n * 
+//    	a - k^n / a-k
+//    	double i =  9 * 0.111111111111111;
+//    	System.out.println(i);
         launch(args);
     }
 }
