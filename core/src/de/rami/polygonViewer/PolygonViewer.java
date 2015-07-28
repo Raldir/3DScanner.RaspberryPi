@@ -11,8 +11,10 @@ import java.util.Arrays;
 
 
 
+
 import javax.imageio.ImageIO;
 import javax.management.RuntimeErrorException;
+
 
 
 
@@ -45,7 +47,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
-import de.rami.polygonViewer.BildData.Line;
 
 public class PolygonViewer implements ApplicationListener {
 	
@@ -61,7 +62,7 @@ public class PolygonViewer implements ApplicationListener {
 	public ModelBuilder modelBuilder = null;
 	
 	public ArrayList<ArrayList<Vec2>> pictureData = new ArrayList<>();
-	public BildData.Line l = new BildData.Line();
+	public Line l = new Line();
 	public static ArrayList<File> bilder = new ArrayList<>();
 	
 	private boolean readHoehe = true;
@@ -103,8 +104,8 @@ public class PolygonViewer implements ApplicationListener {
 			Server server = new Server(1234);
 			server.setReceiveAction((File f) -> {
 				if(readHoehe){
-					l = BildData.getHoehe(f);
-					if(l.y1 - l.y2 < Bildpunkte.bildskalierung){
+					l = new Line().getHoehe(f);
+					if(l.y1 - l.y2 <  Settings.bildskalierung){
 						System.out.println("der ausgewählte Schewellenwert ist zu hoch oder das Bild zu dunkel");
 					}
 					readHoehe = false;

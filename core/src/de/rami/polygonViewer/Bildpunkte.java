@@ -11,7 +11,7 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
-import de.rami.polygonViewer.BildData.Line;
+import de.rami.polygonViewer.Line;
 
 //Die Klasse ist verantwortlich fuer die Auswertung der Punkte eines Bildes
 
@@ -20,23 +20,6 @@ public class Bildpunkte{
 	/**
 	 * Bestimmt die benˆtigte Helligkeit[genauer RGB Wert], damit ein Pixel vom Algorithmus wahrgenommen wird.
 	 */
-	public static int obererSchwellenWert = 200;
-	public static final int untererschwellenWert = obererSchwellenWert / 2;
-	
-	/**
-	 * Anpassung der Verhaeltnisse von den X und Y Werten der Punkte
-	 */
-	public static int skalierungswertX = 30;
-	public static int skalierungswertY = 90;
-	
-	/**
-	 * Skaliert das Objekt in Bezug auf die "Plygonanzahl": Umso grˆﬂer der Wert, umso weniger
-	 * Polygone hat das Objekt (bildkskalierung 15 -> Objekt hat nur 1 / 15 Punkte, die es bei der standard-
-	 * m‰ﬂigen durchfuehrung[in x Richtung n Punkte, welche identisch zur Anzahl der Bilder ist, y die hoehe des ubergebenen Bildes] haette.
-	 */
-	public static float bildskalierung = 15f;
-	public static float bereichsSkalierung = 12;
-	
 	
 	private BufferedImage image;
 	private LinkedList<Vec2> pointsbefore = new LinkedList<Vec2>();
@@ -48,7 +31,7 @@ public class Bildpunkte{
 			image = ImageIO.read(f);
 			Line hoehe = l;
 			System.out.println("----" + hoehe.y1 + "   " + hoehe.y2);
-		punkte = skalierung(bildskalierung, hoehe);
+		punkte = skalierung(Settings.bildskalierung, hoehe);
 		}catch (IOException e){
 			e.printStackTrace();
 		}
@@ -64,9 +47,9 @@ public class Bildpunkte{
 	 * @param image
 	 * @return
 	 */
-	public LinkedList<Vec2> getPointsinLine(int line, BufferedImage image){
-		int oSchwellenWert = getLinieSchwellenWert(line, image, obererSchwellenWert, 1);
-		int uschwellenWert = untererschwellenWert/obererSchwellenWert * oSchwellenWert;
+	public LinkedList<Vec2> PointsinLine(int line, BufferedImage image){
+		int oSchwellenWert = getLinieSchwellenWert(line, image,  Settings.obererSchwellenWert, 1);
+		int uschwellenWert = Settings.untererschwellenWert/ Settings.obererSchwellenWert * oSchwellenWert;
 		System.out.println(oSchwellenWert);
 		if(oSchwellenWert == 1){
 			return pointsbefore;
@@ -127,7 +110,7 @@ public class Bildpunkte{
 		for(int i = 0; i < values.size(); i++){
 			gesamtvalue += values.get(i);
 		}
-		return new Vec2((image.getWidth() - ((gesamtvalue / values.size()))) / skalierungswertX, ((image.getHeight()- points.get(0).y)) / skalierungswertY);
+		return new Vec2((image.getWidth() - ((gesamtvalue / values.size()))) /  Settings.skalierungswertX, ((image.getHeight()- points.get(0).y)) /  Settings.skalierungswertY);
 	}
 	
 	public static class Point{
@@ -169,10 +152,10 @@ public class Bildpunkte{
 	 * @return
 	 */
 	public ArrayList<Vec2> skalierung(float skalierungswert, Line hoehe){
-		double nbereich = bereichsSkalierung / 2;
+		double nbereich =  Settings.bereichsSkalierung / 2;
 		int nbereich2 = 0;
 		if(nbereich % 2 != 0){
-			nbereich2 = (int) (bereichsSkalierung / 2);
+			nbereich2 = (int) ( Settings.bereichsSkalierung / 2);
 			nbereich = nbereich2 + 1;
 		}
 		ArrayList<Vec2> punkte = new ArrayList<Vec2>();
@@ -181,7 +164,7 @@ public class Bildpunkte{
 			Point p = new Point();
 			for(int j = 0; j < nbereich; j++){
 				if((i + j) < image.getHeight()){
-					temp = getMiddlePoint(getPointsinLine(image.getHeight() - (i + j), image), image);
+					temp = getMiddlePoint(PointsinLine(image.getHeight() - (i + j), image), image);
 				}
 				p.v1 += temp.x;
 				p.v2 += temp.y;
@@ -189,12 +172,12 @@ public class Bildpunkte{
 			}
 			for(int j = 1; j < nbereich2; j++){
 				if((i + j) < image.getHeight()){
-					temp = getMiddlePoint(getPointsinLine(image.getHeight() - (i - j), image), image);
+					temp = getMiddlePoint(PointsinLine(image.getHeight() - (i - j), image), image);
 				}
 				p.v1 += temp.x;
 				p.v2 += temp.y;
 			}
-			punkte.add(new Vec2((p.v1 / bereichsSkalierung), (p.v2 / bereichsSkalierung)));
+			punkte.add(new Vec2((p.v1 /  Settings.bereichsSkalierung), (p.v2 / Settings.bereichsSkalierung)));
 		}
 		return punkte;
 	}

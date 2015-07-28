@@ -3,12 +3,29 @@ package de.rami.polygonViewer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import de.rami.polygonViewer.BildData.Line;
+import de.rami.polygonViewer.Line;
 
 public class Settings {
 	
 	//Zur Optimierung der Struktur wird f¸r den Mittelwert eine Eigene Klasse festgelegt.
 	public static final float middle = 10.36f;
+	
+	public static int obererSchwellenWert = 200;
+	public static final int untererschwellenWert = obererSchwellenWert / 2;
+	
+	/**
+	 * Anpassung der Verhaeltnisse von den X und Y Werten der Punkte
+	 */
+	public static int skalierungswertX = 30;
+	public static int skalierungswertY = 90;
+	
+	/**
+	 * Skaliert das Objekt in Bezug auf die "Plygonanzahl": Umso grˆﬂer der Wert, umso weniger
+	 * Polygone hat das Objekt (bildkskalierung 15 -> Objekt hat nur 1 / 15 Punkte, die es bei der standard-
+	 * m‰ﬂigen durchfuehrung[in x Richtung n Punkte, welche identisch zur Anzahl der Bilder ist, y die hoehe des ubergebenen Bildes] haette.
+	 */
+	public static float bildskalierung = 15f;
+	public static float bereichsSkalierung = 12;
 
 	
 	/**
@@ -18,8 +35,8 @@ public class Settings {
 	 * @throws IOException
 	 */
 	public ArrayList<Vec2> createMiddle(File f) throws IOException{
-		Line width = BildData.getWidth(f);
-		Line hoehe = BildData.getHoehe(f);
+		Line width = new Line().getWidth(f);
+		Line hoehe = new Line().getHoehe(f);
 		return new Bildpunkte(f, hoehe).skalierung(width.y1 - width.y2, hoehe);
 	}
 	
