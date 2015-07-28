@@ -20,12 +20,12 @@ public class Exec {
     public static void connectfromPItoServer(int fotosAnzahl)
             throws IOException {
     	final String ipServer = Inet4Address.getLocalHost().getHostAddress();
-//    	System.out.println(ipServer);
+//    	System.out.println(Inet4Address.getAllByName("raspberrypi"));
 //    	System.out.println(fotosAnzahl);
         final SSHClient ssh = new SSHClient();
         ssh.addHostKeyVerifier(new NullHostKeyVerifier());
-       
-        ssh.connect(InetAddress.getByName("raspberrypi").getHostAddress(), 22);
+//        for(int i = 0; i < InetAddress.)
+        ssh.connect("192.168.1.12", 22);
        
         try {
          ssh.authPassword("pi", "raspberry");
@@ -42,14 +42,5 @@ public class Exec {
         } finally {
             ssh.disconnect();
         }
-    }
-    
-    public static void main(String[] args){
-    	try {
-			connectfromPItoServer(16);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 }

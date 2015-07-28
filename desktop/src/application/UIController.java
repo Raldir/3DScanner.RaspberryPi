@@ -1,7 +1,9 @@
 package application;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -50,12 +52,11 @@ public class UIController implements Initializable  {
 	
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
-	public static int bilderZahl = 32;
+	public static int bilderZahl = 8;
 	
 	
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
-	
 	/**
 	 * handles the calibration provides a popup window with further information.
 	 * @param e
@@ -63,6 +64,7 @@ public class UIController implements Initializable  {
 	@FXML
 	private void handleCalibrate(ActionEvent e)
 	{
+//		ArrayList <File> bilder = PolygonViewer.bilder;
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Kalibrierungsanleitung");
 		alert.setHeaderText(null);
@@ -109,7 +111,8 @@ public class UIController implements Initializable  {
 	@FXML
 	private void handleStart(ActionEvent e){
 		if(startButton.getText() == "Start"){
-			DesktopLauncher.main(null);
+			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+			new LwjglApplication(new PolygonViewer(), config);
 			try {
 				Exec.connectfromPItoServer(bilderZahl);
 			} catch (IOException e1) {

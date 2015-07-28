@@ -10,8 +10,10 @@ import java.util.Arrays;
 
 
 
+
 import javax.imageio.ImageIO;
 import javax.management.RuntimeErrorException;
+
 
 
 
@@ -43,9 +45,12 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
-import de.rami.polygonViewer.Bildpunkte.Line;
+import de.rami.polygonViewer.BildData.Line;
 
 public class PolygonViewer implements ApplicationListener {
+	
+	public static boolean renderModell = false;
+	
 	public Environment environment;
 	public PerspectiveCamera cam;
 	public CameraInputController camController;
@@ -54,12 +59,12 @@ public class PolygonViewer implements ApplicationListener {
 	public ModelInstance instance;
 	public Material material = null;
 	public ModelBuilder modelBuilder = null;
-	public Server server = null;
+	
 	public ArrayList<ArrayList<Vec2>> pictureData = new ArrayList<>();
-	public int pictureCounter = 0;
-	public boolean readHoehe = true;
-	public Bildpunkte.Line l = new Bildpunkte.Line();
-	public ArrayList<File> bilder = new ArrayList<>();
+	public BildData.Line l = new BildData.Line();
+	public static ArrayList<File> bilder = new ArrayList<>();
+	
+	private boolean readHoehe = true;
 	
 	/**
 	 * Intiialisierung der Anwendung: Einrichten der libgdx Umgebung, starten des Servers
@@ -95,10 +100,10 @@ public class PolygonViewer implements ApplicationListener {
 	 */
 	public void setupServer(){
         try {
-			server = new Server(1234);
+			Server server = new Server(1234);
 			server.setReceiveAction((File f) -> {
 				if(readHoehe){
-					l = Bildpunkte.getHoehe(f);
+					l = BildData.getHoehe(f);
 					if(l.y1 - l.y2 < Bildpunkte.bildskalierung){
 						System.out.println("der ausgewählte Schewellenwert ist zu hoch oder das Bild zu dunkel");
 					}
@@ -106,9 +111,8 @@ public class PolygonViewer implements ApplicationListener {
 				}
 				bilder.add(f);
 //				int number = pictureCounter;
-				pictureCounter++;
 				//Die aus dem Bild ausgewerten Punkte werden abgespeichert
-				ArrayList<Vec2> points = Bildpunkte.getGesamtPoints(f, l);
+				ArrayList<Vec2> points = new Bildpunkte(f, l).getPunkte();
 				
 //				if(pictureData.size() == number){
 					pictureData.add(points);
@@ -140,6 +144,14 @@ public class PolygonViewer implements ApplicationListener {
         modelBuilder.part("asdf", mesh, GL20.GL_TRIANGLES, material);
         model = modelBuilder.end();
         instance = new ModelInstance(model);
+	}
+	
+	public void renderNewModell(){
+		pictureData.clear();
+		for(int i = 0 ; i < bilder.size(); i++){
+			pictureData.add(new Bildpunkte(bilder.get(i), l).getPunkte());
+		}
+	setupModel(VerticesGeneration.genVerticesTest(pictureData));
 	}
 	
 	/**
@@ -175,5 +187,7 @@ public class PolygonViewer implements ApplicationListener {
 
 	@Override
 	public void resume() {
+		model.dispose();
+		renderNewModell();
 	}
 }

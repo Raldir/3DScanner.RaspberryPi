@@ -11,55 +11,39 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
+import de.rami.polygonViewer.BildData.Line;
+
 //Die Klasse ist verantwortlich fuer die Auswertung der Punkte eines Bildes
 
 public class Bildpunkte{
 	
-	static ArrayList<Integer> pointsX = new ArrayList<Integer>();
-	static ArrayList<Integer> pointsY = new ArrayList<Integer>();
-	static BufferedImage image;
-	static LinkedList<Vec2> pointsbefore = new LinkedList<Vec2>();
-	
 	/**
 	 * Bestimmt die benötigte Helligkeit[genauer RGB Wert], damit ein Pixel vom Algorithmus wahrgenommen wird.
 	 */
-	public static final int obererSchwellenWert = 250;
-	public static final int untererschwellenWert = 150;
+	public static int obererSchwellenWert = 200;
+	public static final int untererschwellenWert = obererSchwellenWert / 2;
 	
 	/**
 	 * Anpassung der Verhaeltnisse von den X und Y Werten der Punkte
 	 */
-	final static int skalierungswertX = 30;
-	final static int skalierungswertY = 90;
+	public static int skalierungswertX = 30;
+	public static int skalierungswertY = 90;
 	
 	/**
 	 * Skaliert das Objekt in Bezug auf die "Plygonanzahl": Umso größer der Wert, umso weniger
 	 * Polygone hat das Objekt (bildkskalierung 15 -> Objekt hat nur 1 / 15 Punkte, die es bei der standard-
 	 * mäßigen durchfuehrung[in x Richtung n Punkte, welche identisch zur Anzahl der Bilder ist, y die hoehe des ubergebenen Bildes] haette.
 	 */
-	public final static float bildskalierung = 15f;
-	final static float bereichsSkalierung = 12;
+	public static float bildskalierung = 15f;
+	public static float bereichsSkalierung = 12;
 	
-	/**
-	 * Der zu betrachtende Bereich des Bildes wird festgelegt, und mit der Information die Methode "Skalierung" aufgerufen
-	 * @param f
-	 * @return
-	 */
-	public static ArrayList<Vec2> getGesamtPoints(File f){
-		ArrayList<Vec2> punkte= new ArrayList<Vec2>();
-		Line hoehe = getHoehe(f);
-		punkte = skalierung(bildskalierung, hoehe);
-		return punkte;
-	}
 	
-	/**
-	 * Identische Methode, jedoch wird der zu betrachtende Bereich als Parameter uebergeben.
-	 * @param f
-	 * @param l
-	 * @return
-	 */
-	public static ArrayList<Vec2> getGesamtPoints(File f, Line l){
-		ArrayList<Vec2> punkte= new ArrayList<Vec2>();
+	private BufferedImage image;
+	private LinkedList<Vec2> pointsbefore = new LinkedList<Vec2>();
+	private ArrayList<Vec2> punkte;
+	
+	public Bildpunkte(File f, Line l){
+		punkte = new ArrayList<Vec2>();
 		try {
 			image = ImageIO.read(f);
 			Line hoehe = l;
@@ -68,78 +52,10 @@ public class Bildpunkte{
 		}catch (IOException e){
 			e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<Vec2> getPunkte(){
 		return punkte;
-	}
-	
-	static class Line{
-		public int y1, y2;
-	}
-	
-	/** 
-	 * Die Methode sucht nach der Hoehe(y Achse des Bildes) des Objektes, in der Punkte gesucht werden.
-	 * @param image
-	 * @return
-	 */
-	public static Line getHoehe(File f){
-		try {
-			image = ImageIO.read(f);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		//Es wird nach dem ersten Punkt von oben und von unten des Bildes gesucht, welcher den benötigten RGB wert hat.
-		Line l = new Line();
-		out:
-		for(int i = 0; i< image.getHeight(); i++){
-			for(int j = 0 ; j < image.getWidth(); j++){
-				if(new Color(image.getRGB(j, i)).getBlue() > obererSchwellenWert  && new Color(image.getRGB(j, i)).getRed() > obererSchwellenWert && new Color(image.getRGB(j, i)).getGreen() > obererSchwellenWert){
-					l.y1 = image.getHeight() - i;
-					break out;
-				}
-			}
-		}
-		out:
-		for(int i = image.getHeight() -1; i > 0; i--){
-			for(int j = 0 ; j < image.getWidth(); j++){
-				if(new Color(image.getRGB(j, i)).getBlue() > obererSchwellenWert  && new Color(image.getRGB(j, i)).getRed() > obererSchwellenWert && new Color(image.getRGB(j, i)).getGreen() > obererSchwellenWert){
-					l.y2 = image.getHeight() - i;
-					break out;
-				}
-			}
-		}
-		return l;
-	}
-	
-	/**
-	 * identische Methode fuer die Breite.
-	 * @param f
-	 * @return
-	 */
-	public static Line getWidth(File f){
-		try {
-			image = ImageIO.read(f);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Line l = new Line();
-		out:
-		for(int i = 0; i< image.getWidth(); i++){
-			for(int j = 0 ; j < image.getHeight(); j++){
-				if(new Color(image.getRGB(i, j)).getBlue() > obererSchwellenWert  && new Color(image.getRGB(i, j)).getRed() > obererSchwellenWert && new Color(image.getRGB(i, j)).getGreen() > obererSchwellenWert){
-					l.y1 = image.getWidth() - i;
-					break out;
-				}
-			}
-		}
-		out:
-		for(int i = image.getWidth() -1; i > 0; i--){
-			for(int j = 0 ; j < image.getHeight(); j++){
-				if(new Color(image.getRGB(i, j)).getBlue() > obererSchwellenWert  && new Color(image.getRGB(i, j)).getRed() > obererSchwellenWert && new Color(image.getRGB(i, j)).getGreen() > obererSchwellenWert){
-					l.y2 = image.getWidth() - i;
-					break out;
-				}
-			}
-		}
-		return l;
 	}
 	
 	/**
@@ -148,7 +64,7 @@ public class Bildpunkte{
 	 * @param image
 	 * @return
 	 */
-	public static LinkedList<Vec2> getPointsinLine(int line, BufferedImage image){
+	public LinkedList<Vec2> getPointsinLine(int line, BufferedImage image){
 		int oSchwellenWert = getLinieSchwellenWert(line, image, obererSchwellenWert, 1);
 		int uschwellenWert = untererschwellenWert/obererSchwellenWert * oSchwellenWert;
 		System.out.println(oSchwellenWert);
@@ -191,7 +107,7 @@ public class Bildpunkte{
 	 * @param image
 	 * @return
 	 */
-	public static Vec2 getMiddlePoint(LinkedList<Vec2> points, BufferedImage image){
+	public Vec2 getMiddlePoint(LinkedList<Vec2> points, BufferedImage image){
 		if(points.size() == 0){
 			return null;
 		}
@@ -214,11 +130,6 @@ public class Bildpunkte{
 		return new Vec2((image.getWidth() - ((gesamtvalue / values.size()))) / skalierungswertX, ((image.getHeight()- points.get(0).y)) / skalierungswertY);
 	}
 	
-	public static void main(String[] args) throws IOException{
-		 Vec2 middle = Bildpunkte.createMiddle(new File("/Users/schueler/Desktop/ServerSystem-3DScannerRPi-master/core/src/de/rami/polygonViewer/1.jpg")).get(0);
-		 System.out.println(middle.x + "   " + middle.y);
-	}
-	
 	public static class Point{
 		float v1, v2;
 	}
@@ -233,7 +144,7 @@ public class Bildpunkte{
 	 * @param untereGrenze
 	 * @return
 	 */
-	public static int getLinieSchwellenWert(int line, BufferedImage image, int obereGrenze, int untereGrenze){
+	public int getLinieSchwellenWert(int line, BufferedImage image, int obereGrenze, int untereGrenze){
 		if(obereGrenze == (untereGrenze + 1)){
 			return untereGrenze;
 		}
@@ -257,7 +168,7 @@ public class Bildpunkte{
 	 * @param hoehe
 	 * @return
 	 */
-	public static ArrayList<Vec2> skalierung(float skalierungswert, Line hoehe){
+	public ArrayList<Vec2> skalierung(float skalierungswert, Line hoehe){
 		double nbereich = bereichsSkalierung / 2;
 		int nbereich2 = 0;
 		if(nbereich % 2 != 0){
@@ -288,15 +199,6 @@ public class Bildpunkte{
 		return punkte;
 	}
 	
-	/**
-	 * Berechnet den Mittelpunkt des Objektes: Punkt, welcher die Tiefe null hat(dafuer Laser und Kamera Winkel = 0°), -> Gebrauchsanleitung
-	 * @param f
-	 * @return
-	 * @throws IOException
-	 */
-	public static ArrayList<Vec2> createMiddle(File f) throws IOException{
-		Line width = getWidth(f);
-		Line hoehe = getHoehe(f);
-		return skalierung(width.y1 - width.y2, hoehe);
-	}
+
+
 }
