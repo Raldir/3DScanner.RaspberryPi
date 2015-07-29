@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.effect.*?>
@@ -27,5 +29,24 @@
       <Button fx:id="startButton" alignment="CENTER" defaultButton="true" layoutX="264.0" layoutY="22.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="26.0" prefWidth="93.0" text="" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="20.0" />
       <Text fx:id="lastCalibrationDate" layoutX="126.0" layoutY="390.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Nie" wrappingWidth="292.0000002384186" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="126.0" />
       <Label layoutX="15.0" layoutY="377.0" text="Zuletzt kalibriert:" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="15.0" />
+      <AnchorPane layoutX="26.0" layoutY="125.0" minHeight="152.0" minWidth="360.0" prefHeight="170.0" prefWidth="360.0" AnchorPane.leftAnchor="26.0">
+         <children>
+            <Slider fx:id="obererSchwellenWert" layoutX="3.0" layoutY="1.0" majorTickUnit="51.0" max="255.0" showTickLabels="true" AnchorPane.leftAnchor="3.0" />
+            <Slider fx:id="skalierungswertX" layoutX="3.0" layoutY="34.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
+            <Slider fx:id="skalierungswertY" layoutX="3.0" layoutY="68.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
+            <Slider fx:id="bildskalierung" layoutX="3.0" layoutY="101.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
+            <Slider fx:id="bereichsSkalierung" layoutX="3.0" layoutY="136.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
+            <Label layoutX="149.0" text="obererSchwellenWert" AnchorPane.leftAnchor="149.0" />
+            <Label layoutX="149.0" layoutY="68.0" text="skalierungswertY" AnchorPane.leftAnchor="149.0" />
+            <Label layoutX="150.0" layoutY="34.0" text="skalierungswertX" AnchorPane.leftAnchor="149.0" />
+            <Label layoutX="150.0" layoutY="101.0" text="bildskalierung" AnchorPane.leftAnchor="149.0" />
+            <Label layoutX="150.0" layoutY="136.0" text="bereichsSkalierung" AnchorPane.leftAnchor="149.0" />
+            <Text fx:id="oswVal" layoutX="294.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" AnchorPane.rightAnchor="40.0" />
+            <Text fx:id="swXVal" layoutX="294.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" AnchorPane.rightAnchor="40.0" />
+            <Text fx:id="swYVal" layoutX="294.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" AnchorPane.rightAnchor="40.0" />
+            <Text fx:id="bildsVal" layoutX="294.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" AnchorPane.rightAnchor="40.0" />
+            <Text fx:id="bereichSVal" layoutX="294.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" AnchorPane.rightAnchor="40.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

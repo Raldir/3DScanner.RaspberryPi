@@ -12,6 +12,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import de.rami.polygonViewer.Exec;
 import de.rami.polygonViewer.PolygonViewer;
+import de.rami.polygonViewer.Settings;
 import de.rami.polygonViewer.desktop.DesktopLauncher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +24,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
@@ -32,27 +35,24 @@ import javafx.stage.Stage;
 public class UIController implements Initializable  {
 	
 	@FXML
-	private Button kalibrierenButton;
-	@FXML
-	private Button startButton;
+	private Button kalibrierenButton, startButton, helpButton;
 	@FXML 
 	private SplitMenuButton qualityChoose;
 	@FXML
-	private CheckMenuItem high;
-	@FXML
-	private CheckMenuItem medium;
-	@FXML
-	private CheckMenuItem low;
-	@FXML
-	private Button helpButton;
+	private CheckMenuItem high, medium, low;
 	@FXML
 	private TextFlow helpText;
 	@FXML
 	private Text lastCalibrationDate;
+	@FXML
+	private Slider obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, bereichsSkalierung;
+	@FXML
+	private Text oswVal, swXVal, swYVal, bildsVal, bereichSVal;
 	
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
 	public static int bilderZahl = 8;
+	Slider sliderArray[];
 	
 	
 	private String qualitySelected;
@@ -100,9 +100,10 @@ public class UIController implements Initializable  {
 			case 'h': bilderZahl = 64;
 		}
 		System.out.println(bilderZahl);
-		qualityChoose.setText("Qualität: "+ selectedMenuItem.getText());
+		qualityChoose.setText("Qualit\u00E4t: "+ selectedMenuItem.getText());
 		//System.out.println(qualitySelected + " QualitÃ¤t Selektiert");	
 		System.out.println(selectedMenuItem.getText() + qualitySelected );
+		// Btw \u00E4 das ist ein kleines Ã¤ in unicode http://www.bennyn.de/programmierung/java/umlaute-und-sonderzeichen-in-java.html
 	}
 	/**
 	 * Handles the Start Button so that it changes the text from  Start to Abbrechen and back.
@@ -136,6 +137,54 @@ public class UIController implements Initializable  {
         stage.setScene(scene);
         stage.show();
 	}
+	
+	private void setUpSlider(Slider slider, Text val, int pos){
+		slider.valueChangingProperty().addListener((obs, wasChanging, isChanging) -> {
+			System.out.println(wasChanging);
+		});
+		slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+    	    System.out.println("Slider Value Changed (newValue: " + newValue.intValue() + ")");
+    	    switch(pos){
+    	    case 0: Settings.obererSchwellenWert = newValue.intValue();
+    	    		val.setText(String.valueOf(newValue.intValue()));
+    	    break;
+    	    case 1: Settings.skalierungswertX = newValue.intValue();
+    	    		val.setText(String.valueOf(newValue.intValue()));
+    	    break;
+    	    case 2: Settings.skalierungswertY = newValue.intValue();
+    	    		val.setText(String.valueOf(newValue.intValue()));;
+    	    break;
+    	    case 3: Settings.bildskalierung = newValue.intValue();
+    	    		val.setText(String.valueOf(newValue.intValue()));
+    	    break;
+    	    case 4: Settings.bereichsSkalierung = newValue.intValue();
+    	    		val.setText(String.valueOf(newValue.intValue()));
+    	    break;
+    	    }
+    	});
+		
+	}
+	
+	private void setUpSliders(){
+		System.out.println("ulameta");
+		Slider[] sliderArray = {obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, bereichsSkalierung};
+		Text[] sliderVals = {oswVal, swXVal, swYVal, bildsVal, bereichSVal};
+		sliderArray[0].setValue(Settings.obererSchwellenWert);
+		sliderArray[1].setValue(Settings.skalierungswertX);
+		sliderArray[2].setValue(Settings.skalierungswertY);
+		sliderArray[3].setValue(Settings.bildskalierung);
+		sliderArray[4].setValue(Settings.bereichsSkalierung);
+		sliderVals[0].setText(String.valueOf(Settings.obererSchwellenWert));
+		sliderVals[1].setText(String.valueOf(Settings.skalierungswertX));
+		sliderVals[2].setText(String.valueOf(Settings.skalierungswertY));
+		sliderVals[3].setText(String.valueOf(Settings.bildskalierung));
+		sliderVals[4].setText(String.valueOf(Settings.bereichsSkalierung));
+		
+		for(int i = 0; i < sliderArray.length; i++){
+			setUpSlider(sliderArray[i], sliderVals[i], i);
+		}
+	}
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -146,8 +195,15 @@ public class UIController implements Initializable  {
     	medium.setSelected(true);
     	selectedMenuItem = medium;
     	qualitySelected = medium.getId();
-    	qualityChoose.setText("Qualität: "+ selectedMenuItem.getText());
+    	qualityChoose.setText("Qualit\u00E4t: "+ selectedMenuItem.getText());
     	System.out.println(selectedMenuItem.getText() + qualitySelected );
+    	setUpSliders();
+    	
+    	//System.out.println(sliderArray[1]);
+    	//System.out.println(bilderZahl);
+    	//System.out.println(obererSchwellenWert.getId());;
+    	//sliderArray[0].setId("#penis");
+    	//System.out.println(obererSchwellenWert.getId());;
     } 
     
     /**
