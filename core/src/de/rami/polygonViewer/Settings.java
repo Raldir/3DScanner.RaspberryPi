@@ -7,7 +7,7 @@ import de.rami.polygonViewer.Line;
 
 public class Settings {
 	
-	//Zur Optimierung der Struktur wird f�r den Mittelwert eine Eigene Klasse festgelegt.
+	//Zur Optimierung der Struktur wird fuer den Mittelwert eine Eigene Klasse festgelegt.
 	public static final float middle = 10.34f;
 	
 	public static int obererSchwellenWert = 200;
