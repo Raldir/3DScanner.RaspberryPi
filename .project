@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>3DScanner-RaspberryPI-master</name>
+	<name>3DScanner</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -17,7 +17,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1437410160365</id>
+			<id>1438166204132</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
