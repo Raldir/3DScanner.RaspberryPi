@@ -7,7 +7,7 @@ import de.rami.polygonViewer.Line;
 
 public class Settings {
 	
-	//Zur Optimierung der Struktur wird für den Mittelwert eine Eigene Klasse festgelegt.
+	//Zur Optimierung der Struktur wird fï¿½r den Mittelwert eine Eigene Klasse festgelegt.
 	public static final float middle = 10.36f;
 	
 	public static int obererSchwellenWert = 200;
@@ -20,16 +20,16 @@ public class Settings {
 	public static int skalierungswertY = 90;
 	
 	/**
-	 * Skaliert das Objekt in Bezug auf die "Plygonanzahl": Umso größer der Wert, umso weniger
+	 * Skaliert das Objekt in Bezug auf die "Plygonanzahl": Umso grï¿½ï¿½er der Wert, umso weniger
 	 * Polygone hat das Objekt (bildkskalierung 15 -> Objekt hat nur 1 / 15 Punkte, die es bei der standard-
-	 * mäßigen durchfuehrung[in x Richtung n Punkte, welche identisch zur Anzahl der Bilder ist, y die hoehe des ubergebenen Bildes] haette.
+	 * mï¿½ï¿½igen durchfuehrung[in x Richtung n Punkte, welche identisch zur Anzahl der Bilder ist, y die hoehe des ubergebenen Bildes] haette.
 	 */
-	public static float bildskalierung = 15f;
-	public static float bereichsSkalierung = 12;
+	public static int bildskalierung = 15;
+	public static int bereichsSkalierung = 12;
 
 	
 	/**
-	 * Berechnet den Mittelpunkt des Objektes: Punkt, welcher die Tiefe null hat(dafuer Laser und Kamera Winkel = 0°), -> Gebrauchsanleitung
+	 * Berechnet den Mittelpunkt des Objektes: Punkt, welcher die Tiefe null hat(dafuer Laser und Kamera Winkel = 0ï¿½), -> Gebrauchsanleitung
 	 * @param f
 	 * @return
 	 * @throws IOException
