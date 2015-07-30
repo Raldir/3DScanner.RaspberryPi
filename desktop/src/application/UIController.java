@@ -57,8 +57,8 @@ public class UIController implements Initializable  {
 	
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
-	/**
-	 * handles the calibration provides a popup window with further information.
+	/**NOT Functional Yet
+	 * handles the calibration provides a popup window with further information. Needs to be combined with acctual calibration...
 	 * @param e
 	 */
 	@FXML
@@ -137,7 +137,15 @@ public class UIController implements Initializable  {
         stage.setScene(scene);
         stage.show();
 	}
-	
+	/**
+	 * Sets up one Slider and is used multiple times to do it for more sliders. Also handles what the sliders do and sets
+	 * their dependancys on other sliders. Two special cases being bereichsSkalierung a Bildskalierung. They resive a warning 
+	 * when set incorrectly but it might not even reach their maximum when scrolled quickly. Might be smart to set them to their
+	 * max-possible values. Need to think on that =)
+	 * @param slider
+	 * @param val
+	 * @param pos
+	 */
 	private void setUpSlider(Slider slider, Text val, int pos){
 		slider.valueChangingProperty().addListener((obs, wasChanging, isChanging) -> {
 			System.out.println(wasChanging);
@@ -154,17 +162,29 @@ public class UIController implements Initializable  {
     	    case 2: Settings.skalierungswertY = newValue.intValue();
     	    		val.setText(String.valueOf(newValue.intValue()));;
     	    break;
-    	    case 3: Settings.bildskalierung = newValue.intValue();
+    	    case 3: if(newValue.intValue() < Settings.bereichsSkalierung){
+    					slider.setValue(Double.parseDouble(val.getText()));
+    	    			alertGeneral("Warunung", "Bildskalierung darf nicht kleiner sein als BereichsSkalierung!");
+    				}else{
+    	    		Settings.bildskalierung = newValue.intValue();
     	    		val.setText(String.valueOf(newValue.intValue()));
+    				}
     	    break;
-    	    case 4: Settings.bereichsSkalierung = newValue.intValue();
+    	    case 4: if(newValue.intValue() > Settings.bildskalierung){
+    	    		slider.setValue(Double.parseDouble(val.getText()));	
+    	    		alertGeneral("Warunung", "BereichsSkalierung darf nicht größer als Bildskalierung sein!");
+    	    		}else{
+    	    		Settings.bereichsSkalierung = newValue.intValue();
     	    		val.setText(String.valueOf(newValue.intValue()));
+    	    		}
     	    break;
     	    }
     	});
 		
 	}
-	
+	/**
+	 * Sets up all the sliders
+	 */
 	private void setUpSliders(){
 		System.out.println("ulameta");
 		Slider[] sliderArray = {obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, bereichsSkalierung};
@@ -211,7 +231,7 @@ public class UIController implements Initializable  {
      * @param title
      * @param content
      */
-    public static void alertTest(String title, String content){
+    public static void alertGeneral(String title, String content){
     	Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle(title);
 		alert.setHeaderText(null);
