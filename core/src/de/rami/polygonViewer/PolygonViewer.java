@@ -110,11 +110,10 @@ public class PolygonViewer implements ApplicationListener {
 					}
 					readHoehe = false;
 				}
-				bilder.add(f);
 //				int number = pictureCounter;
 				//Die aus dem Bild ausgewerten Punkte werden abgespeichert
+				bilder.add(f);
 				ArrayList<Vec2> points = new Bildpunkte(f, l).getPunkte();
-				
 //				if(pictureData.size() == number){
 					pictureData.add(points);
 //				}

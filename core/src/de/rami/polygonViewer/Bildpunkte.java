@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
@@ -20,20 +21,32 @@ public class Bildpunkte{
 	/**
 	 * Bestimmt die benötigte Helligkeit[genauer RGB Wert], damit ein Pixel vom Algorithmus wahrgenommen wird.
 	 */
+	private File previousPicture;
 	
 	private BufferedImage image;
+	private File f;
 	private LinkedList<Vec2> pointsbefore = new LinkedList<Vec2>();
 	private ArrayList<Vec2> punkte;
+	private int untererschwellenWert = Settings.obererSchwellenWert / 2;
+	private Line hoehe;
 	
 	public Bildpunkte(File f, Line l){
 		punkte = new ArrayList<Vec2>();
 		try {
 			image = ImageIO.read(f);
-			Line hoehe = l;
+			hoehe = l;
 			System.out.println("----" + hoehe.y1 + "   " + hoehe.y2);
 		punkte = skalierung(Settings.bildskalierung, hoehe);
 		}catch (IOException e){
 			e.printStackTrace();
+		}
+	}
+	
+	public void setPreviousPicture(){
+		for(int i = 0; i  < PolygonViewer.bilder.size(); i++){
+			if(PolygonViewer.bilder.get(i).equals(f)){
+				previousPicture = PolygonViewer.bilder.get(i - 1);
+			}
 		}
 	}
 	
@@ -49,10 +62,20 @@ public class Bildpunkte{
 	 */
 	public LinkedList<Vec2> PointsinLine(int line, BufferedImage image){
 		int oSchwellenWert = getLinieSchwellenWert(line, image,  Settings.obererSchwellenWert, 1);
-		int uschwellenWert = Settings.untererschwellenWert/ Settings.obererSchwellenWert * oSchwellenWert;
+		int uschwellenWert = untererschwellenWert/ Settings.obererSchwellenWert * oSchwellenWert;
 		System.out.println(oSchwellenWert);
-		if(oSchwellenWert == 1){
-			return pointsbefore;
+		if(oSchwellenWert <= 1){
+			if(pointsbefore.isEmpty()){
+				setPreviousPicture();
+				try {
+					return PointsinLine(line, ImageIO.read(previousPicture));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else{	
+				return pointsbefore;
+			}
 		}
 		// Es wird nach dem ersten Punkt gesucht, welcher den erforderten RGB-Wert erfüllt.
 		int ausgangspunkt = 0;
@@ -91,9 +114,6 @@ public class Bildpunkte{
 	 * @return
 	 */
 	public Vec2 getMiddlePoint(LinkedList<Vec2> points, BufferedImage image){
-		if(points.size() == 0){
-			return null;
-		}
 		float gesamthelligkeit = 0;
 		for(int i = 0; i < points.size(); i++){
 			gesamthelligkeit += image.getRGB((int)(points.get(i).x),(int)(points.get(i).y));
