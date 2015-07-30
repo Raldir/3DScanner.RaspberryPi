@@ -35,7 +35,7 @@ import javafx.stage.Stage;
 public class UIController implements Initializable  {
 	
 	@FXML
-	private Button kalibrierenButton, startButton, helpButton;
+	private Button kalibrierenButton, startButton, helpButton, resetSliderButton;
 	@FXML 
 	private SplitMenuButton qualityChoose;
 	@FXML
@@ -52,9 +52,8 @@ public class UIController implements Initializable  {
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
 	public static int bilderZahl = 8;
-	Slider sliderArray[];
-	
-	
+	private int[] backupValues = {Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.bildskalierung, Settings.bereichsSkalierung};
+	private PreferencesSaver prefsSaver; 
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
 	/**NOT Functional Yet
@@ -137,6 +136,27 @@ public class UIController implements Initializable  {
         stage.setScene(scene);
         stage.show();
 	}
+	
+	/**
+	 * Handles the slider reset button. The setValue() method also fires the change listener that is attached to the buttons.
+	 * therefore the everything should be changed as usual
+	 * @param e
+	 */
+	@FXML 
+	private void handleSliderReset(ActionEvent e){
+		obererSchwellenWert.setValue(backupValues[0]);
+		skalierungswertX.setValue(backupValues[1]);
+		skalierungswertY.setValue(backupValues[2]);
+		bildskalierung.setValue(backupValues[3]);
+		bereichsSkalierung.setValue(backupValues[4]);
+		oswVal.setText(String.valueOf(Settings.obererSchwellenWert));
+		swXVal.setText(String.valueOf(Settings.skalierungswertX));
+		swYVal.setText(String.valueOf(Settings.skalierungswertY));
+		bildsVal.setText(String.valueOf(Settings.bildskalierung));
+		bereichSVal.setText(String.valueOf(Settings.bereichsSkalierung));
+		//System.out.println(Settings.obererSchwellenWert);
+	}
+	
 	/**
 	 * Sets up one Slider and is used multiple times to do it for more sliders. Also handles what the sliders do and sets
 	 * their dependancys on other sliders. Two special cases being bereichsSkalierung a Bildskalierung. They resive a warning 
@@ -155,12 +175,16 @@ public class UIController implements Initializable  {
     	    switch(pos){
     	    case 0: Settings.obererSchwellenWert = newValue.intValue();
     	    		val.setText(String.valueOf(newValue.intValue()));
+    	    		prefsSaver.setPerf("obererSchwellenWert", newValue.intValue());
+    	    		
     	    break;
     	    case 1: Settings.skalierungswertX = newValue.intValue();
     	    		val.setText(String.valueOf(newValue.intValue()));
+    	    		prefsSaver.setPerf("skalierungswertX", newValue.intValue());
     	    break;
     	    case 2: Settings.skalierungswertY = newValue.intValue();
     	    		val.setText(String.valueOf(newValue.intValue()));;
+    	    		prefsSaver.setPerf("skalierungswertY", newValue.intValue());
     	    break;
     	    case 3: if(newValue.intValue() < Settings.bereichsSkalierung){
     					slider.setValue(Double.parseDouble(val.getText()));
@@ -168,6 +192,7 @@ public class UIController implements Initializable  {
     				}else{
     	    		Settings.bildskalierung = newValue.intValue();
     	    		val.setText(String.valueOf(newValue.intValue()));
+    	    		prefsSaver.setPerf("bildskalierung", newValue.intValue());
     				}
     	    break;
     	    case 4: if(newValue.intValue() > Settings.bildskalierung){
@@ -176,6 +201,7 @@ public class UIController implements Initializable  {
     	    		}else{
     	    		Settings.bereichsSkalierung = newValue.intValue();
     	    		val.setText(String.valueOf(newValue.intValue()));
+    	    		prefsSaver.setPerf("bereichsSkalierung", newValue.intValue());
     	    		}
     	    break;
     	    }
@@ -183,23 +209,28 @@ public class UIController implements Initializable  {
 		
 	}
 	/**
-	 * Sets up all the sliders
+	 * Sets up all the sliders and get the safed values
 	 */
 	private void setUpSliders(){
 		System.out.println("ulameta");
 		Slider[] sliderArray = {obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, bereichsSkalierung};
 		Text[] sliderVals = {oswVal, swXVal, swYVal, bildsVal, bereichSVal};
-		sliderArray[0].setValue(Settings.obererSchwellenWert);
-		sliderArray[1].setValue(Settings.skalierungswertX);
-		sliderArray[2].setValue(Settings.skalierungswertY);
-		sliderArray[3].setValue(Settings.bildskalierung);
-		sliderArray[4].setValue(Settings.bereichsSkalierung);
-		sliderVals[0].setText(String.valueOf(Settings.obererSchwellenWert));
-		sliderVals[1].setText(String.valueOf(Settings.skalierungswertX));
-		sliderVals[2].setText(String.valueOf(Settings.skalierungswertY));
-		sliderVals[3].setText(String.valueOf(Settings.bildskalierung));
-		sliderVals[4].setText(String.valueOf(Settings.bereichsSkalierung));
+		sliderArray[0].setValue(prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
+		sliderArray[1].setValue(prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
+		sliderArray[2].setValue(prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
+		sliderArray[3].setValue(prefsSaver.getPref("bildskalierung", Settings.bildskalierung));
+		sliderArray[4].setValue(prefsSaver.getPref("bereichsSkalierung", Settings.bereichsSkalierung));
+		sliderVals[0].setText(String.valueOf(prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert)));
+		sliderVals[1].setText(String.valueOf(prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX)));
+		sliderVals[2].setText(String.valueOf(prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY)));
+		sliderVals[3].setText(String.valueOf(prefsSaver.getPref("bildskalierung", Settings.bildskalierung)));
+		sliderVals[4].setText(String.valueOf(prefsSaver.getPref("bereichsSkalierung", Settings.bereichsSkalierung)));
 		
+		Settings.obererSchwellenWert = prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert);
+		Settings.skalierungswertX = prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX);
+		Settings.skalierungswertY = prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY);
+		Settings.bildskalierung = prefsSaver.getPref("bildskalierung", Settings.bildskalierung);
+		Settings.bereichsSkalierung = prefsSaver.getPref("bereichsSkalierung", Settings.bereichsSkalierung);
 		for(int i = 0; i < sliderArray.length; i++){
 			setUpSlider(sliderArray[i], sliderVals[i], i);
 		}
@@ -217,7 +248,12 @@ public class UIController implements Initializable  {
     	qualitySelected = medium.getId();
     	qualityChoose.setText("Qualit\u00E4t: "+ selectedMenuItem.getText());
     	System.out.println(selectedMenuItem.getText() + qualitySelected );
+    	System.out.println("haaaaaloooo");
+    	prefsSaver = new PreferencesSaver();
+    	System.out.println("schueees");
     	setUpSliders();
+    	System.out.println(Settings.obererSchwellenWert);
+    	
     	
     	//System.out.println(sliderArray[1]);
     	//System.out.println(bilderZahl);

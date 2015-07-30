@@ -48,5 +48,6 @@
             <Text fx:id="bereichSVal" layoutX="294.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" AnchorPane.rightAnchor="40.0" />
          </children>
       </AnchorPane>
+      <Button fx:id="resetSliderButton" layoutX="386.0" layoutY="364.0" mnemonicParsing="false" onAction="#handleSliderReset" text="Reset Sliders" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="17.0" />
    </children>
 </AnchorPane>
