@@ -8,7 +8,8 @@ import de.rami.polygonViewer.Line;
 public class Settings {
 	
 	//Zur Optimierung der Struktur wird fuer den Mittelwert eine Eigene Klasse festgelegt.
-	public static final float middle = 10.36f;
+//	public static final float middle = 20.7077f;
+	public static float middle = 10.36f;
 	
 	public static int obererSchwellenWert = 250;
 	
@@ -18,13 +19,16 @@ public class Settings {
 	public static int skalierungswertX = 30;
 	public static int skalierungswertY = 90;
 	
+	public static int polygonAnzahl = 1000;
+	
+	public static int anzahlbilder = 8;
+	
 	/**
 	 * Skaliert das Objekt in Bezug auf die "Plygonanzahl": Umso gr��er der Wert, umso weniger
 	 * Polygone hat das Objekt (bildkskalierung 15 -> Objekt hat nur 1 / 15 Punkte, die es bei der standard-
 	 * m��igen durchfuehrung[in x Richtung n Punkte, welche identisch zur Anzahl der Bilder ist, y die hoehe des ubergebenen Bildes] haette.
 	 */
-	public static int bildskalierung = 15;
-	public static int bereichsSkalierung = 12;
+	public static float bildskalierung = 0.1f;
 
 	
 	/**
@@ -34,9 +38,8 @@ public class Settings {
 	 * @throws IOException
 	 */
 	public static ArrayList<Vec2> createMiddle(File f) throws IOException{
-		Line width = new Line().getWidth(f);
 		Line hoehe = new Line().getHoehe(f);
-		return new Bildpunkte(f, hoehe).skalierung(width.y1 - width.y2, hoehe);
+		return new Bildpunkte(f, hoehe).skalierung2(hoehe);
 	}
 	
 	public static void main(String[] args) throws IOException{

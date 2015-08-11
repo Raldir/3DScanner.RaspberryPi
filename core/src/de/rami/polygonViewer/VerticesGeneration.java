@@ -1,4 +1,10 @@
 package de.rami.polygonViewer;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,25 +17,18 @@ public class VerticesGeneration {
 	
 	public static final ArrayList<Vertex> testVerts(){
 		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
-		for(int i = 1; i < 20; i++){
+		for(int i = 1; i < 5; i++){
 			ArrayList<Vec2> temp = new ArrayList<Vec2>();
 			temp.add(Vec2.vec2(5, 2));
-			temp.add(Vec2.vec2(6, 3));
-			temp.add(Vec2.vec2(7, 4));
-			temp.add(Vec2.vec2(8, 5));
-			temp.add(Vec2.vec2(7, 6));
-			temp.add(Vec2.vec2(6, 7));
-			temp.add(Vec2.vec2(3, 8));
-			temp.add(Vec2.vec2(8, 9));
-			temp.add(Vec2.vec2(2, 10));
-			temp.add(Vec2.vec2(4, 11));
-			temp.add(Vec2.vec2(5, 12));
-			temp.add(Vec2.vec2(8, 13));
+			temp.add(Vec2.vec2(5, 3));
+			temp.add(Vec2.vec2(5, 4));
+			temp.add(Vec2.vec2(5, 5));
 			list.add(temp);
 		}
 		ArrayList<Vertex> verts = genVerticesTest(list);
 		return verts;
 	}
+	
 	
 //	public static final ArrayList<Vertex> testVerts(){
 //		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
@@ -153,7 +152,7 @@ public class VerticesGeneration {
 			}
 			for(Vec2 vec : list){
 				//Erstellt einen Vektor, in dem der Normalenvektor des Winkels auf die Dicke des Objektes skaliert wird.
-				Vec2 buffer = dir.mul(Settings.middle - vec.x);
+				Vec2 buffer = dir.mul((vec.x - Settings.middle));
 				//Erstellt einen Dreidimensionalen Vektor, welcher als z Wert den y Wert der Übergebenen Punkte verwendet
 				Vertex tempVet = new Vertex(buffer.x, buffer.y, vec.y);
 				//Falls erster Punkt im Bild, wird Dreieck mit bot-Eckpunkt erstellt

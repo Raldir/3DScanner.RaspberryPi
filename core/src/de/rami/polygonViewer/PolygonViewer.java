@@ -12,8 +12,14 @@ import java.util.Arrays;
 
 
 
+import java.util.Collection;
+
+import java.util.Collections;
+
 import javax.imageio.ImageIO;
 import javax.management.RuntimeErrorException;
+
+
 
 
 
@@ -50,7 +56,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class PolygonViewer implements ApplicationListener {
 	
-	public static boolean renderModell = false;
+	public static ArrayList<Vertex> vertices = new ArrayList<Vertex>();
 	
 	public Environment environment;
 	public PerspectiveCamera cam;
@@ -62,10 +68,7 @@ public class PolygonViewer implements ApplicationListener {
 	public ModelBuilder modelBuilder = null;
 	
 	public ArrayList<ArrayList<Vec2>> pictureData = new ArrayList<>();
-	public Line l = new Line();
 	public static ArrayList<File> bilder = new ArrayList<>();
-	
-	private boolean readHoehe = true;
 	
 	/**
 	 * Intiialisierung der Anwendung: Einrichten der libgdx Umgebung, starten des Servers
@@ -80,7 +83,7 @@ public class PolygonViewer implements ApplicationListener {
 		modelBatch = new ModelBatch();
 		//Kamera wird erstellt und ihre Eigenschaften werden festgelegt.
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(10f, 10f, 10f);
+		cam.position.add(10f, 10f, 10f);
 		cam.lookAt(0,0,0);
 		cam.near = 1f;
 		cam.far = 300f;
@@ -103,20 +106,14 @@ public class PolygonViewer implements ApplicationListener {
         try {
 			Server server = new Server(1234);
 			server.setReceiveAction((File f) -> {
-				if(readHoehe){
-					l = new Line().getHoehe(f);
-					if(l.y1 - l.y2 <  Settings.bildskalierung){
-						System.out.println("der ausgewählte Schewellenwert ist zu hoch oder das Bild zu dunkel");
-					}
-					readHoehe = false;
+				Line l = new Line().getHoehe(f);
+				if(l.y1 == 0 && l.y2 == 0){
+					return;
 				}
-//				int number = pictureCounter;
 				//Die aus dem Bild ausgewerten Punkte werden abgespeichert
 				bilder.add(f);
 				ArrayList<Vec2> points = new Bildpunkte(f, l).getPunkte();
-//				if(pictureData.size() == number){
-					pictureData.add(points);
-//				}
+				pictureData.add(points);
 			});
 			server.setCloseAction(() -> {
 				setupModel(VerticesGeneration.genVerticesTest(pictureData));
@@ -134,6 +131,7 @@ public class PolygonViewer implements ApplicationListener {
 	 * @param verts Eckpunkte des Objektes
 	 */
 	public void setupModel(ArrayList<Vertex> verts){
+		vertices = verts;
 		Mesh mesh = new Mesh(true, 100000, 2000000, new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE), new VertexAttribute(Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE));
 		float[] vertices =  VerticesGeneration.genVertexAndNormalArray(verts);
         //Berechnung der Polygone des Modells
@@ -143,15 +141,17 @@ public class PolygonViewer implements ApplicationListener {
         modelBuilder.begin();
         modelBuilder.part("asdf", mesh, GL20.GL_TRIANGLES, material);
         model = modelBuilder.end();
+        model.meshes.reverse();
         instance = new ModelInstance(model);
 	}
 	
 	public void renderNewModell(){
 		pictureData.clear();
 		for(int i = 0 ; i < bilder.size(); i++){
+			Line l = new Line().getHoehe(bilder.get(i));
 			pictureData.add(new Bildpunkte(bilder.get(i), l).getPunkte());
 		}
-	setupModel(VerticesGeneration.genVerticesTest(pictureData));
+		setupModel(VerticesGeneration.genVerticesTest(pictureData));
 	}
 	
 	/**
@@ -187,6 +187,12 @@ public class PolygonViewer implements ApplicationListener {
 
 	@Override
 	public void resume() {
+		try {
+			Settings.middle = Settings.createMiddle(new File("C:\\Users\\Ramor\\Desktop\\3DScanner.RaspberryPi\\core\\1.jpg")).get(0).x;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		model.dispose();
 		renderNewModell();
 	}

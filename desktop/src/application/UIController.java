@@ -11,6 +11,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import de.rami.polygonViewer.Exec;
+import de.rami.polygonViewer.FileCreator;
 import de.rami.polygonViewer.PolygonViewer;
 import de.rami.polygonViewer.Settings;
 import de.rami.polygonViewer.desktop.DesktopLauncher;
@@ -45,14 +46,14 @@ public class UIController implements Initializable  {
 	@FXML
 	private Text lastCalibrationDate;
 	@FXML
-	private Slider obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, bereichsSkalierung;
+	private Slider obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, polygonAnzahl;
 	@FXML
-	private Text oswVal, swXVal, swYVal, bildsVal, bereichSVal;
+	private Text oswVal, swXVal, swYVal, bildsVal, polygonAnzahlT;
 	
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
 	public static int bilderZahl = 8;
-	private int[] backupValues = {Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.bildskalierung, Settings.bereichsSkalierung};
+	private float[] backupValues = {Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.bildskalierung, Settings.polygonAnzahl};
 	private PreferencesSaver prefsSaver; 
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
@@ -63,7 +64,7 @@ public class UIController implements Initializable  {
 	@FXML
 	private void handleCalibrate(ActionEvent e)
 	{
-//		ArrayList <File> bilder = PolygonViewer.bilder;
+		FileCreator.createFile(PolygonViewer.vertices);
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Kalibrierungsanleitung");
 		alert.setHeaderText(null);
@@ -92,11 +93,11 @@ public class UIController implements Initializable  {
 		low.setSelected(false);
 		selectedMenuItem.setSelected(true);
 		switch (qualitySelected.toLowerCase().charAt(0)){
-			case 'l': bilderZahl = 16;
+			case 'l': bilderZahl = 8;
 			break;
-			case 'm': bilderZahl = 32;
+			case 'm': bilderZahl = 16;
 			break;
-			case 'h': bilderZahl = 64;
+			case 'h': bilderZahl = 32;
 		}
 		System.out.println(bilderZahl);
 		qualityChoose.setText("Qualit\u00E4t: "+ selectedMenuItem.getText());
@@ -114,6 +115,7 @@ public class UIController implements Initializable  {
 			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 			new LwjglApplication(new PolygonViewer(), config);
 			try {
+				Settings.anzahlbilder = bilderZahl;
 				Exec.connectfromPItoServer(bilderZahl);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -148,12 +150,12 @@ public class UIController implements Initializable  {
 		skalierungswertX.setValue(backupValues[1]);
 		skalierungswertY.setValue(backupValues[2]);
 		bildskalierung.setValue(backupValues[3]);
-		bereichsSkalierung.setValue(backupValues[4]);
+		polygonAnzahl.setValue(backupValues[4]);
 		oswVal.setText(String.valueOf(Settings.obererSchwellenWert));
 		swXVal.setText(String.valueOf(Settings.skalierungswertX));
 		swYVal.setText(String.valueOf(Settings.skalierungswertY));
 		bildsVal.setText(String.valueOf(Settings.bildskalierung));
-		bereichSVal.setText(String.valueOf(Settings.bereichsSkalierung));
+		polygonAnzahlT.setText(String.valueOf(Settings.polygonAnzahl));
 		//System.out.println(Settings.obererSchwellenWert);
 	}
 	
@@ -186,23 +188,15 @@ public class UIController implements Initializable  {
     	    		val.setText(String.valueOf(newValue.intValue()));;
     	    		prefsSaver.setPerf("skalierungswertY", newValue.intValue());
     	    break;
-    	    case 3: if(newValue.intValue() < Settings.bereichsSkalierung){
-    					slider.setValue(Double.parseDouble(val.getText()));
-    	    			alertGeneral("Warunung", "Bildskalierung darf nicht kleiner sein als BereichsSkalierung!");
-    				}else{
-    	    		Settings.bildskalierung = newValue.intValue();
-    	    		val.setText(String.valueOf(newValue.intValue()));
-    	    		prefsSaver.setPerf("bildskalierung", newValue.intValue());
-    				}
+    	    case 3: 
+    	    		Settings.bildskalierung = newValue.floatValue();
+    	    		val.setText(String.valueOf(newValue.floatValue()));
+    	    		prefsSaver.setPerfFloat("bildskalierung", newValue.floatValue());
     	    break;
-    	    case 4: if(newValue.intValue() > Settings.bildskalierung){
-    	    		slider.setValue(Double.parseDouble(val.getText()));	
-    	    		alertGeneral("Warunung", "BereichsSkalierung darf nicht größer als Bildskalierung sein!");
-    	    		}else{
-    	    		Settings.bereichsSkalierung = newValue.intValue();
+    	    case 4: 
+    	    		Settings.polygonAnzahl = newValue.intValue();
     	    		val.setText(String.valueOf(newValue.intValue()));
-    	    		prefsSaver.setPerf("bereichsSkalierung", newValue.intValue());
-    	    		}
+    	    		prefsSaver.setPerfFloat("polygonAnzahl", newValue.intValue());
     	    break;
     	    }
     	});
@@ -213,24 +207,24 @@ public class UIController implements Initializable  {
 	 */
 	private void setUpSliders(){
 		System.out.println("ulameta");
-		Slider[] sliderArray = {obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, bereichsSkalierung};
-		Text[] sliderVals = {oswVal, swXVal, swYVal, bildsVal, bereichSVal};
+		Slider[] sliderArray = {obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, polygonAnzahl};
+		Text[] sliderVals = {oswVal, swXVal, swYVal, bildsVal, polygonAnzahlT};
 		sliderArray[0].setValue(prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
 		sliderArray[1].setValue(prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
 		sliderArray[2].setValue(prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
-		sliderArray[3].setValue(prefsSaver.getPref("bildskalierung", Settings.bildskalierung));
-		sliderArray[4].setValue(prefsSaver.getPref("bereichsSkalierung", Settings.bereichsSkalierung));
+		sliderArray[3].setValue(prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
+		sliderArray[4].setValue(prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
 		sliderVals[0].setText(String.valueOf(prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert)));
 		sliderVals[1].setText(String.valueOf(prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX)));
 		sliderVals[2].setText(String.valueOf(prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY)));
-		sliderVals[3].setText(String.valueOf(prefsSaver.getPref("bildskalierung", Settings.bildskalierung)));
-		sliderVals[4].setText(String.valueOf(prefsSaver.getPref("bereichsSkalierung", Settings.bereichsSkalierung)));
+		sliderVals[3].setText(String.valueOf(prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung)));
+		sliderVals[4].setText(String.valueOf(prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl)));
 		
 		Settings.obererSchwellenWert = prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert);
 		Settings.skalierungswertX = prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX);
 		Settings.skalierungswertY = prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY);
-		Settings.bildskalierung = prefsSaver.getPref("bildskalierung", Settings.bildskalierung);
-		Settings.bereichsSkalierung = prefsSaver.getPref("bereichsSkalierung", Settings.bereichsSkalierung);
+		Settings.bildskalierung = prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung);
+		Settings.polygonAnzahl = prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl);
 		for(int i = 0; i < sliderArray.length; i++){
 			setUpSlider(sliderArray[i], sliderVals[i], i);
 		}
@@ -250,9 +244,7 @@ public class UIController implements Initializable  {
     	System.out.println(selectedMenuItem.getText() + qualitySelected );
     	System.out.println("haaaaaloooo");
     	prefsSaver = new PreferencesSaver();
-    	System.out.println("schueees");
     	setUpSliders();
-    	System.out.println(Settings.obererSchwellenWert);
     	
     	
     	//System.out.println(sliderArray[1]);

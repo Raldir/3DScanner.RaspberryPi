@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
-
 import de.rami.polygonViewer.Line;
 
 //Die Klasse ist verantwortlich fuer die Auswertung der Punkte eines Bildes
@@ -21,32 +20,23 @@ public class Bildpunkte{
 	/**
 	 * Bestimmt die benötigte Helligkeit[genauer RGB Wert], damit ein Pixel vom Algorithmus wahrgenommen wird.
 	 */
+	
 	private File previousPicture;
 	
 	private BufferedImage image;
 	private File f;
-	private LinkedList<Vec2> pointsbefore = new LinkedList<Vec2>();
+	private ArrayList<Vec2> pointsbefore = new ArrayList<Vec2>();
 	private ArrayList<Vec2> punkte;
-	private int untererschwellenWert = Settings.obererSchwellenWert / 2;
-	private Line hoehe;
 	
-	public Bildpunkte(File f, Line l){
+	public Bildpunkte(File f, Line hoehe){
 		punkte = new ArrayList<Vec2>();
+		this.f = f;
 		try {
 			image = ImageIO.read(f);
-			hoehe = l;
 			System.out.println("----" + hoehe.y1 + "   " + hoehe.y2);
-		punkte = skalierung(Settings.bildskalierung, hoehe);
+		punkte = skalierung2(hoehe);
 		}catch (IOException e){
 			e.printStackTrace();
-		}
-	}
-	
-	public void setPreviousPicture(){
-		for(int i = 0; i  < PolygonViewer.bilder.size(); i++){
-			if(PolygonViewer.bilder.get(i).equals(f)){
-				previousPicture = PolygonViewer.bilder.get(i - 1);
-			}
 		}
 	}
 	
@@ -60,32 +50,23 @@ public class Bildpunkte{
 	 * @param image
 	 * @return
 	 */
-	public LinkedList<Vec2> PointsinLine(int line, BufferedImage image){
+	public ArrayList<Vec2> PointsinLine(int line, BufferedImage image){
 		int oSchwellenWert = getLinieSchwellenWert(line, image,  Settings.obererSchwellenWert, 1);
-		int uschwellenWert = untererschwellenWert/ Settings.obererSchwellenWert * oSchwellenWert;
-		System.out.println(oSchwellenWert);
-		if(oSchwellenWert <= 1){
-			if(pointsbefore.isEmpty()){
-				setPreviousPicture();
-				try {
-					return PointsinLine(line, ImageIO.read(previousPicture));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}else{	
+		int uschwellenWert = (int) (0.5 * oSchwellenWert);
+		if(oSchwellenWert == 1){
+			if(pointsbefore != null){	
 				return pointsbefore;
 			}
 		}
 		// Es wird nach dem ersten Punkt gesucht, welcher den erforderten RGB-Wert erfüllt.
 		int ausgangspunkt = 0;
-		LinkedList<Vec2> punkteLine = new LinkedList<Vec2>();
+		ArrayList<Vec2> punkteLine = new ArrayList<Vec2>();
 		for(int j = 0 ; j < image.getWidth(); j++){
-			if(new Color(image.getRGB(j, line)).getRed() > oSchwellenWert && new Color(image.getRGB(j, line)).getBlue() > oSchwellenWert
-					&& new Color(image.getRGB(j, line)).getGreen() > oSchwellenWert){
-				System.out.println("punkt gespeichert");
+			if(new Color(image.getRGB(j, line)).getRed() >= oSchwellenWert && new Color(image.getRGB(j, line)).getBlue() >= oSchwellenWert
+					&& new Color(image.getRGB(j, line)).getGreen() >= oSchwellenWert){
+//				System.out.println("punkt gespeichert");
 				ausgangspunkt = j;
-				punkteLine.add(new Vec2((image.getWidth() -1) - j, line));
+				punkteLine.add(new Vec2((j), line));
 				break;
 			}
 		}
@@ -93,13 +74,13 @@ public class Bildpunkte{
 		//nun mindestens einen etwas kleineren RGB-Wert haben und die dadurch entstandene Liste wird zurückgegeben
 		int i = 0;
 		while(ausgangspunkt + i < image.getWidth() && new Color(image.getRGB(ausgangspunkt + i, line)).getBlue() > uschwellenWert && new Color(image.getRGB(ausgangspunkt + i, line)).getRed() > uschwellenWert && new Color(image.getRGB(ausgangspunkt + i, line)).getGreen() > uschwellenWert){
-			punkteLine.add(new Vec2((image.getWidth() -1) - (ausgangspunkt + i), line));
+			punkteLine.add(new Vec2((ausgangspunkt + i), line));
 			i++;
 		}
 		
 		i = 0;
 		while(ausgangspunkt -i > 0 && new Color(image.getRGB(ausgangspunkt - i, line)).getBlue() > uschwellenWert && new Color(image.getRGB(ausgangspunkt - i, line)).getRed() > uschwellenWert && new Color(image.getRGB(ausgangspunkt - i, line)).getGreen() > uschwellenWert){
-			punkteLine.add(new Vec2((image.getWidth() -1) - (ausgangspunkt - i), line));
+			punkteLine.add(new Vec2((ausgangspunkt - i), line));
 			i++;
 		}
 		pointsbefore = punkteLine;
@@ -113,7 +94,7 @@ public class Bildpunkte{
 	 * @param image
 	 * @return
 	 */
-	public Vec2 getMiddlePoint(LinkedList<Vec2> points, BufferedImage image){
+	public Vec2 getMiddlePoint(ArrayList<Vec2> points, BufferedImage image){
 		float gesamthelligkeit = 0;
 		for(int i = 0; i < points.size(); i++){
 			gesamthelligkeit += image.getRGB((int)(points.get(i).x),(int)(points.get(i).y));
@@ -122,7 +103,7 @@ public class Bildpunkte{
 		//Die Koordinate wird mit dem Verhältnis der Helligkeit des Punktes zur Durchschnittshelligkeit multipliziert.
 		//So fließt ein hellererPunkt staerker ein als ein vergleichsweise dunkler Punkt.
 		float durchschnittshelligkeit = gesamthelligkeit / points.size();
-		LinkedList<Float> values = new LinkedList<Float>();
+		ArrayList<Float> values = new ArrayList<Float>();
 		for(int i = 0; i< points.size(); i++){
 			values.add(points.get(i).x * (image.getRGB((int)(points.get(i).x),(int)(points.get(i).y)) / durchschnittshelligkeit));
 		}
@@ -130,7 +111,7 @@ public class Bildpunkte{
 		for(int i = 0; i < values.size(); i++){
 			gesamtvalue += values.get(i);
 		}
-		return new Vec2((image.getWidth() - ((gesamtvalue / values.size()))) /  Settings.skalierungswertX, ((image.getHeight()- points.get(0).y)) /  Settings.skalierungswertY);
+		return new Vec2((((gesamtvalue / values.size()))) /  Settings.skalierungswertX,  ((points.get(0).y)) /  Settings.skalierungswertY);
 	}
 	
 	public static class Point{
@@ -147,7 +128,7 @@ public class Bildpunkte{
 	 * @param untereGrenze
 	 * @return
 	 */
-	public int getLinieSchwellenWert(int line, BufferedImage image, int obereGrenze, int untereGrenze){
+	public static int getLinieSchwellenWert(int line, BufferedImage image, int obereGrenze, int untereGrenze){
 		if(obereGrenze == (untereGrenze + 1)){
 			return untereGrenze;
 		}
@@ -171,33 +152,54 @@ public class Bildpunkte{
 	 * @param hoehe
 	 * @return
 	 */
-	public ArrayList<Vec2> skalierung(float skalierungswert, Line hoehe){
-		double nbereich =  Settings.bereichsSkalierung / 2;
-		int nbereich2 = 0;
-		if(nbereich % 2 != 0){
-			nbereich2 = (int) ( Settings.bereichsSkalierung / 2);
-			nbereich = nbereich2 + 1;
-		}
-		ArrayList<Vec2> punkte = new ArrayList<Vec2>();
-		for(int i = hoehe.y2; i < hoehe.y1; i+= skalierungswert){
+//	public ArrayList<Vec2> skalierung(float skalierungswert, Line hoehe){
+//		double nbereich =  Settings.bereichsSkalierung / 2;
+//		int nbereich2 = 0;
+//		if(nbereich % 2 != 0){
+//			nbereich2 = (int) ( Settings.bereichsSkalierung / 2);
+//			nbereich = nbereich2 + 1;
+//		}
+//		ArrayList<Vec2> punkte = new ArrayList<Vec2>();
+//		for(int i = hoehe.y1; i < hoehe.y2; i+= skalierungswert){
+//			Vec2 temp = null;
+//			Point p = new Point();
+//			for(int j = 0; j < nbereich; j++){
+//				if((i + j) < image.getHeight()){
+//					temp = getMiddlePoint(PointsinLine(image.getHeight() - (i + j), image), image);
+//				}
+//				p.v1 += temp.x;
+//				p.v2 += temp.y;
+//				
+//			}
+//			for(int j = 1; j < nbereich2; j++){
+//				if((i - j) > 0){
+//					temp = getMiddlePoint(PointsinLine(image.getHeight() - (i - j), image), image);
+//				}
+//				p.v1 += temp.x;
+//				p.v2 += temp.y;
+//			}
+//			punkte.add(new Vec2((p.v1 /  Settings.bereichsSkalierung), (p.v2 / Settings.bereichsSkalierung)));
+//		}
+//		return punkte;
+//	}
+	
+	public ArrayList<Vec2> skalierung2(Line hoehe){
+		int anzahlPunkte = (Settings.polygonAnzahl / Settings.anzahlbilder);
+		System.out.println("anzahlPunkte " + anzahlPunkte);
+		double punktabstand = (double)(hoehe.y2 - hoehe.y1) * ((double) (1 / (double)(anzahlPunkte)));
+		System.out.println("punktabstand " + punktabstand);
+		for(double i = hoehe.y1; i + 0.001 < hoehe.y2; i+= punktabstand){
+			int counter = 0;
 			Vec2 temp = null;
 			Point p = new Point();
-			for(int j = 0; j < nbereich; j++){
-				if((i + j) < image.getHeight()){
-					temp = getMiddlePoint(PointsinLine(image.getHeight() - (i + j), image), image);
-				}
-				p.v1 += temp.x;
-				p.v2 += temp.y;
-				
-			}
-			for(int j = 1; j < nbereich2; j++){
-				if((i + j) < image.getHeight()){
-					temp = getMiddlePoint(PointsinLine(image.getHeight() - (i - j), image), image);
-				}
+			for(float j = 0; j < punktabstand; j+= Settings.bildskalierung){
+				if((int)i + j < image.getHeight())
+				temp = getMiddlePoint( PointsinLine(((int)i + (int)j), image), image);
+				counter++;
 				p.v1 += temp.x;
 				p.v2 += temp.y;
 			}
-			punkte.add(new Vec2((p.v1 /  Settings.bereichsSkalierung), (p.v2 / Settings.bereichsSkalierung)));
+			punkte.add(new Vec2((p.v1 /  counter), (p.v2 / counter)));
 		}
 		return punkte;
 	}
