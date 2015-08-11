@@ -24,20 +24,20 @@ public class PreferencesSaver {
 	
 	public void setPerf(String name, int value){
 		this.prefs.put(name, String.valueOf(value));
-		System.out.println("saved Prefs");
+		System.out.println("saved Prefs " +value);
 	}
 	
 	public void setPerfFloat(String name, float value){
 		this.prefs.put(name, String.valueOf(value));
-		System.out.println("saved Prefs");
+		System.out.println("saved Prefs "+ value);
 	}
 	
 	public int getPref(String name, int defaultValue){
-		System.out.println("this.prefs.getInt(name, defaultValue);");
+		System.out.println(this.prefs.getInt(name, defaultValue));
 		return this.prefs.getInt(name, defaultValue);
 	}
 	public float getPrefFloat(String name, float defaultValue){
-		System.out.println("this.prefs.getInt(name, defaultValue);");
+		//System.out.println();
 		return this.prefs.getFloat(name, defaultValue);
 	}
 }

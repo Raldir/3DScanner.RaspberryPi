@@ -19,10 +19,10 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         stage.setTitle("SuperduperScanner");
         stage.setScene(scene);
-        stage.setMinWidth(450);
-        stage.setMinHeight(300);
-        stage.setMaxWidth(1000);
-        stage.setMaxHeight(800);
+        stage.setMinWidth(500);
+        stage.setMinHeight(400);
+        stage.setMaxWidth(600);
+        stage.setMaxHeight(500);
         stage.show();
         
     }

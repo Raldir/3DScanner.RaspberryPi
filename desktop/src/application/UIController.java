@@ -27,6 +27,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
@@ -49,10 +53,15 @@ public class UIController implements Initializable  {
 	private Slider obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, polygonAnzahl;
 	@FXML
 	private Text oswVal, swXVal, swYVal, bildsVal, polygonAnzahlT;
+	@FXML
+	private Spinner<Integer> oswSpin, skalXSpin, skalYSpin, polyAnSpin;
+	@FXML
+	private Spinner<Double> bildSkalSpin;
 	
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
 	public static int bilderZahl = 8;
+	//final??
 	private float[] backupValues = {Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.bildskalierung, Settings.polygonAnzahl};
 	private PreferencesSaver prefsSaver; 
 	private String qualitySelected;
@@ -139,6 +148,100 @@ public class UIController implements Initializable  {
         stage.show();
 	}
 	
+	private void setUpSpinnerInt(Spinner<Integer> spinner, int pos, int min, int max, int increment, int savedSet ){
+		IntegerSpinnerValueFactory oswFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, savedSet, increment);
+		spinner.setValueFactory(oswFactory);
+		spinner.valueProperty().addListener((obs, oldValue, newValue) -> {
+	    System.out.println("New value: "+newValue);
+	    // hier könnte es rundungsfehler von double auf Number geben
+	    setValueSettings(pos, newValue);
+		});
+	}
+	
+	private void setUpSpinnerDouble(Spinner<Double> spinner, int pos, double min, double max, double increment, double savedSet){
+		DoubleSpinnerValueFactory oswFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, savedSet, increment);
+		spinner.setValueFactory(oswFactory);
+		spinner.valueProperty().addListener((obs, oldValue, newValue) -> {
+	    System.out.println("New value: "+newValue);
+	    // hier könnte es rundungsfehler von double auf Number geben
+	    setValueSettings(pos, newValue);
+		});
+		
+	}
+	
+	
+	/**
+	 * Sets up one Slider and is used multiple times to do it for more sliders. Also handles what the sliders do.
+	 * @param slider
+	 * @param val
+	 * @param pos
+	 */
+	private void setUpSlider(Slider slider, int pos, double savedSet){
+		slider.setValue(savedSet);
+		slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+    	    System.out.println("Slider Value Changed (newValue in Integer: " + newValue.intValue() + ")");
+    	    setValueSettings(pos, newValue);
+    	});
+		
+	}
+	
+	private void setValueSettings(int pos, Number newValue) {
+		switch(pos){
+	    case 0: Settings.obererSchwellenWert = newValue.intValue();
+	    		prefsSaver.setPerf("obererSchwellenWert", newValue.intValue());
+	    		this.obererSchwellenWert.setValue(newValue.doubleValue());
+	    		this.oswSpin.getValueFactory().setValue(newValue.intValue());
+	    break;
+	    case 1: Settings.skalierungswertX = newValue.intValue();
+	    		prefsSaver.setPerf("skalierungswertX", newValue.intValue());
+	    		this.skalierungswertX.setValue(newValue.doubleValue());
+	    		this.skalXSpin.getValueFactory().setValue(newValue.intValue());
+	    break;
+	    case 2: Settings.skalierungswertY = newValue.intValue();
+	    		prefsSaver.setPerf("skalierungswertY", newValue.intValue());
+	    		this.skalierungswertY.setValue(newValue.doubleValue());
+	    		this.skalYSpin.getValueFactory().setValue(newValue.intValue());
+	    break;
+	    case 3: 
+	    		System.out.println("case3 " + newValue);
+	    		System.out.println("float " + newValue.floatValue());
+	    		System.out.println("cast double " + (Double) newValue );
+	    		System.out.println("double " + newValue.doubleValue());
+	    		Settings.bildskalierung = newValue.floatValue();
+	    		prefsSaver.setPerfFloat("bildskalierung", newValue.floatValue());
+	    		this.bildskalierung.setValue(newValue.doubleValue());
+	    		this.bildSkalSpin.getValueFactory().setValue((Double) newValue);
+	    break;
+	    case 4: 
+	    		Settings.polygonAnzahl = newValue.intValue();
+	    		prefsSaver.setPerfFloat("polygonAnzahl", newValue.intValue());
+	    		this.polygonAnzahl.setValue(newValue.doubleValue());
+	    		this.polyAnSpin.getValueFactory().setValue(newValue.intValue());
+	    break;
+	    }	
+	}
+
+	private void setUpSettings(){
+		//Spinner muessen zu erst erstellt werden weil Property Factory erstellt werden muss.. zur sicherheit..
+		setUpSpinnerInt(oswSpin, 0, 0, 255, 1, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
+		setUpSpinnerInt(skalXSpin, 1, 1, 100, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
+		setUpSpinnerInt(skalYSpin, 2, 1, 100, 1, prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
+		setUpSpinnerDouble(bildSkalSpin, 3, 0.1, 10, 0.1, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
+		setUpSpinnerInt(polyAnSpin, 4, 100, 10000, 1, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
+		
+		setUpSlider(obererSchwellenWert, 0, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
+		setUpSlider(skalierungswertX, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
+		setUpSlider(skalierungswertY, 2, prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
+		setUpSlider(bildskalierung, 3, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
+		setUpSlider(polygonAnzahl, 4, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
+		
+		Settings.obererSchwellenWert = prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert);
+		Settings.skalierungswertX = prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX);
+		Settings.skalierungswertY = prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY);
+		Settings.bildskalierung = prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung);
+		Settings.polygonAnzahl = prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl);
+	}
+	
 	/**
 	 * Handles the slider reset button. The setValue() method also fires the change listener that is attached to the buttons.
 	 * therefore the everything should be changed as usual
@@ -146,88 +249,12 @@ public class UIController implements Initializable  {
 	 */
 	@FXML 
 	private void handleSliderReset(ActionEvent e){
+		//Dank des changelisteners und der settValueSet verknuepfung reicht es, die slider zu aendern....
 		obererSchwellenWert.setValue(backupValues[0]);
 		skalierungswertX.setValue(backupValues[1]);
 		skalierungswertY.setValue(backupValues[2]);
 		bildskalierung.setValue(backupValues[3]);
 		polygonAnzahl.setValue(backupValues[4]);
-		oswVal.setText(String.valueOf(Settings.obererSchwellenWert));
-		swXVal.setText(String.valueOf(Settings.skalierungswertX));
-		swYVal.setText(String.valueOf(Settings.skalierungswertY));
-		bildsVal.setText(String.valueOf(Settings.bildskalierung));
-		polygonAnzahlT.setText(String.valueOf(Settings.polygonAnzahl));
-		//System.out.println(Settings.obererSchwellenWert);
-	}
-	
-	/**
-	 * Sets up one Slider and is used multiple times to do it for more sliders. Also handles what the sliders do and sets
-	 * their dependancys on other sliders. Two special cases being bereichsSkalierung a Bildskalierung. They resive a warning 
-	 * when set incorrectly but it might not even reach their maximum when scrolled quickly. Might be smart to set them to their
-	 * max-possible values. Need to think on that =)
-	 * @param slider
-	 * @param val
-	 * @param pos
-	 */
-	private void setUpSlider(Slider slider, Text val, int pos){
-		slider.valueChangingProperty().addListener((obs, wasChanging, isChanging) -> {
-			System.out.println(wasChanging);
-		});
-		slider.valueProperty().addListener((observable, oldValue, newValue) -> {
-    	    System.out.println("Slider Value Changed (newValue: " + newValue.intValue() + ")");
-    	    switch(pos){
-    	    case 0: Settings.obererSchwellenWert = newValue.intValue();
-    	    		val.setText(String.valueOf(newValue.intValue()));
-    	    		prefsSaver.setPerf("obererSchwellenWert", newValue.intValue());
-    	    		
-    	    break;
-    	    case 1: Settings.skalierungswertX = newValue.intValue();
-    	    		val.setText(String.valueOf(newValue.intValue()));
-    	    		prefsSaver.setPerf("skalierungswertX", newValue.intValue());
-    	    break;
-    	    case 2: Settings.skalierungswertY = newValue.intValue();
-    	    		val.setText(String.valueOf(newValue.intValue()));;
-    	    		prefsSaver.setPerf("skalierungswertY", newValue.intValue());
-    	    break;
-    	    case 3: 
-    	    		Settings.bildskalierung = newValue.floatValue();
-    	    		val.setText(String.valueOf(newValue.floatValue()));
-    	    		prefsSaver.setPerfFloat("bildskalierung", newValue.floatValue());
-    	    break;
-    	    case 4: 
-    	    		Settings.polygonAnzahl = newValue.intValue();
-    	    		val.setText(String.valueOf(newValue.intValue()));
-    	    		prefsSaver.setPerfFloat("polygonAnzahl", newValue.intValue());
-    	    break;
-    	    }
-    	});
-		
-	}
-	/**
-	 * Sets up all the sliders and get the safed values
-	 */
-	private void setUpSliders(){
-		System.out.println("ulameta");
-		Slider[] sliderArray = {obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, polygonAnzahl};
-		Text[] sliderVals = {oswVal, swXVal, swYVal, bildsVal, polygonAnzahlT};
-		sliderArray[0].setValue(prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
-		sliderArray[1].setValue(prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
-		sliderArray[2].setValue(prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
-		sliderArray[3].setValue(prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
-		sliderArray[4].setValue(prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
-		sliderVals[0].setText(String.valueOf(prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert)));
-		sliderVals[1].setText(String.valueOf(prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX)));
-		sliderVals[2].setText(String.valueOf(prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY)));
-		sliderVals[3].setText(String.valueOf(prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung)));
-		sliderVals[4].setText(String.valueOf(prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl)));
-		
-		Settings.obererSchwellenWert = prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert);
-		Settings.skalierungswertX = prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX);
-		Settings.skalierungswertY = prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY);
-		Settings.bildskalierung = prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung);
-		Settings.polygonAnzahl = prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl);
-		for(int i = 0; i < sliderArray.length; i++){
-			setUpSlider(sliderArray[i], sliderVals[i], i);
-		}
 	}
 
 
@@ -244,14 +271,9 @@ public class UIController implements Initializable  {
     	System.out.println(selectedMenuItem.getText() + qualitySelected );
     	System.out.println("haaaaaloooo");
     	prefsSaver = new PreferencesSaver();
-    	setUpSliders();
-    	
-    	
-    	//System.out.println(sliderArray[1]);
-    	//System.out.println(bilderZahl);
-    	//System.out.println(obererSchwellenWert.getId());;
-    	//sliderArray[0].setId("#penis");
-    	//System.out.println(obererSchwellenWert.getId());;
+    	//setUpSliders();
+    	setUpSettings();
+
     } 
     
     /**
