@@ -107,13 +107,12 @@ public class PolygonViewer implements ApplicationListener {
 			Server server = new Server(1234);
 			server.setReceiveAction((File f) -> {
 				Line l = new Line().getHoehe(f);
-				if(l.y1 == 0 && l.y2 == 0){
+				if(Math.abs(l.y1 - l.y2) == 0 ){
 					return;
 				}
 				//Die aus dem Bild ausgewerten Punkte werden abgespeichert
 				bilder.add(f);
-				ArrayList<Vec2> points = new Bildpunkte(f, l).getPunkte();
-				pictureData.add(points);
+				pictureData.add(new Bildpunkte(f, l).getPunkte());
 			});
 			server.setCloseAction(() -> {
 				setupModel(VerticesGeneration.genVerticesTest(pictureData));
