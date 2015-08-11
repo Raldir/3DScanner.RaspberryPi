@@ -11,6 +11,7 @@ import java.util.HashSet;
 public class FileCreator {
 	
 	public static String pfad = "C:\\Users\\Ramor\\Desktop\\test1.obj";
+	public static int glaettungsfaktor = 8;
 	
 	
 	public static void createFile(ArrayList<Vertex> vertices){
@@ -42,7 +43,7 @@ public class FileCreator {
 			bw.newLine();
 			bw.write("usemtl Material");
 			bw.newLine();
-			bw.write("s 8");
+			bw.write("s " + glaettungsfaktor);
 			for(Triangle t : tris){
 				bw.newLine();
 				bw.write("f " + (vertices.indexOf(t.a) + 1) + " " + (vertices.indexOf(t.b) + 1) + " " + (vertices.indexOf(t.c) + 1));
