@@ -51,7 +51,7 @@
       <Button fx:id="startButton" alignment="CENTER" defaultButton="true" layoutX="267.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="26.0" prefWidth="93.0" text="" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="51.0" />
       <Text fx:id="lastCalibrationDate" layoutX="127.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Nie" wrappingWidth="292.0000002384186" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="127.0" />
       <Label layoutX="16.0" layoutY="356.0" text="Zuletzt kalibriert:" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="16.0" />
-      <AnchorPane layoutX="15.0" layoutY="121.0" minHeight="152.0" minWidth="360.0" prefHeight="170.0" prefWidth="462.0" AnchorPane.leftAnchor="15.0">
+      <AnchorPane layoutX="15.0" layoutY="121.0" minHeight="152.0" minWidth="360.0" prefHeight="218.0" prefWidth="462.0" AnchorPane.leftAnchor="15.0">
          <children>
             <Slider fx:id="obererSchwellenWert" layoutX="3.0" layoutY="1.0" majorTickUnit="51.0" max="255.0" showTickLabels="true" AnchorPane.leftAnchor="3.0" />
             <Slider fx:id="skalierungswertX" layoutX="3.0" layoutY="34.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
@@ -71,6 +71,9 @@
                <cursor>
                   <Cursor fx:constant="DEFAULT" />
                </cursor></Spinner>
+            <Slider fx:id="glaettungBlender" blockIncrement="1.0" layoutX="2.0" layoutY="174.0" majorTickUnit="1.0" max="10.0" min="1.0" showTickLabels="true" value="1.0" />
+            <Label layoutX="149.0" layoutY="174.0" text="GlaettungBlender" />
+            <Spinner fx:id="glaetBlenderSpin" layoutX="291.0" layoutY="169.0" prefHeight="26.0" prefWidth="100.0" />
          </children>
       </AnchorPane>
       <Button fx:id="resetSliderButton" layoutX="388.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleSliderReset" text="Reset Sliders" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />
