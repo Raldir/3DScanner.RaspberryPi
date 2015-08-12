@@ -10,6 +10,7 @@ import java.util.HashSet;
 
 public class FileCreator {
 	
+	///Eventuell sollte man hier den default pfad rausnehmen?
 	public static String pfad = "C:\\Users\\Ramor\\Desktop\\test1.obj";
 	public static int glaettungsfaktor = 8;
 	

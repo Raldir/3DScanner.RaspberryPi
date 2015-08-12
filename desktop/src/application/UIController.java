@@ -26,6 +26,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -35,6 +36,7 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class UIController implements Initializable  {
@@ -57,6 +59,8 @@ public class UIController implements Initializable  {
 	private Spinner<Integer> oswSpin, skalXSpin, skalYSpin, polyAnSpin;
 	@FXML
 	private Spinner<Double> bildSkalSpin;
+	@FXML
+	private MenuItem closeButt, saveAs, saveSettings, loadSettings, howToUse, about;
 	
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
@@ -66,6 +70,36 @@ public class UIController implements Initializable  {
 	private PreferencesSaver prefsSaver; 
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
+	
+	/**
+	 * 
+	 * kuemmert sich um das speiche. sollt so funzen kann ich aber nicht checken. Man kann sicherlich noch verfeinerer
+	 * Also bei mir erstellts sogar ein leres dokument grade gemerkt =)
+	 * http://java-buddy.blogspot.de/2012/05/save-file-with-javafx-filechooser.html
+	 * http://docs.oracle.com/javafx/2/ui_controls/file-chooser.htm
+	 * Werde bei gelegeneiht noch default namen oder sowas rumwerkeln. Standart speicherort usw.
+	 * @param e
+	 */
+	@FXML
+	private void hadleSaveAs(ActionEvent e){
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Save As...");
+		  
+        //Set extension filter. Sorgt dafür das die richitige endung vorgegben ist
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Blender Datei", "*.obj");
+        fileChooser.getExtensionFilters().add(extFilter);
+        //Show save file dialog
+        File filePath = fileChooser.showSaveDialog(Main.stage);
+        
+        if(filePath != null){
+        	//System.out.println(filePath);
+        	System.out.println(filePath.toString());
+        	FileCreator.pfad = filePath.toString();
+        	FileCreator.createFile(PolygonViewer.vertices);
+        }
+    }
+		
+	
 	/**NOT Functional Yet
 	 * handles the calibration provides a popup window with further information. Needs to be combined with acctual calibration...
 	 * @param e
@@ -73,7 +107,6 @@ public class UIController implements Initializable  {
 	@FXML
 	private void handleCalibrate(ActionEvent e)
 	{
-		FileCreator.createFile(PolygonViewer.vertices);
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Kalibrierungsanleitung");
 		alert.setHeaderText(null);
@@ -226,7 +259,7 @@ public class UIController implements Initializable  {
 		setUpSpinnerInt(oswSpin, 0, 0, 255, 1, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
 		setUpSpinnerInt(skalXSpin, 1, 1, 100, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
 		setUpSpinnerInt(skalYSpin, 2, 1, 100, 1, prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
-		setUpSpinnerDouble(bildSkalSpin, 3, 0.1, 10, 0.1, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
+		setUpSpinnerDouble(bildSkalSpin, 3, 0.1, 10, 0.01, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
 		setUpSpinnerInt(polyAnSpin, 4, 100, 10000, 1, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
 		
 		setUpSlider(obererSchwellenWert, 0, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));

@@ -14,6 +14,28 @@
 
 <AnchorPane maxHeight="500.0" maxWidth="500.0" minHeight="400.0" minWidth="500.0" prefHeight="400.0" prefWidth="500.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UIController">
    <children>
+      <MenuBar prefHeight="29.0" prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="closeButt" mnemonicParsing="false" text="Close" />
+                  <MenuItem fx:id="saveAs" mnemonicParsing="false" onAction="#hadleSaveAs" text="Save as..." />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Settings">
+            <items>
+              <MenuItem fx:id="saveSettings" mnemonicParsing="false" text="Save Settings..." />
+                  <MenuItem fx:id="loadSettings" mnemonicParsing="false" text="Load Settings..." />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+                  <MenuItem fx:id="howToUse" mnemonicParsing="false" onAction="#handleHelp" text="How to use..." />
+              <MenuItem fx:id="about" mnemonicParsing="false" text="About..." />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
      <Button fx:id="helpButton" accessibleHelp="Hilfe" alignment="CENTER" contentDisplay="CENTER" layoutX="459.0" layoutY="51.0" maxHeight="26.0" maxWidth="26.0" minHeight="26.0" minWidth="26.0" mnemonicParsing="false" onAction="#handleHelp" prefHeight="26.0" prefWidth="26.0" styleClass="runderKnopf" text="?" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="51.0">
          <font>
             <Font name="Times New Roman" size="13.0" />
@@ -52,27 +74,5 @@
          </children>
       </AnchorPane>
       <Button fx:id="resetSliderButton" layoutX="388.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleSliderReset" text="Reset Sliders" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />
-      <MenuBar prefHeight="29.0" prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-                  <MenuItem mnemonicParsing="false" text="Save as..." />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Settings">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Save Settings..." />
-                  <RadioMenuItem mnemonicParsing="false" text="Load Settings..." />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-                  <MenuItem mnemonicParsing="false" text="How to use..." />
-              <MenuItem mnemonicParsing="false" text="About..." />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
    </children>
 </AnchorPane>

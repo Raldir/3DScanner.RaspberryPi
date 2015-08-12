@@ -9,10 +9,10 @@ import javafx.scene.Scene;
 
 
 public class Main extends Application {
-    
-    
+    static Stage stage; 
     @Override
     public void start(Stage stage) throws Exception {
+    	Main.stage = stage;
     	System.out.println("hi");
         Parent root = FXMLLoader.load(getClass().getResource("Test_UI.fxml"));
         Scene scene = new Scene(root);
