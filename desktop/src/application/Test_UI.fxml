@@ -24,8 +24,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Settings">
             <items>
-              <MenuItem fx:id="saveSettings" mnemonicParsing="false" text="Save Settings..." />
-                  <MenuItem fx:id="loadSettings" mnemonicParsing="false" text="Load Settings..." />
+              <MenuItem fx:id="saveSettings" mnemonicParsing="false" onAction="#handleSettingsSave" text="Save Settings..." />
+                  <MenuItem fx:id="loadSettings" mnemonicParsing="false" onAction="#handleSettingsLoad" text="Load Settings..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -58,22 +58,19 @@
             <Slider fx:id="skalierungswertY" layoutX="3.0" layoutY="68.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
             <Slider fx:id="bildskalierung" blockIncrement="1.0" layoutX="3.0" layoutY="101.0" majorTickUnit="4.9" max="10.0" min="0.1" showTickLabels="true" value="0.1" AnchorPane.leftAnchor="3.0" />
             <Slider fx:id="polygonAnzahl" layoutX="3.0" layoutY="136.0" majorTickUnit="4900.0" max="10000.0" min="100.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
+            <Slider fx:id="glaettungBlender" blockIncrement="1.0" layoutX="2.0" layoutY="174.0" majorTickUnit="1.0" max="10.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="2.0" />
             <Label layoutX="149.0" text="obererSchwellenWert" AnchorPane.leftAnchor="149.0" />
             <Label layoutX="149.0" layoutY="68.0" text="skalierungswertY" AnchorPane.leftAnchor="149.0" />
             <Label layoutX="150.0" layoutY="34.0" text="skalierungswertX" AnchorPane.leftAnchor="149.0" />
             <Label layoutX="150.0" layoutY="101.0" text="Glaettungsfakor" AnchorPane.leftAnchor="149.0" />
             <Label layoutX="150.0" layoutY="136.0" text="polygonAnzahl" AnchorPane.leftAnchor="149.0" />
+            <Label layoutX="149.0" layoutY="174.0" text="GlaettungBlender" AnchorPane.leftAnchor="149.0" />
             <Spinner fx:id="oswSpin" layoutX="291.0" layoutY="-5.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
             <Spinner fx:id="skalXSpin" layoutX="291.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
             <Spinner fx:id="skalYSpin" layoutX="292.0" layoutY="63.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
             <Spinner fx:id="bildSkalSpin" layoutX="292.0" layoutY="96.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
-            <Spinner fx:id="polyAnSpin" layoutX="292.0" layoutY="131.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0">
-               <cursor>
-                  <Cursor fx:constant="DEFAULT" />
-               </cursor></Spinner>
-            <Slider fx:id="glaettungBlender" blockIncrement="1.0" layoutX="2.0" layoutY="174.0" majorTickUnit="1.0" max="10.0" min="1.0" showTickLabels="true" value="1.0" />
-            <Label layoutX="149.0" layoutY="174.0" text="GlaettungBlender" />
-            <Spinner fx:id="glaetBlenderSpin" layoutX="291.0" layoutY="169.0" prefHeight="26.0" prefWidth="100.0" />
+            <Spinner fx:id="polyAnSpin" layoutX="292.0" layoutY="131.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
+         	<Spinner fx:id="glaetBlenderSpin" layoutX="291.0" layoutY="169.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
          </children>
       </AnchorPane>
       <Button fx:id="resetSliderButton" layoutX="388.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleSliderReset" text="Reset Sliders" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />

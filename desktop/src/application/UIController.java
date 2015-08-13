@@ -70,6 +70,7 @@ public class UIController implements Initializable  {
 	private PreferencesSaver prefsSaver; 
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
+	private SettingsSaver savedSetts;
 	
 	/**
 	 * 
@@ -98,6 +99,39 @@ public class UIController implements Initializable  {
         	FileCreator.createFile(PolygonViewer.vertices);
         }
     }
+	
+	@FXML 
+	private void handleSettingsSave(ActionEvent e){
+		System.out.println("in the function");
+		this.savedSetts = new SettingsSaver(FileCreator.glaettungsfaktor, Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.polygonAnzahl, Settings.bildskalierung);
+		savedSetts.saveSettings("name");
+		System.out.println("done with method");
+		
+	}
+	
+	@FXML
+	private void handleSettingsLoad(ActionEvent e){
+		String nameOfSave = "name";
+		this.savedSetts = savedSetts.loadSettings(nameOfSave);
+		System.out.println(savedSetts);
+		System.out.println(savedSetts.getBildskalierung());
+		savedSetts.systout();
+		setUpSliderFromSaved(nameOfSave);
+	}
+	
+	private void setUpSliderFromSaved(String nameOfSave){
+		//Dank des changelisteners und der settValueSet verknuepfung reicht es, die slider zu aendern....
+		obererSchwellenWert.setValue(savedSetts.getObererSchwellenWert());
+		System.out.println("obschwell"+savedSetts.getObererSchwellenWert());
+		skalierungswertX.setValue(savedSetts.getSkalierungswertX());
+		System.out.println("sX"+savedSetts.getSkalierungswertX());
+		skalierungswertY.setValue(savedSetts.getSkalierungswertY());
+		System.out.println("sy"+savedSetts.getSkalierungswertY());
+		bildskalierung.setValue(savedSetts.getBildskalierung());
+		polygonAnzahl.setValue(savedSetts.getPolygonAnzahl());
+		//HIER GLAETTUNG falls was nicht funzt
+		glaettungBlender.setValue(savedSetts.getGlaettungsfaktor());
+	}
 		
 	
 	/**NOT Functional Yet
@@ -245,9 +279,10 @@ public class UIController implements Initializable  {
 	    break;
 	    case 4: 
 	    		Settings.polygonAnzahl = newValue.intValue();
-	    		prefsSaver.setPerfFloat("polygonAnzahl", newValue.intValue());
+	    		prefsSaver.setPerf("polygonAnzahl", newValue.intValue());
 	    		this.polygonAnzahl.setValue(newValue.doubleValue());
 	    		this.polyAnSpin.getValueFactory().setValue(newValue.intValue());
+	    break;
 	    case 5:
 	    		//HIER GLAETTUNG falls was nicht funzt
 	    		FileCreator.glaettungsfaktor = newValue.intValue();
@@ -285,6 +320,8 @@ public class UIController implements Initializable  {
 		FileCreator.glaettungsfaktor = prefsSaver.getPref("glaettungsfaktor", FileCreator.glaettungsfaktor);
 	}
 	
+	
+	
 	/**
 	 * Handles the slider reset button. The setValue() method also fires the change listener that is attached to the buttons.
 	 * therefore the everything should be changed as usual
@@ -316,6 +353,8 @@ public class UIController implements Initializable  {
     	System.out.println(selectedMenuItem.getText() + qualitySelected );
     	System.out.println("haaaaaloooo");
     	prefsSaver = new PreferencesSaver();
+    	
+    	
     	//setUpSliders();
     	setUpSettings();
 

@@ -3,7 +3,7 @@ package application;
 import java.util.prefs.Preferences;
 
 public class PreferencesSaver {
-	Preferences prefs;
+	Preferences prefs; 
 	
 	public PreferencesSaver() {
 		// Retrieve the user preference node for the package com.mycompany
@@ -40,4 +40,5 @@ public class PreferencesSaver {
 		//System.out.println();
 		return this.prefs.getFloat(name, defaultValue);
 	}
+	
 }
