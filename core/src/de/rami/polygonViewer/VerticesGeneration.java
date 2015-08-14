@@ -19,10 +19,10 @@ public class VerticesGeneration {
 		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
 		for(int i = 1; i < 5; i++){
 			ArrayList<Vec2> temp = new ArrayList<Vec2>();
-			temp.add(Vec2.vec2(5, 2));
-			temp.add(Vec2.vec2(5, 3));
-			temp.add(Vec2.vec2(5, 4));
-			temp.add(Vec2.vec2(5, 5));
+			temp.add(Vec2.vec2(8, 3));
+			temp.add(Vec2.vec2(4, 4));
+			temp.add(Vec2.vec2(6, 5));
+			temp.add(Vec2.vec2(5, 6));
 			list.add(temp);
 		}
 		ArrayList<Vertex> verts = genVerticesTest(list);
