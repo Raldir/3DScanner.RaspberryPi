@@ -43,10 +43,13 @@ public class SettingsSaver implements java.io.Serializable{
 	public SettingsSaver loadSettings(String nameOfSett){
 		 try{
 			   FileInputStream fin = new FileInputStream("/Users/Ich/Desktop/"+nameOfSett);
+			   System.out.println("/Users/Ich/Desktop/"+nameOfSett);
 			   ObjectInputStream ois = new ObjectInputStream(fin);
 			   SettingsSaver savedSetts = (SettingsSaver) ois.readObject();
 			   ois.close();
+			   //useless because it must be null!!! gets the values from previously ceated object not savedSetts
 			   System.out.println("loadsett "+glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
+			   systout();
 			   return savedSetts;
 			   
 		   }catch(Exception ex){

@@ -34,15 +34,17 @@ import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class UIController implements Initializable  {
 	
 	@FXML
-	private Button kalibrierenButton, startButton, helpButton, resetSliderButton;
+	private Button kalibrierenButton, startButton, helpButton, resetSliderButton, SettSaveButton;
 	@FXML 
 	private SplitMenuButton qualityChoose;
 	@FXML
@@ -71,7 +73,12 @@ public class UIController implements Initializable  {
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
 	private SettingsSaver savedSetts;
+	private Main main;
 	
+	
+	public void setMain(Main main){
+		this.main = main;
+	}
 	/**
 	 * 
 	 * kuemmert sich um das speiche. sollt so funzen kann ich aber nicht checken. Man kann sicherlich noch verfeinerer
@@ -99,38 +106,86 @@ public class UIController implements Initializable  {
         	FileCreator.createFile(PolygonViewer.vertices);
         }
     }
+	private void showNewDialog(String fxmlName, int width, int height) throws IOException{
+		Parent root = FXMLLoader.load(getClass().getResource(fxmlName));
+        // Create the dialog Stage.
+        //System.out.println(scene.getWidth());
+        Stage dialogStage = new Stage();
+        dialogStage.setWidth(width);
+        dialogStage.setHeight(height);
+        dialogStage.setResizable(false);
+        dialogStage.setTitle("Edit Person");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(Main.stage);
+        
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+        dialogStage.setScene(scene);
+        
+        dialogStage.showAndWait();   
+	}
+	
 	
 	@FXML 
-	private void handleSettingsSave(ActionEvent e){
-		System.out.println("in the function");
+	private void handleSettingsSave(ActionEvent e) throws IOException{
+		showNewDialog("Save_Settings.fxml", 286, 100);
+		
+		/*System.out.println("in the function");
 		this.savedSetts = new SettingsSaver(FileCreator.glaettungsfaktor, Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.polygonAnzahl, Settings.bildskalierung);
 		savedSetts.saveSettings("name");
-		System.out.println("done with method");
+		System.out.println("done with method");*/
 		
 	}
 	
 	@FXML
-	private void handleSettingsLoad(ActionEvent e){
-		String nameOfSave = "name";
-		this.savedSetts = savedSetts.loadSettings(nameOfSave);
-		System.out.println(savedSetts);
-		System.out.println(savedSetts.getBildskalierung());
-		savedSetts.systout();
-		setUpSliderFromSaved(nameOfSave);
+	private void handleSettingsLoad(ActionEvent e) throws IOException{
+		//FXMLLoader loader = FXMLLoader.load(getClass().getResource("Settings_Selection.fxml"));
+        // Create the dialog Stage.
+        //System.out.println(scene.getWidth());
+		/*FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("Settings_Selection.fxml"));
+        Stage dialogStage = new Stage();
+        dialogStage.setWidth(250);
+        dialogStage.setHeight(250);
+        dialogStage.setResizable(false);
+        dialogStage.setTitle("Edit Person");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(Main.stage);
+        Parent root = (Parent) loader.load();
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+        dialogStage.setScene(scene);
+        SettingsSelectionController controller = loader.getController();
+		System.out.println(controller.isSelClicked());*/
+			
+		if(main.isSelectedSettings()){
+			
+			this.savedSetts = main.getSavedSetts(); 
+			setUpSliderFromSaved();
+			System.out.println("bibib");
+		}
+		
+		//String nameOfSave = "name";
+		//this.savedSetts = savedSetts.loadSettings(nameOfSave);
+		//System.out.println(savedSetts);
+		//System.out.println(savedSetts.getBildskalierung());
+		//savedSetts.systout();
+		//setUpSliderFromSaved(nameOfSave);
 	}
 	
-	private void setUpSliderFromSaved(String nameOfSave){
+	public void setUpSliderFromSaved(){
 		//Dank des changelisteners und der settValueSet verknuepfung reicht es, die slider zu aendern....
-		obererSchwellenWert.setValue(savedSetts.getObererSchwellenWert());
-		System.out.println("obschwell"+savedSetts.getObererSchwellenWert());
-		skalierungswertX.setValue(savedSetts.getSkalierungswertX());
-		System.out.println("sX"+savedSetts.getSkalierungswertX());
-		skalierungswertY.setValue(savedSetts.getSkalierungswertY());
-		System.out.println("sy"+savedSetts.getSkalierungswertY());
-		bildskalierung.setValue(savedSetts.getBildskalierung());
-		polygonAnzahl.setValue(savedSetts.getPolygonAnzahl());
+		System.out.println("obschwell"+this.savedSetts.getObererSchwellenWert());
+		obererSchwellenWert.setValue(this.savedSetts.getObererSchwellenWert());
+		System.out.println("obschwell"+this.savedSetts.getObererSchwellenWert());
+		skalierungswertX.setValue(this.savedSetts.getSkalierungswertX());
+		System.out.println("sX"+this.savedSetts.getSkalierungswertX());
+		skalierungswertY.setValue(this.savedSetts.getSkalierungswertY());
+		System.out.println("sy"+this.savedSetts.getSkalierungswertY());
+		bildskalierung.setValue(this.savedSetts.getBildskalierung());
+		polygonAnzahl.setValue(this.savedSetts.getPolygonAnzahl());
 		//HIER GLAETTUNG falls was nicht funzt
-		glaettungBlender.setValue(savedSetts.getGlaettungsfaktor());
+		glaettungBlender.setValue(this.savedSetts.getGlaettungsfaktor());
 	}
 		
 	
@@ -235,8 +290,7 @@ public class UIController implements Initializable  {
 		});
 		
 	}
-	
-	
+
 	/**
 	 * Sets up one Slider and is used multiple times to do it for more sliders. Also handles what the sliders do
 	 * TODO perhaps add the same parameters like setUpSpinner() to have save min and max because while the values stick to the 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="100.0" maxWidth="286.0" minHeight="100.0" minWidth="286.0" prefHeight="100.0" prefWidth="286.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SaveSettingsController">
+   <children>
+      <Button fx:id="saveButton" layoutX="186.0" layoutY="46.0" mnemonicParsing="false" onAction="#handleSave" text="Speichern" AnchorPane.leftAnchor="186.0" />
+      <Label layoutX="44.0" layoutY="6.0" text="Namen zum speichern auswählen" AnchorPane.leftAnchor="44.0" />
+      <TextField fx:id="saveName" layoutX="14.0" layoutY="46.0" AnchorPane.leftAnchor="14.0" />
+   </children>
+</AnchorPane>

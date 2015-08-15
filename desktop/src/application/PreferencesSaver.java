@@ -1,5 +1,6 @@
 package application;
 
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class PreferencesSaver {
@@ -40,5 +41,37 @@ public class PreferencesSaver {
 		//System.out.println();
 		return this.prefs.getFloat(name, defaultValue);
 	}
+	/**
+	 * Okaaay might be this is stupid but her we save the number of presets (saved settings) we have saved so far
+	 */
+	public void setAmountPrefsSaved(String key, int amount){
+		this.prefs.put(key, String.valueOf(amount));
+		System.out.println("new amount of saved settings = "+amount );
+	}
 	
+	/**
+	 * And her we save the individual preset with under its position in the list which we can ask for above method and iterate through it
+	 * and its position retrieves the name where it is to find. 
+	 */
+	public void savePreset(int pos, String name){
+		this.prefs.put(String.valueOf(pos), name );
+		System.out.println("Die einstellung mit dem Namen " + name +"hatt die pos "+pos);
+	}
+	//TODO think of a intelligent way to handle the default value...
+	public int getAmountPrefsSaved(String key){
+		return this.prefs.getInt(key, 0);
+	}
+	//TODO think of a intelligent way to handle the default value...
+	public String getSavedPreset(int pos){
+		return this.prefs.get(String.valueOf(pos), "Failed To retrieve");
+	}
+	
+	public void clear(){
+		try {
+			this.prefs.clear();
+		} catch (BackingStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
