@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="221.0" maxWidth="250.0" minHeight="200.0" minWidth="250.0" prefHeight="221.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SettingsSelectionController">
+   <children>
+      <Button fx:id="selectButton" defaultButton="true" layoutX="140.0" layoutY="181.0" mnemonicParsing="false" onAction="#handleSelect" text="Auswählen" AnchorPane.leftAnchor="140.0" />
+      <ListView fx:id="settingsList" layoutX="27.0" layoutY="31.0" prefHeight="141.0" prefWidth="197.0" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="31.0" />
+      <Button fx:id="deleteButton" layoutX="27.0" layoutY="181.0" mnemonicParsing="false" onAction="#handleDelete" text="Löschen" AnchorPane.leftAnchor="27.0" />
+      <Label layoutX="76.0" layoutY="6.0" text="Preset auswälen" AnchorPane.leftAnchor="76.0" />
+   </children>
+</AnchorPane>

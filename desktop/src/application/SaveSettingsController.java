@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class SaveSettingsController {
 	@FXML
@@ -15,7 +16,7 @@ public class SaveSettingsController {
 	
 	private SettingsSaver savedSetts;
 	private PreferencesSaver prefsSaver;
-	//static int AmountPrefsSaved;
+	
 	@FXML
 	private void handleSave(ActionEvent e){
 		
@@ -28,10 +29,16 @@ public class SaveSettingsController {
 			prefsSaver.clear();
 			System.out.println("cleared");
 		}
+		 
+		//TODO maybe add a small sign on the mainwindow that shows that everything was saved...
+		
+		Stage stage = (Stage) saveButton.getScene().getWindow();
+		stage.close();
 	}
 	
 	@FXML
     private void initialize() {
+		//saveName.requestFocus();
     }
 
 

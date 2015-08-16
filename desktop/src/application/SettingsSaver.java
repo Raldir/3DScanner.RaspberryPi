@@ -6,6 +6,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class SettingsSaver implements java.io.Serializable{
+	/**
+	 * I have no idea what that does. If it causes conflicts get rid of it. it works without it, too
+	 */
+	private static final long serialVersionUID = -3705430483055238924L;
 	int glaettungsfaktor, obererSchwellenWert, skalierungswertX, skalierungswertY, polygonAnzahl;
 	float bildskalierung;
 

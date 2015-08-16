@@ -9,19 +9,7 @@ public class PreferencesSaver {
 	public PreferencesSaver() {
 		// Retrieve the user preference node for the package com.mycompany
 		this.prefs = Preferences.userNodeForPackage(application.PreferencesSaver.class);
-/*
-		// Preference key name
-		final String PREF_NAME = "name_of_preference";
-
-		// Set the value of the preference
-		String newValue = "a string";
-		prefs.put(PREF_NAME, newValue);
-
-		// Get the value of the preference;
-		// default value is returned if the preference does not exist
-		String defaultValue = "default string";
-		String propertyValue = prefs.get(PREF_NAME, defaultValue); // "a string"
-*/	}
+	}
 	
 	public void setPerf(String name, int value){
 		this.prefs.put(name, String.valueOf(value));
@@ -65,7 +53,9 @@ public class PreferencesSaver {
 	public String getSavedPreset(int pos){
 		return this.prefs.get(String.valueOf(pos), "Failed To retrieve");
 	}
-	
+	/**
+	 * This is a temporary method to clean up shit so I dont get problems when testing
+	 */
 	public void clear(){
 		try {
 			this.prefs.clear();

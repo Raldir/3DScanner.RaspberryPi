@@ -3,18 +3,14 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
-
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-
 import de.rami.polygonViewer.Exec;
 import de.rami.polygonViewer.FileCreator;
 import de.rami.polygonViewer.PolygonViewer;
 import de.rami.polygonViewer.Settings;
-import de.rami.polygonViewer.desktop.DesktopLauncher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +21,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
@@ -34,7 +29,6 @@ import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
@@ -72,18 +66,13 @@ public class UIController implements Initializable  {
 	private PreferencesSaver prefsSaver; 
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
-	private SettingsSaver savedSetts;
 	private Main main;
-	
 	
 	public void setMain(Main main){
 		this.main = main;
 	}
-	/**
-	 * 
-	 * kuemmert sich um das speiche. sollt so funzen kann ich aber nicht checken. Man kann sicherlich noch verfeinerer
-	 * Also bei mir erstellts sogar ein leres dokument grade gemerkt =)
-	 * http://java-buddy.blogspot.de/2012/05/save-file-with-javafx-filechooser.html
+	
+	/** http://java-buddy.blogspot.de/2012/05/save-file-with-javafx-filechooser.html
 	 * http://docs.oracle.com/javafx/2/ui_controls/file-chooser.htm
 	 * Werde bei gelegeneiht noch default namen oder sowas rumwerkeln. Standart speicherort usw.
 	 * @param e
@@ -106,86 +95,59 @@ public class UIController implements Initializable  {
         	FileCreator.createFile(PolygonViewer.vertices);
         }
     }
-	private void showNewDialog(String fxmlName, int width, int height) throws IOException{
+	
+	/**
+	 * I have excluded this from SettingsSave() because it might be useful elsewhere later on...
+	 * @param fxmlName
+	 * @param width
+	 * @param height
+	 * @param title
+	 * @throws IOException
+	 */
+	private void showNewDialog(String fxmlName, int width, int height, String title) throws IOException{
 		Parent root = FXMLLoader.load(getClass().getResource(fxmlName));
         // Create the dialog Stage.
-        //System.out.println(scene.getWidth());
         Stage dialogStage = new Stage();
         dialogStage.setWidth(width);
         dialogStage.setHeight(height);
         dialogStage.setResizable(false);
-        dialogStage.setTitle("Edit Person");
+        dialogStage.setTitle(title);
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.initOwner(Main.stage);
-        
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         dialogStage.setScene(scene);
-        
         dialogStage.showAndWait();   
 	}
 	
-	
 	@FXML 
 	private void handleSettingsSave(ActionEvent e) throws IOException{
-		showNewDialog("Save_Settings.fxml", 286, 100);
-		
-		/*System.out.println("in the function");
-		this.savedSetts = new SettingsSaver(FileCreator.glaettungsfaktor, Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.polygonAnzahl, Settings.bildskalierung);
-		savedSetts.saveSettings("name");
-		System.out.println("done with method");*/
-		
+		showNewDialog("Save_Settings.fxml", 286, 130,"Eintstellung speichern" );
 	}
 	
+	/**
+	 * this opens the Settings selector via the main class
+	 * @param e
+	 * @throws IOException
+	 */
 	@FXML
 	private void handleSettingsLoad(ActionEvent e) throws IOException{
-		//FXMLLoader loader = FXMLLoader.load(getClass().getResource("Settings_Selection.fxml"));
-        // Create the dialog Stage.
-        //System.out.println(scene.getWidth());
-		/*FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("Settings_Selection.fxml"));
-        Stage dialogStage = new Stage();
-        dialogStage.setWidth(250);
-        dialogStage.setHeight(250);
-        dialogStage.setResizable(false);
-        dialogStage.setTitle("Edit Person");
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.initOwner(Main.stage);
-        Parent root = (Parent) loader.load();
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-        dialogStage.setScene(scene);
-        SettingsSelectionController controller = loader.getController();
-		System.out.println(controller.isSelClicked());*/
-			
-		if(main.isSelectedSettings()){
-			
-			this.savedSetts = main.getSavedSetts(); 
-			setUpSliderFromSaved();
-			System.out.println("bibib");
-		}
-		
-		//String nameOfSave = "name";
-		//this.savedSetts = savedSetts.loadSettings(nameOfSave);
-		//System.out.println(savedSetts);
-		//System.out.println(savedSetts.getBildskalierung());
-		//savedSetts.systout();
-		//setUpSliderFromSaved(nameOfSave);
+		main.settingsSelector();
 	}
 	
-	public void setUpSliderFromSaved(){
+	public void setUpSliderFromSaved(SettingsSaver savedSetts){
 		//Dank des changelisteners und der settValueSet verknuepfung reicht es, die slider zu aendern....
-		System.out.println("obschwell"+this.savedSetts.getObererSchwellenWert());
-		obererSchwellenWert.setValue(this.savedSetts.getObererSchwellenWert());
-		System.out.println("obschwell"+this.savedSetts.getObererSchwellenWert());
-		skalierungswertX.setValue(this.savedSetts.getSkalierungswertX());
-		System.out.println("sX"+this.savedSetts.getSkalierungswertX());
-		skalierungswertY.setValue(this.savedSetts.getSkalierungswertY());
-		System.out.println("sy"+this.savedSetts.getSkalierungswertY());
-		bildskalierung.setValue(this.savedSetts.getBildskalierung());
-		polygonAnzahl.setValue(this.savedSetts.getPolygonAnzahl());
+		System.out.println("obschwell"+savedSetts.getObererSchwellenWert());
+		obererSchwellenWert.setValue(savedSetts.getObererSchwellenWert());
+		System.out.println("obschwell"+savedSetts.getObererSchwellenWert());
+		skalierungswertX.setValue(savedSetts.getSkalierungswertX());
+		System.out.println("sX"+savedSetts.getSkalierungswertX());
+		skalierungswertY.setValue(savedSetts.getSkalierungswertY());
+		System.out.println("sy"+savedSetts.getSkalierungswertY());
+		bildskalierung.setValue(savedSetts.getBildskalierung());
+		polygonAnzahl.setValue(savedSetts.getPolygonAnzahl());
 		//HIER GLAETTUNG falls was nicht funzt
-		glaettungBlender.setValue(this.savedSetts.getGlaettungsfaktor());
+		glaettungBlender.setValue(savedSetts.getGlaettungsfaktor());
 	}
 		
 	
@@ -252,6 +214,7 @@ public class UIController implements Initializable  {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			//this will never be executed or maybe at he wrong time. Needs to be reworked.
 			startButton.setText("Abbrechen");
 		}
 		else{
@@ -261,13 +224,7 @@ public class UIController implements Initializable  {
 	
 	@FXML
 	private void handleHelp(ActionEvent e) throws IOException{
-		Stage stage = new Stage();
-		Parent root = FXMLLoader.load(getClass().getResource("HelpUI.fxml"));
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-        stage.setTitle("test");
-        stage.setScene(scene);
-        stage.show();
+		showNewDialog("HelpUI.fxml", 300, 400, "Hilfe" );
 	}
 	
 	private void setUpSpinnerInt(Spinner<Integer> spinner, int pos, int min, int max, int increment, int savedSet ){
@@ -374,8 +331,6 @@ public class UIController implements Initializable  {
 		FileCreator.glaettungsfaktor = prefsSaver.getPref("glaettungsfaktor", FileCreator.glaettungsfaktor);
 	}
 	
-	
-	
 	/**
 	 * Handles the slider reset button. The setValue() method also fires the change listener that is attached to the buttons.
 	 * therefore the everything should be changed as usual
@@ -392,8 +347,7 @@ public class UIController implements Initializable  {
 		//HIER GLAETTUNG falls was nicht funzt
 		glaettungBlender.setValue(backupValues[5]);
 	}
-
-
+	
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     	//Auf grund massiver Spackungen muss der Text vom Knopf hier gesetzt werden, das sonst die if nicht funzt.
@@ -407,11 +361,7 @@ public class UIController implements Initializable  {
     	System.out.println(selectedMenuItem.getText() + qualitySelected );
     	System.out.println("haaaaaloooo");
     	prefsSaver = new PreferencesSaver();
-    	
-    	
-    	//setUpSliders();
     	setUpSettings();
-
     } 
     
     /**
