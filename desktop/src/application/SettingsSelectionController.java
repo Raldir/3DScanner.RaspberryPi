@@ -20,8 +20,14 @@ public class SettingsSelectionController {
 	
 	@FXML
 	private void handleDelete(ActionEvent e){
-		System.out.println("deeleters");
+		//System.out.println("deeleters");
 		System.out.println(settingsList.getSelectionModel().getSelectedItem());
+		String nameOfSett = settingsList.getSelectionModel().getSelectedItem();
+		int pos = settingsList.getSelectionModel().getSelectedIndex();
+		//pos + 1 weil null index basiert bei index
+		System.out.println(pos+1+" position index" + nameOfSett);
+		prefsSaver.deletePreset(pos+1);
+		loadList();
 	}
 	
 	public void setUIController(UIController controller){
@@ -30,19 +36,18 @@ public class SettingsSelectionController {
 	
 	@FXML
 	private void handleSelect(ActionEvent e){
-		//have a try catch?? if nothing is selected
 		System.out.println("seeeelected");
-		settingsList.getSelectionModel().getSelectedItem();
-		System.out.println(settingsList.getSelectionModel().getSelectedItem());
-		this.savedSetts = new SettingsSaver();
-		this.savedSetts = this.savedSetts.loadSettings(settingsList.getSelectionModel().getSelectedItem());
-		this.uiController.setUpSliderFromSaved(this.savedSetts);
+		
+		if(settingsList.getSelectionModel().getSelectedItem()!= null){
+			System.out.println(settingsList.getSelectionModel().getSelectedItem());
+			this.savedSetts = new SettingsSaver();
+			this.savedSetts = this.savedSetts.loadSettings(settingsList.getSelectionModel().getSelectedItem());
+			this.uiController.setUpSliderFromSaved(this.savedSetts);
+		}
 	}
 	
-	@FXML
-    private void initialize() {
-		this.prefsSaver = new PreferencesSaver();
-		
+	private void loadList(){
+
 		ObservableList<String> data = FXCollections.observableArrayList();
 		//Attation cannot be zero indexed because 0 has the meaning that nothing is there.. therefor +1
 	    if(prefsSaver.getAmountPrefsSaved("key") > 0){
@@ -57,5 +62,11 @@ public class SettingsSelectionController {
 	    //selectButton.requestFocus();
 	    //TODO ad some way this is fireable with enter key all the time
     }	
-
+	
+	
+	@FXML
+    private void initialize() {
+		this.prefsSaver = new PreferencesSaver();
+		loadList();
+	}
 }

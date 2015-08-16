@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -46,12 +47,40 @@ public class PreferencesSaver {
 		System.out.println("Die einstellung mit dem Namen " + name +"hatt die pos "+pos);
 	}
 	//TODO think of a intelligent way to handle the default value...
+	/**
+	 * 
+	 * @param key the key to use is "key"
+	 * @return
+	 */
 	public int getAmountPrefsSaved(String key){
 		return this.prefs.getInt(key, 0);
 	}
 	//TODO think of a intelligent way to handle the default value...
 	public String getSavedPreset(int pos){
 		return this.prefs.get(String.valueOf(pos), "Failed To retrieve");
+	}
+	
+	public void deletePreset(int pos){
+		String path = "/Users/Ich/Desktop/"+getSavedPreset(pos)+".pref";
+		File f = new File(path);
+		if(f.delete()){
+			System.out.println("deleted");
+			if(getAmountPrefsSaved("key")>0){
+				for(int i = pos; i <= getAmountPrefsSaved("key"); i++){
+					//do i have to do that. cant remember...
+					int j = i;
+					System.out.println("i"+i+"j"+j);
+					System.out.println("vormspeichern"+getSavedPreset(j+1));
+					savePreset(i, getSavedPreset(j+1));
+					System.out.println( "vormspeichern"+ getSavedPreset(i));
+					System.out.println(getSavedPreset(j+1));
+				}
+				setAmountPrefsSaved("key", getAmountPrefsSaved("key")-1);
+			}
+		}
+		else{
+			System.out.println("Hat nicht gekalppt");
+		}
 	}
 	/**
 	 * This is a temporary method to clean up shit so I dont get problems when testing

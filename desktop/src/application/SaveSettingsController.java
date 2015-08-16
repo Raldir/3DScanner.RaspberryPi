@@ -19,21 +19,32 @@ public class SaveSettingsController {
 	
 	@FXML
 	private void handleSave(ActionEvent e){
-		
-		savedSetts = new SettingsSaver(FileCreator.glaettungsfaktor, Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.polygonAnzahl, Settings.bildskalierung);
-		savedSetts.saveSettings(saveName.getText());
 		prefsSaver = new PreferencesSaver();
-		prefsSaver.savePreset(prefsSaver.getAmountPrefsSaved("key")+1, saveName.getText());
-		prefsSaver.setAmountPrefsSaved("key", prefsSaver.getAmountPrefsSaved("key")+1);
-		if(saveName.getText().equals("c")){
-			prefsSaver.clear();
-			System.out.println("cleared");
+		boolean allreadyExists = false;
+		//do some checking if the name allready exists
+		for(int i = 1; i <= prefsSaver.getAmountPrefsSaved("key"); i++){
+			prefsSaver.getSavedPreset(i);
+			if(prefsSaver.getSavedPreset(i).equals(saveName.getText())){
+				allreadyExists = true;
+			}
 		}
-		 
-		//TODO maybe add a small sign on the mainwindow that shows that everything was saved...
+		if(allreadyExists == false){
+			savedSetts = new SettingsSaver(FileCreator.glaettungsfaktor, Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.polygonAnzahl, Settings.bildskalierung);
+			savedSetts.saveSettings(saveName.getText());
+			prefsSaver.savePreset(prefsSaver.getAmountPrefsSaved("key")+1, saveName.getText());
+			prefsSaver.setAmountPrefsSaved("key", prefsSaver.getAmountPrefsSaved("key")+1);
+			if(saveName.getText().equals("c")){
+				prefsSaver.clear();
+				System.out.println("cleared");
+			}
+			//TODO maybe add a small sign on the mainwindow that shows that everything was saved...
+			
+			//Stage stage = (Stage) saveButton.getScene().getWindow();
+			//stage.close();
+		} else{
+			UIController.alertGeneral("Fehler!", "Diesen Namen gibt es schon, bitte einen anderen nehmen!");
+		}
 		
-		Stage stage = (Stage) saveButton.getScene().getWindow();
-		stage.close();
 	}
 	
 	@FXML

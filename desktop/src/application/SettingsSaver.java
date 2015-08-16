@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -12,7 +13,8 @@ public class SettingsSaver implements java.io.Serializable{
 	private static final long serialVersionUID = -3705430483055238924L;
 	int glaettungsfaktor, obererSchwellenWert, skalierungswertX, skalierungswertY, polygonAnzahl;
 	float bildskalierung;
-
+	static String settingsSavePath;
+	
 	public SettingsSaver(int glaettungsfaktor, int obererSchwellenWert, int skalierungswertX, int skalierungswertY, int polygonAnzahl, float bildskalierung) {
 		this.glaettungsfaktor = glaettungsfaktor;
 		this.obererSchwellenWert = obererSchwellenWert;
@@ -31,12 +33,17 @@ public class SettingsSaver implements java.io.Serializable{
 	
 	public void saveSettings(String nameOfSett){
 		 try{
-				FileOutputStream fout = new FileOutputStream("/Users/Ich/Desktop/"+nameOfSett);
+			 	settingsSavePath =  System.getProperty("user.home")+ File.separator;
+			 	System.out.println(settingsSavePath+nameOfSett+".pref");
+				FileOutputStream fout = new FileOutputStream(settingsSavePath +nameOfSett+".pref");
 				ObjectOutputStream oos = new ObjectOutputStream(fout); 
 				System.out.println("saveStetting" +glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
 				System.out.println(this);
 				oos.writeObject(this);
+				
+				fout.close();
 				oos.close();
+				
 				System.out.println("Done");
 				   
 			   }catch(Exception ex){
@@ -46,10 +53,12 @@ public class SettingsSaver implements java.io.Serializable{
 	
 	public SettingsSaver loadSettings(String nameOfSett){
 		 try{
-			   FileInputStream fin = new FileInputStream("/Users/Ich/Desktop/"+nameOfSett);
-			   System.out.println("/Users/Ich/Desktop/"+nameOfSett);
+			   FileInputStream fin = new FileInputStream(settingsSavePath+nameOfSett+".pref");
+			   System.out.println(settingsSavePath+nameOfSett);
 			   ObjectInputStream ois = new ObjectInputStream(fin);
 			   SettingsSaver savedSetts = (SettingsSaver) ois.readObject();
+			   
+			   fin.close();
 			   ois.close();
 			   //useless because it must be null!!! gets the values from previously ceated object not savedSetts
 			   System.out.println("loadsett "+glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
