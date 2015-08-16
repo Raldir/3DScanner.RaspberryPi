@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -10,12 +11,14 @@ public class SettingsSaver implements java.io.Serializable{
 	/**
 	 * I have no idea what that does. If it causes conflicts get rid of it. it works without it, too
 	 */
+	protected static String settingsSavePath;
+	
 	private static final long serialVersionUID = -3705430483055238924L;
 	int glaettungsfaktor, obererSchwellenWert, skalierungswertX, skalierungswertY, polygonAnzahl;
 	float bildskalierung;
-	static String settingsSavePath;
 	
 	public SettingsSaver(int glaettungsfaktor, int obererSchwellenWert, int skalierungswertX, int skalierungswertY, int polygonAnzahl, float bildskalierung) {
+		settingsSavePath = calculatePath();
 		this.glaettungsfaktor = glaettungsfaktor;
 		this.obererSchwellenWert = obererSchwellenWert;
 		this.skalierungswertX = skalierungswertX; 
@@ -31,15 +34,24 @@ public class SettingsSaver implements java.io.Serializable{
 		System.out.println("sysout mthe "+glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
 	}
 	
+	public String calculatePath(){
+		String findDirectory = null;
+		try {
+			findDirectory = new File("").getCanonicalPath();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		StringBuffer sb = new StringBuffer();
+		sb.append(findDirectory.charAt(findDirectory.length() - 8));
+		if(sb.charAt(0) == findDirectory.charAt(findDirectory.length() - 8)){
+			sb.append(sb.charAt(0));
+		}
+		return (findDirectory + sb + "src" + sb + "savedSettings" + sb);
+	}
 	public void saveSettings(String nameOfSett){
 		 try{
-			String findDirectory = new File("").getCanonicalPath();
-			StringBuffer sb = new StringBuffer();
-			sb.append(findDirectory.charAt(findDirectory.length() - 8));
-			if(sb.charAt(0) == findDirectory.charAt(findDirectory.length() - 8)){
-				sb.append(sb.charAt(0));
-			}
-			FileOutputStream fout = new FileOutputStream(findDirectory + sb + "src" + sb + "savedSettings" + sb + nameOfSett);
+			FileOutputStream fout = new FileOutputStream(settingsSavePath + nameOfSett + ".txt");
 				ObjectOutputStream oos = new ObjectOutputStream(fout); 
 				System.out.println("saveStetting" +glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
 				System.out.println(this);
@@ -57,13 +69,7 @@ public class SettingsSaver implements java.io.Serializable{
 	
 	public SettingsSaver loadSettings(String nameOfSett){
 		 try{
-			 String findDirectory = new File("").getCanonicalPath();
-				StringBuffer sb = new StringBuffer();
-				sb.append(findDirectory.charAt(findDirectory.length() - 8));
-				if(sb.charAt(0) == findDirectory.charAt(findDirectory.length() - 8)){
-					sb.append(sb.charAt(0));
-				}
-			   FileInputStream fin = new FileInputStream(findDirectory + sb + "src" + sb + "savedSettings" + sb + nameOfSett);
+			   FileInputStream fin = new FileInputStream(settingsSavePath + nameOfSett + ".txt");
 			   System.out.println(settingsSavePath+nameOfSett);
 			   ObjectInputStream ois = new ObjectInputStream(fin);
 			   SettingsSaver savedSetts = (SettingsSaver) ois.readObject();
