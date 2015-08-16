@@ -14,7 +14,7 @@ public class FileCreator {
 	
 	///Eventuell sollte man hier den default pfad rausnehmen?
 	public static String pfad = "C:\\Users\\Ramor\\Desktop\\test1.obj";
-	public static String glaettungsfaktor = "off";
+	public static int glaettungsfaktor = 8;
 	
 	
 	public static void createFile(ArrayList<Vertex> vertices){
@@ -30,8 +30,6 @@ public class FileCreator {
 		try {
 			FileOutputStream out = new FileOutputStream(file);
 			BufferedWriter  bw = new BufferedWriter(new OutputStreamWriter(out));
-			bw.write("mtllib Cube.mtl");
-			bw.newLine();
 			bw.write("o scannedObject");
 			for(int i = 0;  i < vertices.size(); i++){
 				bw.newLine();
@@ -40,13 +38,13 @@ public class FileCreator {
 			bw.newLine();
 			for(int i = 0; i < vertices.size(); i++){
 				Vector3 normal =  vertices.get(i).genNormal();
-				bw.write("vn " + normal.x + " " + normal.y + " " + normal.z);
+				bw.write("vn " + -normal.x + " " + -normal.y + " " + -normal.z);
 				bw.newLine();
 			}
 			bw.write("s " + glaettungsfaktor);
 			for(Triangle t : tris){
 				bw.newLine();
-				bw.write("f " + (vertices.indexOf(t.c) + 1) + "//" + (vertices.indexOf(t.c) + 1) + " " + (vertices.indexOf(t.b) + 1)+ "//" + (vertices.indexOf(t.b) + 1) + " " + (vertices.indexOf(t.a) + 1)+ "//" + (vertices.indexOf(t.a) + 1));
+				bw.write("f " + (vertices.indexOf(t.a) + 1) + "//" + (vertices.indexOf(t.a) + 1) + " " + (vertices.indexOf(t.b) + 1)+ "//" + (vertices.indexOf(t.b) + 1) + " " + (vertices.indexOf(t.c) + 1)+ "//" + (vertices.indexOf(t.c) + 1));
 			}
 			bw.close();
 		} catch (IOException e) {

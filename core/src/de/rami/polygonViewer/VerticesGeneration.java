@@ -19,10 +19,8 @@ public class VerticesGeneration {
 		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
 		for(int i = 1; i < 5; i++){
 			ArrayList<Vec2> temp = new ArrayList<Vec2>();
-			temp.add(Vec2.vec2(8, 3));
-			temp.add(Vec2.vec2(4, 4));
-			temp.add(Vec2.vec2(6, 5));
-			temp.add(Vec2.vec2(5, 6));
+			temp.add(Vec2.vec2(2, 3));
+			temp.add(Vec2.vec2(2, 6));
 			list.add(temp);
 		}
 		ArrayList<Vertex> verts = genVerticesTest(list);
@@ -152,31 +150,19 @@ public class VerticesGeneration {
 			}
 			for(Vec2 vec : list){
 				//Erstellt einen Vektor, in dem der Normalenvektor des Winkels auf die Dicke des Objektes skaliert wird.
-				Vec2 buffer = dir.mul((vec.x - Settings.middle));
+				Vec2 buffer = dir.mul((Settings.middle - vec.x));
 				//Erstellt einen Dreidimensionalen Vektor, welcher als z Wert den y Wert der Übergebenen Punkte verwendet
 				Vertex tempVet = new Vertex(buffer.x, buffer.y, vec.y);
 				//Falls erster Punkt im Bild, wird Dreieck mit bot-Eckpunkt erstellt
 				if(j == 0){
-					tempVet.connectWith(bot);
 					if(lastPic != null){
 						tempVet.addTriangle(lastPic.get(j), bot);
 					}
 				}
 				//Falls letzter Punkt im Bild, wird Dreieck mit top-Eckpunkt erstellt
 				if(j == list.size() - 1){
-					tempVet.connectWith(top);
 					if(lastPic != null){
 						lastPic.get(j).addTriangle(tempVet, top);
-					}
-				}
-				//Verbindet Eckpunkt mit Vorherigen Eckpunkt auf gleicher Höhe(nur verwendet für LinestripModell)
-				if(vet != null){
-					vet.connectWith(tempVet);
-				}
-				if(lastPic != null && lastPic.size() > j){
-					tempVet.connectWith(lastPic.get(j));
-					if(j > 0){
-						tempVet.connectWith(lastPic.get(j - 1));
 					}
 				}
 				//Fügt dem vorherigen Eckpunkt zwei Dreiecke hinzu
@@ -199,12 +185,6 @@ public class VerticesGeneration {
 		Vertex tempVert = null;
 		//Erstellt die Dreiecke für das erste Bild und dem letzen
 		for(Vertex v: lastPic){
-			if(i > 0){
-				v.connectWith(firstPic.get(i - 1));
-			}
-			firstPic.get(i).connectWith(v);
-			
-			
 			if(tempVert != null){
 				firstPic.get(i).addTriangle(v, tempVert);
 				firstPic.get(i).addTriangle(tempVert, firstPic.get(i - 1));
