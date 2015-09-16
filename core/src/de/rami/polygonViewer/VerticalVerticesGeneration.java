@@ -13,9 +13,9 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.math.Vector3;
 
-public class VerticesGeneration {
+public class VerticalVerticesGeneration implements Vertices3DGeneration {
 	
-	public static final ArrayList<Vertex> testVerts(){
+	public final ArrayList<Vertex> testVerts(){
 		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
 		for(int i = 1; i < 5; i++){
 			ArrayList<Vec2> temp = new ArrayList<Vec2>();
@@ -23,91 +23,8 @@ public class VerticesGeneration {
 			temp.add(Vec2.vec2(2, 6));
 			list.add(temp);
 		}
-		ArrayList<Vertex> verts = genVerticesTest(list);
+		ArrayList<Vertex> verts = genVertices(list);
 		return verts;
-	}
-	
-	
-//	public static final ArrayList<Vertex> testVerts(){
-//		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
-//		Bildpunkte.Line l = new Bildpunkte.Line();
-//		l.y1= 410;
-//		l.y2 = 155;
-//		try {
-//			l = Bildpunkte.getHoehe(ImageIO.read(new File("C:\\Users\\Ramor\\Desktop\\Shot00\\img000.png")));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//				for(int j = 0; j < 49; j++){
-//					System.out.println(" ----------------------------------------" + j + "-------------------------------- ");
-//					list.add(Bildpunkte.getGesamtPoints("C:\\Users\\Ramor\\Desktop\\Shot00\\img" + (j/100) + (j / 10) % 10 + j % 10 + ".png", l));
-//				}
-//				for(int j = 11; j >= 0; j--){
-//					list.add(Bildpunkte.getGesamtPoints("C:\\Users\\Ramor\\Desktop\\Shot00\\img" + (j/100) + (j / 10) % 10 + j % 10 + ".png", l));
-//				}
-//					list.add(Bildpunkte.getGesamtPoints("C:\\Users\\Ramor\\Desktop\\Shot01\\img00.png"), l);
-//					list.add(Bildpunkte.getGesamtPoints("C:\\Users\\Ramor\\Desktop\\testbild.png"));
-//		setSameSize(list, 0);
-//		ArrayList<ArrayList<Vec2>> list2 = new ArrayList<ArrayList<Vec2>>();
-//		Collections.reverse(list2);
-//		list.addAll(list2);
-//		for(int i = 0; i < list.size(); i++){
-//			System.out.println(list.get(i).size());
-//		}
-//		ArrayList<Vertex> verts = genVerticesTest(list);
-//		return verts;
-//	}
-	
-	/**
-	 * Gibt die Indizes der Eckpunkte der übergebenen Liste in richtiger Reihenfolge zurück
-	 * @param vertices
-	 * @return
-	 */
-	public static final short[] readTriangleIndices(ArrayList<Vertex> vertices){
-		ArrayList<Short> res = new ArrayList<Short>();
-		ArrayList<Triangle> tris = new ArrayList<Triangle>();
-		for(Vertex a : vertices){
-			tris.addAll(a.getTriangles());
-		}
-		HashSet<Triangle> trisSet = new HashSet<Triangle>();
-		trisSet.addAll(tris);
-		tris.clear();
-		tris.addAll(trisSet);
-		
-		for(Triangle t : tris){
-			res.add((short) vertices.indexOf(t.a));
-			res.add((short) vertices.indexOf(t.b));
-			res.add((short) vertices.indexOf(t.c));
-		}
-		short[] arr = new short[res.size()];
-		int i = 0;
-		for(Short s : res){
-			arr[i] = s;
-			i++;
-		}
-		return arr;
-	}
-	
-	/**
-	 * Speichert die Koordinaten und die Normale eines Eckpunktes in eine floatArray und gibt diese zurück.
-	 * @param vertices
-	 * @return
-	 */
-	public static final float[] genVertexAndNormalArray(ArrayList<Vertex> vertices){
-		float[] res = new float[vertices.size() * 6];
-		int i = 0;
-		for(Vertex v : vertices){
-			res[i] 		= v.getX();
-			res[i + 1] 	= v.getY();
-			res[i + 2] 	= v.getZ();
-			Vector3 vec = v.genNormal();
-			res[i + 3]  = vec.x;
-			res[i + 4]  = vec.y;
-			res[i + 5]  = vec.z;
-			i += 6;
-		}
-		return res;
 	}
 	
 	/**
@@ -117,16 +34,18 @@ public class VerticesGeneration {
 	 * @param results
 	 * @return
 	 */
-	public static final ArrayList<Vertex> genVerticesTest(ArrayList<ArrayList<Vec2>> results){
+	public ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
 		ArrayList<Vertex> res = new ArrayList<Vertex>();
 		//Sucht die zwei Vektoren mit den größten bzw. niedrigsten z-Wert und erstellt zwei
 		// Vektoren die sich jeweils mit der gefunden Höhe im Mittelpunkt befinden.
 		float max = 0;
 		float min = Float.MAX_VALUE;
+		float maxX = 0;
 		for(ArrayList<Vec2> list : results){
 			for(Vec2 vec : list){
 				min = Math.min(min, vec.y);
 				max = Math.max(max, vec.y);
+				maxX = Math.max(maxX, vec.x);
 			}
 		}
 		Vertex bot = new Vertex(0, 0, min);
@@ -150,7 +69,7 @@ public class VerticesGeneration {
 			}
 			for(Vec2 vec : list){
 				//Erstellt einen Vektor, in dem der Normalenvektor des Winkels auf die Dicke des Objektes skaliert wird.
-				Vec2 buffer = dir.mul((Settings.middle - vec.x));
+				Vec2 buffer = dir.mul(((maxX + 1) - vec.x));
 				//Erstellt einen Dreidimensionalen Vektor, welcher als z Wert den y Wert der Übergebenen Punkte verwendet
 				Vertex tempVet = new Vertex(buffer.x, buffer.y, vec.y);
 				//Falls erster Punkt im Bild, wird Dreieck mit bot-Eckpunkt erstellt

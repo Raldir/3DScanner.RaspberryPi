@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.PathMatcher;
 
 public class SettingsSaver implements java.io.Serializable{
 	/**
@@ -47,11 +49,12 @@ public class SettingsSaver implements java.io.Serializable{
 		if(sb.charAt(0) == findDirectory.charAt(findDirectory.length() - 8)){
 			sb.append(sb.charAt(0));
 		}
-		return (findDirectory + sb + "src" + sb + "savedSettings" + sb);
+		return (findDirectory + sb + ".." + sb + "savedSettings" + sb);
 	}
+	
 	public void saveSettings(String nameOfSett){
 		 try{
-			FileOutputStream fout = new FileOutputStream(settingsSavePath + nameOfSett + ".txt");
+			 	FileOutputStream fout = new FileOutputStream(settingsSavePath + nameOfSett + ".pref");
 				ObjectOutputStream oos = new ObjectOutputStream(fout); 
 				System.out.println("saveStetting" +glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
 				System.out.println(this);
@@ -69,7 +72,7 @@ public class SettingsSaver implements java.io.Serializable{
 	
 	public SettingsSaver loadSettings(String nameOfSett){
 		 try{
-			   FileInputStream fin = new FileInputStream(settingsSavePath + nameOfSett + ".txt");
+			   FileInputStream fin = new FileInputStream(settingsSavePath + nameOfSett + ".pref");
 			   System.out.println(settingsSavePath+nameOfSett);
 			   ObjectInputStream ois = new ObjectInputStream(fin);
 			   SettingsSaver savedSetts = (SettingsSaver) ois.readObject();

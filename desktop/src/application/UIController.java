@@ -67,6 +67,8 @@ public class UIController implements Initializable  {
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
 	private Main main;
+	//fueeeeeer ANTON
+
 	
 	public void setMain(Main main){
 		this.main = main;

@@ -53,7 +53,7 @@ public class FileCreator {
 		}
 	}
 	
-	public static void main(String[] args){
-		createFile(VerticesGeneration.testVerts());
-	}
+//	public static void main(String[] args){
+//		createFile(VerticesGenerationTest.testVerts2());
+//	}
 }

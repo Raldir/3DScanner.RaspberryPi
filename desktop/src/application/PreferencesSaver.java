@@ -61,7 +61,7 @@ public class PreferencesSaver {
 	}
 	
 	public void deletePreset(int pos){
-		String path = SettingsSaver.settingsSavePath + getSavedPreset(pos) + ".txt";
+		String path = SettingsSaver.settingsSavePath + getSavedPreset(pos) + ".pref";
 		File f = new File(path);
 		if(f.delete()){
 			System.out.println("deleted");

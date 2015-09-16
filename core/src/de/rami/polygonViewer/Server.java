@@ -25,7 +25,8 @@ public class Server {
 	 * @throws IOException
 	 */
 	public Socket waitForClientLogin() throws IOException {
-		Socket socket = serverSocket.accept(); 
+		Socket socket = serverSocket.accept();
+		
 		return socket;
 	}
 

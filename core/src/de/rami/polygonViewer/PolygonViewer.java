@@ -69,6 +69,8 @@ public class PolygonViewer implements ApplicationListener {
 	
 	public ArrayList<ArrayList<Vec2>> pictureData = new ArrayList<>();
 	public static ArrayList<File> bilder = new ArrayList<>();
+	public int messuretype = 0;
+	PicturePointsAnalyser ppA;
 	
 	/**
 	 * Intiialisierung der Anwendung: Einrichten der libgdx Umgebung, starten des Servers
@@ -83,8 +85,6 @@ public class PolygonViewer implements ApplicationListener {
 		modelBatch = new ModelBatch();
 		//Kamera wird erstellt und ihre Eigenschaften werden festgelegt.
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.add(10f, 10f, 10f);
-		cam.lookAt(0,0,0);
 		cam.near = 1f;
 		cam.far = 300f;
 		cam.update();
@@ -95,6 +95,7 @@ public class PolygonViewer implements ApplicationListener {
         //Kamera für den Nutzer steuerbar machen
         camController = new CameraInputController(cam);
         Gdx.input.setInputProcessor(camController);
+//        setupModel(VerticesGenerationTest.testVerts2());
         setupServer();
 	}
 	
@@ -106,16 +107,24 @@ public class PolygonViewer implements ApplicationListener {
         try {
 			Server server = new Server(1234);
 			server.setReceiveAction((File f) -> {
-				Line l = new Line().getHoehe(f);
-				if(Math.abs(l.y1 - l.y2) == 0 ){
-					return;
-				}
 				//Die aus dem Bild ausgewerten Punkte werden abgespeichert
 				bilder.add(f);
-				pictureData.add(new Bildpunkte(f, l).getPunkte());
+				if(messuretype == 0){
+					ppA = new VerticalAnalyser(f);
+					System.out.println(ppA.getClass().getName());
+					pictureData.add(ppA.getPunkte());
+				}else{
+					ppA = new HorizontalAnalyser(f);
+					pictureData.add(ppA.getPunkte());
+				}
 			});
 			server.setCloseAction(() -> {
-				setupModel(VerticesGeneration.genVerticesTest(pictureData));
+				if(messuretype == 0){
+					setupModel(new VerticalVerticesGeneration().genVertices(pictureData));
+				}else{
+					setupModel(new HorizontalVerticesGeneration().genVertices(pictureData));
+				}
+
 			});
 			server.listen();
 		}catch (IOException e) {
@@ -132,9 +141,9 @@ public class PolygonViewer implements ApplicationListener {
 	public void setupModel(ArrayList<Vertex> verts){
 		vertices = verts;
 		Mesh mesh = new Mesh(true, 100000, 2000000, new VertexAttribute(Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE), new VertexAttribute(Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE));
-		float[] vertices =  VerticesGeneration.genVertexAndNormalArray(verts);
+		float[] vertices =  Vertices3DGeneration.genVertexAndNormalArray(verts);
         //Berechnung der Polygone des Modells
-		short[] indices = VerticesGeneration.readTriangleIndices(verts);
+		short[] indices = Vertices3DGeneration.readTriangleIndicies(verts);
         mesh.setVertices(vertices);
         mesh.setIndices(indices);
         modelBuilder.begin();
@@ -142,15 +151,40 @@ public class PolygonViewer implements ApplicationListener {
         model = modelBuilder.end();
         model.meshes.reverse();
         instance = new ModelInstance(model);
+        setCameraPosition(verts);
+	}
+	
+	public void setCameraPosition(ArrayList<Vertex> verts){
+        int xd = 0;
+        int yd = 0;
+        int zd = 0;
+        for(Vertex v : verts){
+        	xd += v.getX();
+        	yd += v.getY();
+        	zd += v.getZ();
+        }
+        xd /= verts.size();
+        yd /= verts.size();
+        zd /= verts.size();
+        cam.lookAt(xd, yd, zd);
+		cam.position.add(0, 0, 0);
 	}
 	
 	public void renderNewModell(){
 		pictureData.clear();
+		ArrayList<Vertex> list = new ArrayList<Vertex>();
 		for(int i = 0 ; i < bilder.size(); i++){
-			Line l = new Line().getHoehe(bilder.get(i));
-			pictureData.add(new Bildpunkte(bilder.get(i), l).getPunkte());
+			if(ppA.getClass().getName() == "de.rami.polygonViewer.VerticalAnalyser"){
+				System.out.println("hello");
+				pictureData.add(new VerticalAnalyser(bilder.get(i)).getPunkte());
+				list = new VerticalVerticesGeneration().genVertices(pictureData);
+			}else{
+				pictureData.add(new HorizontalAnalyser(bilder.get(i)).getPunkte());
+				list = new HorizontalVerticesGeneration().genVertices(pictureData);
+			}
 		}
-		setupModel(VerticesGeneration.genVerticesTest(pictureData));
+		setupModel(list);
+		setCameraPosition(list);
 	}
 	
 	/**
@@ -186,12 +220,6 @@ public class PolygonViewer implements ApplicationListener {
 
 	@Override
 	public void resume() {
-		try {
-			Settings.middle = Settings.createMiddle(new File("C:\\Users\\Ramor\\Desktop\\3DScanner.RaspberryPi\\core\\1.jpg")).get(0).x;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		model.dispose();
 		renderNewModell();
 	}
