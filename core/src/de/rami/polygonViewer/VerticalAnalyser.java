@@ -14,6 +14,11 @@ import javax.imageio.ImageIO;
 
 //Die Klasse ist verantwortlich fuer die Auswertung der Punkte eines Bildes
 
+/**
+ * Klasse zur Analyse der Bilder bei einer vertikalen Scannung
+ * @author Rami und Anton
+ *
+ */
 public class VerticalAnalyser extends PicturePointsAnalyser{
 	
 	/**
@@ -166,4 +171,11 @@ public class VerticalAnalyser extends PicturePointsAnalyser{
 		return getLinieSchwellenWert(line, image,  tempGrenze, untereGrenze);
 	}
 
+	public static void main(String[] args){
+		VerticalAnalyser v = new VerticalAnalyser(new File("C:\\Users\\Ramor\\Desktop\\3DScanner.RaspberryPi\\core\\fotos\\img01.jpg"));
+		ArrayList<Vec2> list = v.getPunkte();
+		for(int i = 0; i < list.size(); i++){
+			System.out.println(list.get(i).y);
+		}
+	}
 }

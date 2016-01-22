@@ -13,7 +13,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+/**
+ * main-Klasse des raspberry
+ * @author Rami und Anton
+ *
+ */
 public class Bilderstellung {
 	
 	

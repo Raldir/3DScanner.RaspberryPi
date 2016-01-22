@@ -6,6 +6,11 @@ import java.net.Socket;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Erzeugt Server
+ * @author Rami und Anton
+ *
+ */
 public class Server {
 
 	ServerSocket serverSocket;

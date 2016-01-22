@@ -5,6 +5,12 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 
+/**
+ * Erzeugung eines Clienten
+ * @author Rami, Anton
+ * Berater: Andre Schurat
+ *
+ */
 public class Client {
 
 	Socket socket;

@@ -35,6 +35,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Anton und Rami
+ *
+ */
 public class UIController implements Initializable  {
 	
 	@FXML
@@ -48,13 +53,13 @@ public class UIController implements Initializable  {
 	@FXML
 	private Text lastCalibrationDate;
 	@FXML
-	private Slider obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, polygonAnzahl, glaettungBlender;
+	private Slider obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, polygonAnzahl, grunddicke;
 	@FXML
 	private Text oswVal, swXVal, swYVal, bildsVal, polygonAnzahlT;
 	@FXML
-	private Spinner<Integer> oswSpin, skalXSpin, skalYSpin, polyAnSpin, glaetBlenderSpin;
+	private Spinner<Integer> oswSpin, skalXSpin, skalYSpin, polyAnSpin;
 	@FXML
-	private Spinner<Double> bildSkalSpin;
+	private Spinner<Double> bildSkalSpin , glaetBlenderSpin;
 	@FXML
 	private MenuItem closeButt, saveAs, saveSettings, loadSettings, howToUse, about;
 	
@@ -62,7 +67,7 @@ public class UIController implements Initializable  {
 	
 	public static int bilderZahl = 8;
 	//final??
-	private float[] backupValues = {Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.bildskalierung, Settings.polygonAnzahl, FileCreator.glaettungsfaktor};
+	private float[] backupValues = {Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.bildskalierung, Settings.polygonAnzahl, Settings.grunddicke};
 	private PreferencesSaver prefsSaver; 
 	private String qualitySelected;
 	private CheckMenuItem selectedMenuItem;
@@ -149,7 +154,7 @@ public class UIController implements Initializable  {
 		bildskalierung.setValue(savedSetts.getBildskalierung());
 		polygonAnzahl.setValue(savedSetts.getPolygonAnzahl());
 		//HIER GLAETTUNG falls was nicht funzt
-		glaettungBlender.setValue(savedSetts.getGlaettungsfaktor());
+		grunddicke.setValue(savedSetts.getgrunddicke());
 	}
 		
 	
@@ -297,11 +302,11 @@ public class UIController implements Initializable  {
 	    		this.polyAnSpin.getValueFactory().setValue(newValue.intValue());
 	    break;
 	    case 5:
-	    		//HIER GLAETTUNG falls was nicht funzt
-	    		FileCreator.glaettungsfaktor = newValue.intValue();
-	    		prefsSaver.setPerf("glaettungsfaktor", newValue.intValue());
-	    		this.glaettungBlender.setValue(newValue.doubleValue());
-	    		this.glaetBlenderSpin.getValueFactory().setValue(newValue.intValue());
+	    		//HIER Grunddicke falls etwas nicht funtzt // Rami eddited von Glättungsfaktor
+	    		Settings.grunddicke = newValue.floatValue();
+	    		prefsSaver.setPerfFloat("grunddicke", newValue.floatValue());
+	    		this.grunddicke.setValue(newValue.doubleValue());
+	    		this.glaetBlenderSpin.getValueFactory().setValue((Double) newValue);
 	    break;
 	    }	
 	}
@@ -314,23 +319,23 @@ public class UIController implements Initializable  {
 		setUpSpinnerDouble(bildSkalSpin, 3, 0.1, 10, 0.01, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
 		setUpSpinnerInt(polyAnSpin, 4, 100, 10000, 1, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
 		//HIER GLAETTUNG falls was nicht funzt
-		setUpSpinnerInt(glaetBlenderSpin, 5, 1, 10, 1, prefsSaver.getPref("glaettungsfaktor", FileCreator.glaettungsfaktor));
+		setUpSpinnerDouble(glaetBlenderSpin, 5, 1, 10, 1, prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke));
 		
 		setUpSlider(obererSchwellenWert, 0, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
 		setUpSlider(skalierungswertX, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
 		setUpSlider(skalierungswertY, 2, prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
 		setUpSlider(bildskalierung, 3, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
 		setUpSlider(polygonAnzahl, 4, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
-		//HIER GLAETTUNG falls was nicht funzt
-		setUpSlider(glaettungBlender, 5, prefsSaver.getPref("glaettungsfaktor", FileCreator.glaettungsfaktor));
+		//HIER GLAETTUNG falls was nicht funzt --again eddited by Rami zu grunddicke
+		setUpSlider(grunddicke, 5, prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke));
 		
 		Settings.obererSchwellenWert = prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert);
 		Settings.skalierungswertX = prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX);
 		Settings.skalierungswertY = prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY);
 		Settings.bildskalierung = prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung);
 		Settings.polygonAnzahl = prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl);
-		//HIER GLAETTUNG falls was nicht funzt
-		FileCreator.glaettungsfaktor = prefsSaver.getPref("glaettungsfaktor", FileCreator.glaettungsfaktor);
+		//HIER GLAETTUNG falls was nicht funzt --again eddited by Rami zu grunddicke
+		Settings.grunddicke = prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke);
 	}
 	
 	/**
@@ -347,7 +352,7 @@ public class UIController implements Initializable  {
 		bildskalierung.setValue(backupValues[3]);
 		polygonAnzahl.setValue(backupValues[4]);
 		//HIER GLAETTUNG falls was nicht funzt
-		glaettungBlender.setValue(backupValues[5]);
+		grunddicke.setValue(backupValues[5]);
 	}
 	
     @Override

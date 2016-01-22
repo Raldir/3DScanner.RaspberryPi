@@ -7,6 +7,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 
+/**
+ * 
+ * @author Rami und Anton
+ *
+ */
+
 public class SettingsSelectionController {
 	
 	@FXML

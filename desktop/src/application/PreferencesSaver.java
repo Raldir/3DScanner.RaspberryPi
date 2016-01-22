@@ -4,6 +4,11 @@ import java.io.File;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+/**
+ *
+ * @author Rami und Anton
+ *
+ */
 public class PreferencesSaver {
 	Preferences prefs; 
 	

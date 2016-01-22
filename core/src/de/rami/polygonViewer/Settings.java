@@ -4,11 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Alle wichtigen von außen veränderbare Variablen für das Projekt
+ * @author Rami und Anton
+ *
+ */
 public class Settings {
 	
 	//Zur Optimierung der Struktur wird fuer den Mittelwert eine Eigene Klasse festgelegt.
 //	public static final float middle = 20.7077f;
-	public static float middle = 19.914f;
+//	public static float middle = 19.914f;
 	
 	public static int obererSchwellenWert = 250;
 	
@@ -21,6 +26,8 @@ public class Settings {
 	public static int polygonAnzahl = 100;
 	
 	public static int anzahlbilder = 8;
+	
+	public static float grunddicke = 1.0f;
 	
 	/**
 	 * Skaliert das Objekt in Bezug auf die "Plygonanzahl": Umso grï¿½ï¿½er der Wert, umso weniger

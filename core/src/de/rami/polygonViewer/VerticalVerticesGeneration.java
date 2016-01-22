@@ -13,6 +13,11 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * Generierung des 3DModelles der vertikalen Scannung
+ * @author Rami Aly, Anton von Weltzien und Andre Schurat
+ *
+ */
 public class VerticalVerticesGeneration implements Vertices3DGeneration {
 	
 	public final ArrayList<Vertex> testVerts(){
@@ -69,7 +74,7 @@ public class VerticalVerticesGeneration implements Vertices3DGeneration {
 			}
 			for(Vec2 vec : list){
 				//Erstellt einen Vektor, in dem der Normalenvektor des Winkels auf die Dicke des Objektes skaliert wird.
-				Vec2 buffer = dir.mul(((maxX + 1) - vec.x));
+				Vec2 buffer = dir.mul(((maxX + Settings.grunddicke) - vec.x));
 				//Erstellt einen Dreidimensionalen Vektor, welcher als z Wert den y Wert der Übergebenen Punkte verwendet
 				Vertex tempVet = new Vertex(buffer.x, buffer.y, vec.y);
 				//Falls erster Punkt im Bild, wird Dreieck mit bot-Eckpunkt erstellt

@@ -11,7 +11,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
 
-
+/**
+ * Main-Klasse der Gui
+ * @author Rami und Anton von Weltzien
+ *
+ */
 public class Main extends Application {
     static Stage stage;
     private SettingsSelectionController SetLoadcontroller;

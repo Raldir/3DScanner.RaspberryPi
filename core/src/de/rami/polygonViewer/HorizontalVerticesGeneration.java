@@ -6,6 +6,12 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.math.Vector3;
 
+
+/**
+ * Generierung des 3D-Modelles für die Horizontale Messung
+ * @author Rami Aly, Anton von Welzien
+ *
+ */
 public class HorizontalVerticesGeneration implements Vertices3DGeneration {
 	
 	public ArrayList<Vertex> testVerts(){

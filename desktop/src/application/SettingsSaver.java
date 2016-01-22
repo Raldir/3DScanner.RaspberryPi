@@ -9,6 +9,11 @@ import java.io.ObjectOutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.PathMatcher;
 
+/**
+ * 
+ * @author Rami und Anton
+ *
+ */
 public class SettingsSaver implements java.io.Serializable{
 	/**
 	 * I have no idea what that does. If it causes conflicts get rid of it. it works without it, too
@@ -16,24 +21,24 @@ public class SettingsSaver implements java.io.Serializable{
 	protected static String settingsSavePath;
 	
 	private static final long serialVersionUID = -3705430483055238924L;
-	int glaettungsfaktor, obererSchwellenWert, skalierungswertX, skalierungswertY, polygonAnzahl;
-	float bildskalierung;
+	int obererSchwellenWert, skalierungswertX, skalierungswertY, polygonAnzahl;
+	float bildskalierung, grunddicke;
 	
-	public SettingsSaver(int glaettungsfaktor, int obererSchwellenWert, int skalierungswertX, int skalierungswertY, int polygonAnzahl, float bildskalierung) {
+	public SettingsSaver(int obererSchwellenWert, int skalierungswertX, int skalierungswertY, int polygonAnzahl, float bildskalierung, float grunddicke) {
 		settingsSavePath = calculatePath();
-		this.glaettungsfaktor = glaettungsfaktor;
+		this.grunddicke = grunddicke;
 		this.obererSchwellenWert = obererSchwellenWert;
 		this.skalierungswertX = skalierungswertX; 
 		this.skalierungswertY = skalierungswertY;
 		this.polygonAnzahl = polygonAnzahl;
 		this. bildskalierung = bildskalierung;
-		System.out.println(glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
+		System.out.println(grunddicke + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
 	}
 	
 	public SettingsSaver(){}
 	
 	public void systout(){
-		System.out.println("sysout mthe "+glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
+		System.out.println("sysout mthe "+grunddicke + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
 	}
 	
 	public String calculatePath(){
@@ -56,7 +61,7 @@ public class SettingsSaver implements java.io.Serializable{
 		 try{
 			 	FileOutputStream fout = new FileOutputStream(settingsSavePath + nameOfSett + ".pref");
 				ObjectOutputStream oos = new ObjectOutputStream(fout); 
-				System.out.println("saveStetting" +glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
+				System.out.println("saveStetting" +grunddicke + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
 				System.out.println(this);
 				oos.writeObject(this);
 				
@@ -80,7 +85,7 @@ public class SettingsSaver implements java.io.Serializable{
 			   fin.close();
 			   ois.close();
 			   //useless because it must be null!!! gets the values from previously ceated object not savedSetts
-			   System.out.println("loadsett "+glaettungsfaktor + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
+			   System.out.println("loadsett "+grunddicke + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
 			   systout();
 			   return savedSetts;
 			   
@@ -90,8 +95,8 @@ public class SettingsSaver implements java.io.Serializable{
 		   } 
 	}
 
-	public int getGlaettungsfaktor() {
-		return glaettungsfaktor;
+	public float getgrunddicke() {
+		return grunddicke;
 	}
 
 	public int getObererSchwellenWert() {
@@ -115,8 +120,8 @@ public class SettingsSaver implements java.io.Serializable{
 	}
 
 
-	public void setGlaettungsfaktor(int glaettungsfaktor) {
-		this.glaettungsfaktor = glaettungsfaktor;
+	public void setgrunddicke(float grunddicke) {
+		this.grunddicke = grunddicke;
 	}
 
 	public void setObererSchwellenWert(int obererSchwellenWert) {

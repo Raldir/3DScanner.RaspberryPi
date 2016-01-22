@@ -8,6 +8,12 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+
+/**
+ * Abstrakte Klasse für das Analysieren der Bilder
+ * @author Rami und Anton
+ *
+ */
 public abstract class PicturePointsAnalyser {
 
 	private BufferedImage image;

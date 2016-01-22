@@ -20,6 +20,7 @@ public class Vec2 {
 	
 	/**
 	 * Gibt einen auf eins normierten Vektor zurück, der in die Richtung des Winkels zeigt.
+	 * @author Andre Schurat
 	 * @param ang
 	 * @return
 	 */

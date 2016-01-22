@@ -54,6 +54,11 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 
+/**
+ * Erstellung der Umgebung in LibGDX zum Darstellen des Objektes in einer GUI.
+ * @author Rami Aly, Anton von Welzien, Andre Schurat
+ *
+ */
 public class PolygonViewer implements ApplicationListener {
 	
 	public static ArrayList<Vertex> vertices = new ArrayList<Vertex>();

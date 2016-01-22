@@ -10,6 +10,7 @@ public interface Vertices3DGeneration{
 	/**
 	 * Gibt die Indizes der Eckpunkte der übergebenen Liste in richtiger Reihenfolge zurück
 	 * @param vertices
+	 * @author Andre Schurat
 	 * @return
 	 */
 	public static short[] readTriangleIndicies(ArrayList<Vertex> vertices){
@@ -40,6 +41,7 @@ public interface Vertices3DGeneration{
 	/**
 	 * Speichert die Koordinaten und die Normale eines Eckpunktes in eine floatArray und gibt diese zurück.
 	 * @param vertices
+	 * @author Andre Schurat
 	 * @return
 	 */
 	public static float[] genVertexAndNormalArray(ArrayList<Vertex> vertices){

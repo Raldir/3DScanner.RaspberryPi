@@ -40,7 +40,6 @@
          <font>
             <Font name="Times New Roman" size="13.0" />
          </font></Button>
-      <Button fx:id="kalibrierenButton" alignment="CENTER" layoutX="15.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleCalibrate" text="Kalibrieren" textAlignment="CENTER" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="51.0" />
       <SplitMenuButton fx:id="qualityChoose" layoutX="111.0" layoutY="51.0" minWidth="141.0" mnemonicParsing="false" AnchorPane.leftAnchor="111.0" AnchorPane.topAnchor="51.0">
          <items>
             <CheckMenuItem fx:id="high" mnemonicParsing="false" onAction="#hadleQualitySelect" text="Hoch" />
@@ -49,22 +48,20 @@
          </items>
       </SplitMenuButton>
       <Button fx:id="startButton" alignment="CENTER" defaultButton="true" layoutX="267.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="26.0" prefWidth="93.0" text="" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="51.0" />
-      <Text fx:id="lastCalibrationDate" layoutX="127.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Nie" wrappingWidth="292.0000002384186" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="127.0" />
-      <Label layoutX="16.0" layoutY="356.0" text="Zuletzt kalibriert:" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="16.0" />
       <AnchorPane layoutX="15.0" layoutY="121.0" minHeight="152.0" minWidth="360.0" prefHeight="218.0" prefWidth="462.0" AnchorPane.leftAnchor="15.0">
          <children>
-            <Slider fx:id="obererSchwellenWert" layoutX="3.0" layoutY="1.0" majorTickUnit="51.0" max="255.0" showTickLabels="true" AnchorPane.leftAnchor="3.0" />
+            <Slider fx:id="obererSchwellenWert" layoutX="3.0" layoutY="1.0" majorTickUnit="51.0" max="254.0" showTickLabels="true" AnchorPane.leftAnchor="3.0" />
             <Slider fx:id="skalierungswertX" layoutX="3.0" layoutY="34.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
             <Slider fx:id="skalierungswertY" layoutX="3.0" layoutY="68.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
             <Slider fx:id="bildskalierung" blockIncrement="1.0" layoutX="3.0" layoutY="101.0" majorTickUnit="4.9" max="10.0" min="0.1" showTickLabels="true" value="0.1" AnchorPane.leftAnchor="3.0" />
             <Slider fx:id="polygonAnzahl" layoutX="3.0" layoutY="136.0" majorTickUnit="4900.0" max="10000.0" min="100.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
-            <Slider fx:id="glaettungBlender" blockIncrement="1.0" layoutX="2.0" layoutY="174.0" majorTickUnit="1.0" max="10.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="2.0" />
+            <Slider fx:id="grunddicke" blockIncrement="1.0" layoutX="2.0" layoutY="174.0" majorTickUnit="1.0" max="10.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="2.0" />
             <Label layoutX="149.0" text="obererSchwellenWert" AnchorPane.leftAnchor="149.0" />
             <Label layoutX="149.0" layoutY="68.0" text="skalierungswertY" AnchorPane.leftAnchor="149.0" />
             <Label layoutX="150.0" layoutY="34.0" text="skalierungswertX" AnchorPane.leftAnchor="149.0" />
             <Label layoutX="150.0" layoutY="101.0" text="Glaettungsfakor" AnchorPane.leftAnchor="149.0" />
             <Label layoutX="150.0" layoutY="136.0" text="polygonAnzahl" AnchorPane.leftAnchor="149.0" />
-            <Label layoutX="149.0" layoutY="174.0" text="GlaettungBlender" AnchorPane.leftAnchor="149.0" />
+            <Label layoutX="149.0" layoutY="174.0" text="grunddicke" AnchorPane.leftAnchor="149.0" />
             <Spinner fx:id="oswSpin" layoutX="291.0" layoutY="-5.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
             <Spinner fx:id="skalXSpin" layoutX="291.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
             <Spinner fx:id="skalYSpin" layoutX="292.0" layoutY="63.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />

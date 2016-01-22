@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector3;
 
-
+/**
+ * Wrapper Klasse für Verticies
+ * @author Andre Schurat, Rami Aly, Anton von Weltzien
+ *
+ */
 public class Vertex implements Comparable<Vertex> {
 
 	private Vector3 pos;

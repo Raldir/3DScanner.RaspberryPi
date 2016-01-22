@@ -10,6 +10,12 @@ import javax.imageio.ImageIO;
 
 import de.rami.polygonViewer.PicturePointsAnalyser.Point;
 
+
+/**
+ * Horizontale Scannung des Objektes[Work in Progress]
+ * @author Rami und Anton
+ *
+ */
 public class HorizontalAnalyser extends PicturePointsAnalyser{
 	/**
 	 * Bestimmt die benötigte Helligkeit[genauer RGB Wert], damit ein Pixel vom Algorithmus wahrgenommen wird.

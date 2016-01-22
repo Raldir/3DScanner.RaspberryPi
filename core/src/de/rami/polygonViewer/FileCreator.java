@@ -10,6 +10,10 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * @author Rami und Anton
+ * Generiert eine .obj Datei im übergebenen Pfad.
+ */
 public class FileCreator {
 	
 	///Eventuell sollte man hier den default pfad rausnehmen?

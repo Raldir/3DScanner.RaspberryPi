@@ -12,7 +12,11 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
  
-
+/**
+ * Der Filelistener registriert Änderungen im angegebenen Ordner und verknüpft damit Aktion.
+ * @author Rami und Anton
+ *
+ */
 public class FileListener {
  
 	

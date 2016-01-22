@@ -8,6 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Rami und Anton
+ *
+ */
 public class SaveSettingsController {
 	@FXML
 	private TextField saveName; 
@@ -29,7 +34,7 @@ public class SaveSettingsController {
 			}
 		}
 		if(allreadyExists == false){
-			savedSetts = new SettingsSaver(FileCreator.glaettungsfaktor, Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.polygonAnzahl, Settings.bildskalierung);
+			savedSetts = new SettingsSaver(Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.polygonAnzahl, Settings.bildskalierung, Settings.grunddicke);
 			savedSetts.saveSettings(saveName.getText());
 			prefsSaver.savePreset(prefsSaver.getAmountPrefsSaved("key")+1, saveName.getText());
 			prefsSaver.setAmountPrefsSaved("key", prefsSaver.getAmountPrefsSaved("key")+1);

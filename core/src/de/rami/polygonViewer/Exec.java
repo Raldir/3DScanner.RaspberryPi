@@ -14,9 +14,14 @@ import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.connection.channel.direct.Session.Command;
 import net.schmizz.sshj.connection.channel.direct.Session.Shell;
 
-public class Exec {
 
-		
+/**
+ * @author Rami und Anton
+ * Erstellt eine Verbindung zu dem Raspberry Pi mit übergebener Bilderanzahl(IP muss noch angegeben werde, in Bearbeitung)	
+ * @param fotosAnzahl
+ * @throws IOException
+ */
+public class Exec {
     public static void connectfromPItoServer(int fotosAnzahl)
             throws IOException {
     	final String ipServer = Inet4Address.getLocalHost().getHostAddress();
@@ -25,7 +30,7 @@ public class Exec {
         final SSHClient ssh = new SSHClient();
         ssh.addHostKeyVerifier(new NullHostKeyVerifier());
 //        for(int i = 0; i < InetAddress.)
-        ssh.connect("192.168.1.12", 22);
+        ssh.connect("192.168.1.32", 22);
        
         try {
          ssh.authPassword("pi", "raspberry");

@@ -2,6 +2,11 @@ package de.rami.polygonViewer;
 
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * Einfache Dreiecksklasse
+ * @author Rami Aly, Anton von Weltzien, Andre Schurat
+ *
+ */
 public class Triangle {
 	
 	public Vertex a, b, c;
