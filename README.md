@@ -1,4 +1,4 @@
-Welcome to the 3DScanner.RaspberryPi wiki!
+#Welcome to the 3DScanner Project realised with a Raspberry Pi!
 
 #Navigation
 
