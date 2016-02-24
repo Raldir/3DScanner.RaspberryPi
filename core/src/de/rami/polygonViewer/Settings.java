@@ -25,7 +25,7 @@ public class Settings {
 	
 	public static int polygonAnzahl = 100;
 	
-	public static int anzahlbilder = 8;
+	public static int anzahlbilder = 16;
 	
 	public static float grunddicke = 1.0f;
 	
