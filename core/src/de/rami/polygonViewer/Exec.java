@@ -30,7 +30,7 @@ public class Exec {
         final SSHClient ssh = new SSHClient();
         ssh.addHostKeyVerifier(new NullHostKeyVerifier());
 //        for(int i = 0; i < InetAddress.)
-        ssh.connect("192.168.1.32", 22);
+        ssh.connect("192.168.2.100", 22);
        
         try {
          ssh.authPassword("pi", "raspberry");
