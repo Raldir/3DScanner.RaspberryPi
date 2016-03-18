@@ -25,7 +25,7 @@ public class SettingsSaver implements java.io.Serializable{
 	float bildskalierung, grunddicke;
 	
 	public SettingsSaver(int obererSchwellenWert, int skalierungswertX, int skalierungswertY, int polygonAnzahl, float bildskalierung, float grunddicke) {
-		settingsSavePath = calculatePath();
+		settingsSavePath = System.getProperty("user.home");
 		this.grunddicke = grunddicke;
 		this.obererSchwellenWert = obererSchwellenWert;
 		this.skalierungswertX = skalierungswertX; 
@@ -59,7 +59,7 @@ public class SettingsSaver implements java.io.Serializable{
 	
 	public void saveSettings(String nameOfSett){
 		 try{
-			 	FileOutputStream fout = new FileOutputStream(settingsSavePath + nameOfSett + ".pref");
+			 	FileOutputStream fout = new FileOutputStream(settingsSavePath + "//" + nameOfSett + ".pref");
 				ObjectOutputStream oos = new ObjectOutputStream(fout); 
 				System.out.println("saveStetting" +grunddicke + " "+ obererSchwellenWert + " "+ skalierungswertX + " "+ skalierungswertY + " "+ polygonAnzahl + " "+ bildskalierung);
 				System.out.println(this);
@@ -77,8 +77,7 @@ public class SettingsSaver implements java.io.Serializable{
 	
 	public SettingsSaver loadSettings(String nameOfSett){
 		 try{
-			   FileInputStream fin = new FileInputStream(settingsSavePath + nameOfSett + ".pref");
-			   System.out.println(settingsSavePath+nameOfSett);
+			   FileInputStream fin = new FileInputStream(settingsSavePath + "\\" + nameOfSett + ".pref");
 			   ObjectInputStream ois = new ObjectInputStream(fin);
 			   SettingsSaver savedSetts = (SettingsSaver) ois.readObject();
 			   

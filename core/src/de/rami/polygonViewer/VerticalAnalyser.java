@@ -37,7 +37,7 @@ public class VerticalAnalyser extends PicturePointsAnalyser{
 	public ArrayList<Vec2> PointsinLine(int line){
 		int oSchwellenWert = getLinieSchwellenWert(line, getImage(),  Settings.obererSchwellenWert, 1);
 		int uschwellenWert = (int) (0.5 * oSchwellenWert) + 1;
-		System.out.println(oSchwellenWert);
+//		System.out.println(oSchwellenWert);
 		if(oSchwellenWert == 1){
 			if(getPunktebefore() != null){
 				return getPunktebefore();
@@ -129,19 +129,23 @@ public class VerticalAnalyser extends PicturePointsAnalyser{
 		int anzahlPunkte = (Settings.polygonAnzahl / Settings.anzahlbilder);
 		System.out.println("anzahlPunkte " + anzahlPunkte);
 		double punktabstand = (double)(hoehe.v2 - hoehe.v1) * ((double) (1 / (double)(anzahlPunkte)));
-		System.out.println("punktabstand " + punktabstand);
-		for(double i = hoehe.v1; i + 0.001 < hoehe.v2; i+= punktabstand){
+		for(double i = hoehe.v1; Double.compare(i, hoehe.v2) <= 0; i+= punktabstand){
 			int counter = 0;
 			Vec2 temp = null;
 			Point p = new Point();
 			for(float j = 0; j < punktabstand; j+= Settings.bildskalierung){
-				if((int)i + j <  getImage().getHeight())
-				temp = getMiddlePoint( PointsinLine(((int)i + (int)j)));
-				counter++;
-				p.v1 += temp.x;
-				p.v2 += temp.y;
+				if((int)i + j <  getImage().getHeight()){
+					temp = getMiddlePoint( PointsinLine(((int)i + (int)j)));
+					counter++;
+					p.v1 += temp.x;
+					p.v2 += temp.y;
+				}
 			}
 			list.add(new Vec2((p.v1 /  counter), (p.v2 / counter)));
+		}
+		int difference = list.size() - anzahlPunkte;
+		if(list.size() > 0 && difference > 0){
+			list.remove(list.size() -1);	
 		}
 		return list;
 	}

@@ -5,15 +5,19 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.math.Vector3;
 
-public interface Vertices3DGeneration{
+/**
+ * 
+ * @author Andre Schurat, Anton von Weltzien, Rami Aly
+ *
+ */
+public abstract class Vertices3DGeneration{
 	
 	/**
 	 * Gibt die Indizes der Eckpunkte der übergebenen Liste in richtiger Reihenfolge zurück
 	 * @param vertices
-	 * @author Andre Schurat
 	 * @return
 	 */
-	public static short[] readTriangleIndicies(ArrayList<Vertex> vertices){
+	protected static short[] readTriangleIndicies(ArrayList<Vertex> vertices){
 		ArrayList<Short> res = new ArrayList<Short>();
 		ArrayList<Triangle> tris = new ArrayList<Triangle>();
 		for(Vertex a : vertices){
@@ -41,10 +45,9 @@ public interface Vertices3DGeneration{
 	/**
 	 * Speichert die Koordinaten und die Normale eines Eckpunktes in eine floatArray und gibt diese zurück.
 	 * @param vertices
-	 * @author Andre Schurat
 	 * @return
 	 */
-	public static float[] genVertexAndNormalArray(ArrayList<Vertex> vertices){
+	protected float[] genVertexAndNormalArray(ArrayList<Vertex> vertices){
 		float[] res = new float[vertices.size() * 6];
 		int i = 0;
 		for(Vertex v : vertices){
@@ -60,5 +63,7 @@ public interface Vertices3DGeneration{
 		return res;
 	}
 	
-	public ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results);
+	protected ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
+		return null;
+	}
 }

@@ -15,7 +15,9 @@ public class Settings {
 //	public static final float middle = 20.7077f;
 //	public static float middle = 19.914f;
 	
-	public static int obererSchwellenWert = 250;
+	public static int obererSchwellenWert = 253;
+	
+	public static String raspberryIP = "192.168.2.100";
 	
 	/**
 	 * Anpassung der Verhaeltnisse von den X und Y Werten der Punkte
@@ -25,7 +27,7 @@ public class Settings {
 	
 	public static int polygonAnzahl = 100;
 	
-	public static int anzahlbilder = 16;
+	public static int anzahlbilder = 8;
 	
 	public static float grunddicke = 1.0f;
 	

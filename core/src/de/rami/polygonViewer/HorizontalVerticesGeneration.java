@@ -1,19 +1,17 @@
 package de.rami.polygonViewer;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
-
-import com.badlogic.gdx.math.Vector3;
-
 
 /**
  * Generierung des 3D-Modelles für die Horizontale Messung
  * @author Rami Aly, Anton von Welzien
  *
  */
-public class HorizontalVerticesGeneration implements Vertices3DGeneration {
+public class HorizontalVerticesGeneration extends Vertices3DGeneration {
 	
+	/**
+	 * Testmethode, die implementierte Form mit einfacher Figur testet.
+	 */
 	public ArrayList<Vertex> testVerts(){
 		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
 			ArrayList<Vec2> temp = new ArrayList<Vec2>();
@@ -38,33 +36,17 @@ public class HorizontalVerticesGeneration implements Vertices3DGeneration {
 			temp2.add(Vec2.vec2(10 , 2 ));
 			list.add(temp2);
 		ArrayList<Vertex> verts = genVertices(list);
-//		int i = 0;
-//		for(Vertex v : verts){
-//			System.out.println( i + ".  " + v.getX() + "  " +v.getY() + "  " + v.getZ());
-//			i++;
-//		}
-//		short[] test = readTriangleIndices(verts);
-//		for(int in = 0; in < test.length; in+=3){
-//			System.out.println(test[i] + "  " +  test[i+1] + "  " + test[i+2]);
-//		}
+		int i = 0;
+		for(Vertex v : verts){
+			System.out.println( i + ".  " + v.getX() + "  " +v.getY() + "  " + v.getZ());
+			i++;
+		}
+		short[] test = super.readTriangleIndicies(verts);
+		for(int in = 0; in < test.length; in+=3){
+			System.out.println(test[i] + "  " +  test[i+1] + "  " + test[i+2]);
+		}
 		return verts;
 	}
-	
-	
-//	public static final ArrayList<Vertex> testVerts2(){
-//		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
-//		for(int i = 0; i < 5; i++){
-//			File f = new File("C:\\Users\\Ramor\\Desktop\\3DScanner.RaspberryPi\\core\\fotos\\" + i + ".jpg");
-//			Line l = new Line().getWidth(f);
-//			BildpunkteTest t = new BildpunkteTest(f, l);
-//			for(int j = 0; j < t.getPunkte().size(); j++){
-//				System.out.println(t.getPunkte().get(j).x + "  " + t.getPunkte().get(j).y);
-//			}
-//			list.add(t.getPunkte());
-//		}
-//		ArrayList<Vertex> verts = genVerticesTest(list);
-//		return verts;
-//	}
 	
 	
 	/**
@@ -74,7 +56,7 @@ public class HorizontalVerticesGeneration implements Vertices3DGeneration {
 	 * @param results
 	 * @return
 	 */
-	public ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
+	protected ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
 		ArrayList<Vertex> res = new ArrayList<Vertex>();
 		float min = Float.MAX_VALUE;
 		for(ArrayList<Vec2> list : results){

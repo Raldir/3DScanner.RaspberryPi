@@ -11,6 +11,7 @@ import de.rami.polygonViewer.Exec;
 import de.rami.polygonViewer.FileCreator;
 import de.rami.polygonViewer.PolygonViewer;
 import de.rami.polygonViewer.Settings;
+import de.rami.polygonViewer.desktop.DesktopLauncher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,7 +48,7 @@ public class UIController implements Initializable  {
 	@FXML 
 	private SplitMenuButton qualityChoose;
 	@FXML
-	private CheckMenuItem high, medium, low;
+	private CheckMenuItem abnormalHigh, ultraHigh, veryHigh, high, medium, low;
 	@FXML
 	private TextFlow helpText;
 	@FXML
@@ -62,6 +63,7 @@ public class UIController implements Initializable  {
 	private Spinner<Double> bildSkalSpin , glaetBlenderSpin;
 	@FXML
 	private MenuItem closeButt, saveAs, saveSettings, loadSettings, howToUse, about;
+	LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 	
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
@@ -157,26 +159,6 @@ public class UIController implements Initializable  {
 		grunddicke.setValue(savedSetts.getgrunddicke());
 	}
 		
-	
-	/**NOT Functional Yet
-	 * handles the calibration provides a popup window with further information. Needs to be combined with acctual calibration...
-	 * @param e
-	 */
-	@FXML
-	private void handleCalibrate(ActionEvent e)
-	{
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Kalibrierungsanleitung");
-		alert.setHeaderText(null);
-		alert.setContentText("Kalibriert wird wie folgt....");
-
-		alert.showAndWait();
-		
-		//only proof of concept for now, however, might be worth thinking about.
-		Date currentDate = new Date();
-	    System.out.println(currentDate.toString());
-	    lastCalibrationDate.setText(currentDate.toString());
-	}
 	/**
 	 * Hacky solution for the quality selector, which makes it sure only one quality can be selectet at
 	 * a time. The selected quality is stored as a String in the global variable qualitySelected for a still
@@ -187,17 +169,29 @@ public class UIController implements Initializable  {
 	private void hadleQualitySelect(ActionEvent e){
 		Object source = e.getSource();
 		selectedMenuItem = (CheckMenuItem) source;
-		qualitySelected = selectedMenuItem.getId();
+		abnormalHigh.setSelected(false);
+		ultraHigh.setSelected(false);
+		veryHigh.setSelected(false);
 		high.setSelected(false);
 		medium.setSelected(false);
 		low.setSelected(false);
 		selectedMenuItem.setSelected(true);
+		qualitySelected = selectedMenuItem.getId();
 		switch (qualitySelected.toLowerCase().charAt(0)){
 			case 'l': bilderZahl = 8;
+			System.out.println("hello777");
 			break;
 			case 'm': bilderZahl = 16;
+			System.out.println("hello123");
 			break;
 			case 'h': bilderZahl = 32;
+			break;
+			case 'v': bilderZahl = 64;
+			break;
+			case 'u': bilderZahl = 128;
+			break;
+			case 'a': bilderZahl = 256;
+			break;	
 		}
 		System.out.println(bilderZahl);
 		qualityChoose.setText("Qualit\u00E4t: "+ selectedMenuItem.getText());
@@ -211,9 +205,10 @@ public class UIController implements Initializable  {
 	 */
 	@FXML
 	private void handleStart(ActionEvent e){
+		
+	
 		if(startButton.getText() == "Start"){
-			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-			new LwjglApplication(new PolygonViewer(), config);
+			DesktopLauncher.main(null);
 			try {
 				Settings.anzahlbilder = bilderZahl;
 				Exec.connectfromPItoServer(bilderZahl);
@@ -317,9 +312,9 @@ public class UIController implements Initializable  {
 		setUpSpinnerInt(skalXSpin, 1, 1, 100, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
 		setUpSpinnerInt(skalYSpin, 2, 1, 100, 1, prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
 		setUpSpinnerDouble(bildSkalSpin, 3, 0.1, 10, 0.01, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
-		setUpSpinnerInt(polyAnSpin, 4, 100, 10000, 1, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
+		setUpSpinnerInt(polyAnSpin, 4, 100, 100000, 1, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
 		//HIER GLAETTUNG falls was nicht funzt
-		setUpSpinnerDouble(glaetBlenderSpin, 5, 1, 10, 1, prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke));
+		setUpSpinnerDouble(glaetBlenderSpin, 5, 1, 100, 1, prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke));
 		
 		setUpSlider(obererSchwellenWert, 0, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
 		setUpSlider(skalierungswertX, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
@@ -361,9 +356,9 @@ public class UIController implements Initializable  {
     	startButton.setText("Start");
     	helpButton.setTooltip(new Tooltip("Hilfe"));
     	//Inizialisiert den QualityChooser, aber irgendwie umstaendlich...
-    	medium.setSelected(true);
-    	selectedMenuItem = medium;
-    	qualitySelected = medium.getId();
+    	low.setSelected(true);
+    	selectedMenuItem = low;
+    	qualitySelected = low.getId();
     	qualityChoose.setText("Qualit\u00E4t: "+ selectedMenuItem.getText());
     	System.out.println(selectedMenuItem.getText() + qualitySelected );
     	System.out.println("haaaaaloooo");

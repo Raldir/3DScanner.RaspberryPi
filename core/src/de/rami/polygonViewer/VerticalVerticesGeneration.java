@@ -18,19 +18,23 @@ import com.badlogic.gdx.math.Vector3;
  * @author Rami Aly, Anton von Weltzien und Andre Schurat
  *
  */
-public class VerticalVerticesGeneration implements Vertices3DGeneration {
+public class VerticalVerticesGeneration extends Vertices3DGeneration {
+
 	
-	public final ArrayList<Vertex> testVerts(){
-		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
-		for(int i = 1; i < 5; i++){
-			ArrayList<Vec2> temp = new ArrayList<Vec2>();
-			temp.add(Vec2.vec2(2, 3));
-			temp.add(Vec2.vec2(2, 6));
-			list.add(temp);
-		}
-		ArrayList<Vertex> verts = genVertices(list);
-		return verts;
-	}
+	/**
+	 * Testmethode, die implementierte Form mit einfacher Figur testet.
+	 */
+//	public final ArrayList<Vertex> testVerts(){
+//		ArrayList<ArrayList<Vec2>> list = new ArrayList<ArrayList<Vec2>>();
+//		for(int i = 1; i < 5; i++){
+//			ArrayList<Vec2> temp = new ArrayList<Vec2>();
+//			temp.add(Vec2.vec2(2, 3));
+//			temp.add(Vec2.vec2(2, 6));
+//			list.add(temp);
+//		}
+//		ArrayList<Vertex> verts = genVertices(list);
+//		return verts;
+//	}
 	
 	/**
 	 * Diese Methode stellt das Herzstück der Darstellung dar. Es werden mit den übergebenen
@@ -38,8 +42,9 @@ public class VerticalVerticesGeneration implements Vertices3DGeneration {
 	 * und zurückgegeben.
 	 * @param results
 	 * @return
+	 * @Override
 	 */
-	public ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
+	protected ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
 		ArrayList<Vertex> res = new ArrayList<Vertex>();
 		//Sucht die zwei Vektoren mit den größten bzw. niedrigsten z-Wert und erstellt zwei
 		// Vektoren die sich jeweils mit der gefunden Höhe im Mittelpunkt befinden.
