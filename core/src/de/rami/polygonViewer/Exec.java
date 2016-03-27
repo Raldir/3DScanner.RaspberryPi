@@ -22,7 +22,7 @@ import net.schmizz.sshj.connection.channel.direct.Session.Shell;
  * @throws IOException
  */
 public class Exec {
-    public static void connectfromPItoServer(int fotosAnzahl)
+    public static void connectfromPItoServer(int fotosAnzahl, int belichtungsDauer)
             throws IOException {
     	final String ipServer = Inet4Address.getLocalHost().getHostAddress();
 //    	System.out.println(Inet4Address.getAllByName("raspberrypi"));
@@ -37,7 +37,7 @@ public class Exec {
             final Session session = ssh.startSession();
             try {
             	System.out.println("BEGINNE MIt tray");
-                final Command cmd = session.exec("java -jar Desktop/Driver/Java/client.jar " + fotosAnzahl + " " + ipServer);
+                final Command cmd = session.exec("java -jar Desktop/Driver/Java/client.jar " + fotosAnzahl + " " + ipServer + " " + belichtungsDauer);
                 System.out.println(IOUtils.readFully(cmd.getInputStream()).toString());
                 cmd.join(5, TimeUnit.SECONDS);
                 System.out.println("\n** exit status: " + cmd.getExitStatus());

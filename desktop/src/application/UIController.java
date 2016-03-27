@@ -46,9 +46,9 @@ public class UIController implements Initializable  {
 	@FXML
 	private Button kalibrierenButton, startButton, helpButton, resetSliderButton, SettSaveButton;
 	@FXML 
-	private SplitMenuButton qualityChoose;
+	private SplitMenuButton qualityChoose, dauerChoose;
 	@FXML
-	private CheckMenuItem abnormalHigh, ultraHigh, veryHigh, high, medium, low;
+	private CheckMenuItem abnormalHigh, ultraHigh, veryHigh, high, medium, low, highd, mediumd, lowd;
 	@FXML
 	private TextFlow helpText;
 	@FXML
@@ -68,11 +68,12 @@ public class UIController implements Initializable  {
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
 	public static int bilderZahl = 8;
+	public static int beleuchtungsDauer = 0;
 	//final??
 	private float[] backupValues = {Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.bildskalierung, Settings.polygonAnzahl, Settings.grunddicke};
 	private PreferencesSaver prefsSaver; 
-	private String qualitySelected;
-	private CheckMenuItem selectedMenuItem;
+	private String qualitySelected, dauerSelected;
+	private CheckMenuItem selectedMenuItem, dselectedMenuItem;
 	private Main main;
 	//fueeeeeer ANTON
 
@@ -199,6 +200,38 @@ public class UIController implements Initializable  {
 		System.out.println(selectedMenuItem.getText() + qualitySelected );
 		// Btw \u00E4 das ist ein kleines ä in unicode http://www.bennyn.de/programmierung/java/umlaute-und-sonderzeichen-in-java.html
 	}
+	
+	/**
+	 * Hacky solution for the quality selector, which makes it sure only one quality can be selectet at
+	 * a time. The selected quality is stored as a String in the global variable qualitySelected for a still
+	 * unsure purpose 
+	 * @param e
+	 */
+	@FXML
+	private void hadleDauerSelect(ActionEvent e){
+		Object source = e.getSource();
+		dselectedMenuItem = (CheckMenuItem) source;
+		high.setSelected(false);
+		medium.setSelected(false);
+		low.setSelected(false);
+		dselectedMenuItem.setSelected(true);
+		dauerSelected = dselectedMenuItem.getId();
+		switch (dauerSelected.toLowerCase().charAt(0)){
+			case 'l': beleuchtungsDauer = 0;
+			System.out.println("hello777");
+			break;
+			case 'm': beleuchtungsDauer = 1;
+			System.out.println("hello123");
+			break;
+			case 'h': beleuchtungsDauer = 2;
+			break;
+		}
+		System.out.println(beleuchtungsDauer);
+		dauerChoose.setText("Beleuchtung: "+ dselectedMenuItem.getText());
+		//System.out.println(qualitySelected + " Qualität Selektiert");	
+		// Btw \u00E4 das ist ein kleines ä in unicode http://www.bennyn.de/programmierung/java/umlaute-und-sonderzeichen-in-java.html
+	}
+	
 	/**
 	 * Handles the Start Button so that it changes the text from  Start to Abbrechen and back.
 	 * @param e
@@ -211,7 +244,7 @@ public class UIController implements Initializable  {
 			DesktopLauncher.main(null);
 			try {
 				Settings.anzahlbilder = bilderZahl;
-				Exec.connectfromPItoServer(bilderZahl);
+				Exec.connectfromPItoServer(bilderZahl, beleuchtungsDauer);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -360,8 +393,11 @@ public class UIController implements Initializable  {
     	selectedMenuItem = low;
     	qualitySelected = low.getId();
     	qualityChoose.setText("Qualit\u00E4t: "+ selectedMenuItem.getText());
-    	System.out.println(selectedMenuItem.getText() + qualitySelected );
-    	System.out.println("haaaaaloooo");
+    	dselectedMenuItem = lowd;
+    	dauerSelected = lowd.getId();
+    	dauerChoose.setText("Beleuchtung: "+ dselectedMenuItem.getText());
+//    	System.out.println(selectedMenuItem.getText() + qualitySelected );
+//    	System.out.println("haaaaaloooo");
     	prefsSaver = new PreferencesSaver();
     	setUpSettings();
     } 

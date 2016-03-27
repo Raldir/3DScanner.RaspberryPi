@@ -29,6 +29,8 @@ public class Settings {
 	
 	public static int anzahlbilder = 8;
 	
+	public static int belichtungsDauer = 0;
+	
 	public static float grunddicke = 1.0f;
 	
 	/**

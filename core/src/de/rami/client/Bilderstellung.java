@@ -23,6 +23,7 @@ public class Bilderstellung {
 	
 	public static String ip; 
 	public static int fotosAnzahl;
+	public static int belichtungsDauer;
 	FileListener fl = null;
 	
 	/**
@@ -34,7 +35,7 @@ public class Bilderstellung {
 			@Override
 			public void run() {
 				//fl = new FileListener(Paths.get("/home/pi/Desktop/Driver/Java"), "10.0.4.52");
-				System.out.println(ip + "     " + fotosAnzahl);
+				System.out.println(ip + "     " + fotosAnzahl + " " + belichtungsDauer);
 				fl = new FileListener("/home/pi/Desktop/Driver/Kamera", ip);
 //					fl = new FileListener(Paths.get("C:\\Users\\Ramor\\Desktop\\Shoot002"), "127.0.0.1");
 				System.out.println("hi1");
@@ -43,7 +44,7 @@ public class Bilderstellung {
 		t2.start();
 		try{	
 			//Executes the python script
-			Process p = Runtime.getRuntime().exec("sudo python /home/pi/Desktop/Driver/Java/SchrittUndPhoto2.py" + " " + fotosAnzahl);
+			Process p = Runtime.getRuntime().exec("sudo python /home/pi/Desktop/Driver/Java/SchrittUndPhoto2.py" + " " + fotosAnzahl + " " + belichtungsDauer);
 			System.out.println("hi2");
 			//p.waitFor();
 //			executePython();
@@ -59,7 +60,8 @@ public class Bilderstellung {
 	public static void main(String[] args){
 		fotosAnzahl = Integer.parseInt(args[0]);
 		ip = args[1];
+		belichtungsDauer = Integer.parseInt(args[2]);
 		System.out.println("hi0");
-		Bilderstellung br = new Bilderstellung();
+		new Bilderstellung();
 	}
 }
