@@ -18,7 +18,7 @@ sleep_substeps= 0.001 #At the moment this has no use
 sleep_step = 0 #At the moment this has no use
 steps_rotation = 512 #With this motor 512 steps always equal one full rotation
 pics = int(sys.argv[1]) #usable Values for pics so far are 16, 32 and 64. Possible is 2^n
-#This parameter will be set by the server #Depending on the object it needs to be changed to get a white line
+cameraSpeed = 220000 #Depending on the object it needs to be changed to get a white line
 digestTime = 0.01
 #Until proven wrong, this is good. Is explained later
 
@@ -62,20 +62,8 @@ def oneStep():
 def rotateNSteps(N_amount):
     for i in range(N_amount):
         oneStep()
-
-def setIlluminationTime(switcher):
-    print(switcher);
-    if (switcher == "0"):
-        print("hello")
-        return 100000
-    elif (switcher == "1"):
-        print("hello1")
-        return 220000
-    else:
-        print("hello2")
-        return 400000
-
-def betterPictureQuality(switcher):
+	
+def betterPictureQuality():
      #This method sets better Settings for the camera. To make the pictures easier to process
     #All the pictures will have the same quality/structure
     #camera.resolution = (imageWidth, imageHeight)
@@ -86,8 +74,7 @@ def betterPictureQuality(switcher):
     camera.zoom = (0.2, 0.15, 0.55, 0.55)
     #camera.framerate = Fraction(1, (cameraSpeed/10000))
     camera.framerate = Fraction(5, 2)
-    camera.shutter_speed = setIlluminationTime(switcher)
-    print(camera.shutter_speed)
+    camera.shutter_speed = cameraSpeed
     #Here the white balance is set to on standart so colors dont change
     g = camera.awb_gains
     camera.awb_mode = 'off'
@@ -139,7 +126,7 @@ def einBild():
 #Here the camera object is created.
 camera = picamera.PiCamera()
 sleep(3)
-betterPictureQuality(sys.argv[2])
+betterPictureQuality()
 #All the methods above are called here. Because conections are created try/finally is used
 #this is the part of the script that is actually executed.
 try:

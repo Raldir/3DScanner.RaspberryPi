@@ -108,13 +108,13 @@ public class PolygonViewer implements ApplicationListener {
 			Server server = new Server(1234);
 			server.setReceiveAction((File f) -> {
 				// Die aus dem Bild ausgewerten Punkte werden abgespeichert
-				bilder.add(f);
 				if (messuretype == 0) {
 					ppA = new VerticalAnalyser(f);
 					if (ppA.getPunkte().size() > 0) {
 						System.out.println(ppA.getClass().getName());
 						pictureData.put(bildercount, ppA.getPunkte());
 						bildercount++;
+						bilder.add(f);
 					}
 				} else {
 					ppA = new HorizontalAnalyser(f);
