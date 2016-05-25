@@ -1,4 +1,4 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.systemAndSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class Settings {
 	
 	public static int obererSchwellenWert = 253;
 	
-	public static String raspberryIP = "192.168.2.100";
+	public static String raspberryIP = "192.168.1.3";
 	
 	/**
 	 * Anpassung der Verhaeltnisse von den X und Y Werten der Punkte
@@ -27,7 +27,7 @@ public class Settings {
 	
 	public static int polygonAnzahl = 100;
 	
-	public static int anzahlbilder = 8;
+	public static int anzahlbilder = 512;
 	
 	public static int belichtungsDauer = 0;
 	

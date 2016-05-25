@@ -2,7 +2,7 @@ package application;
 
 import java.io.IOException;
 
-import de.rami.polygonViewer.Settings;
+import de.rami.polygonViewer.systemAndSettings.Settings;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;

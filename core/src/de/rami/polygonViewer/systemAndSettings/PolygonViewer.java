@@ -1,4 +1,4 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.systemAndSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +24,8 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -40,6 +42,22 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
+import de.rami.polygonViewer.materials.Vec2;
+import de.rami.polygonViewer.materials.Vertex;
+import de.rami.polygonViewer.modelGenerator.HorizontalVerticesGeneration;
+import de.rami.polygonViewer.modelGenerator.VerticalVerticesGeneration;
+import de.rami.polygonViewer.modelGenerator.Vertices3DGeneration;
+import de.rami.polygonViewer.pictureAnalyser.HorizontalAnalyser;
+import de.rami.polygonViewer.pictureAnalyser.PicturePointsAnalyser;
+import de.rami.polygonViewer.pictureAnalyser.VerticalAnalyser;
+import de.rami.polygonViewer.serverSystem.Server;
 
 /**
  * Erstellung der Umgebung in LibGDX zum Darstellen des Objektes in einer GUI.
@@ -68,6 +86,8 @@ public class PolygonViewer implements ApplicationListener {
 	static PicturePointsAnalyser ppA;
 	static Vertices3DGeneration vca;
 	static int bildercount = 0;
+	
+	private Stage stage;
 
 	/**
 	 * Intiialisierung der Anwendung: Einrichten der libgdx Umgebung, starten
@@ -88,6 +108,29 @@ public class PolygonViewer implements ApplicationListener {
 		cam.near = 1f;
 		cam.far = 300f;
 		cam.update();
+//		stage = new Stage();
+//		BitmapFont font = new BitmapFont();
+//		Skin skin = new Skin();
+//		TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal("images/Button.pack"));
+//		skin.addRegions(buttonAtlas);
+//		TextButtonStyle textButtonStyle = new TextButtonStyle();
+//		textButtonStyle.font = font;
+//		textButtonStyle.up = skin.getDrawable("black");
+//		textButtonStyle.down = skin.getDrawable("black");
+//		textButtonStyle.checked = skin.getDrawable("black");
+//		TextButton button = new TextButton("Refresh", textButtonStyle);
+//		stage.addActor(button);
+//		button.setBounds(0, 0, 50, 50);
+//		button.addListener(new ChangeListener(){
+//
+//			@Override
+//			public void changed(ChangeEvent event, Actor actor) {
+//				model.dispose();
+//				renderNewModell();
+//				
+//			}
+//			
+//		});
 		// Farbe des Objektes wird festgelegt
 		material = new Material(ColorAttribute.createDiffuse(Color.GREEN));
 		// Der Modellbuilder hilft bei der Erstellung des Objektes
@@ -107,9 +150,11 @@ public class PolygonViewer implements ApplicationListener {
 		try {
 			Server server = new Server(1234);
 			server.setReceiveAction((File f) -> {
+				System.out.println("pictureReceived");
 				// Die aus dem Bild ausgewerten Punkte werden abgespeichert
 				if (messuretype == 0) {
-					ppA = new VerticalAnalyser(f);
+					ppA = new VerticalAnalyser(f, pictureData.get(bildercount - 1));
+					System.out.println("points calculated");
 					if (ppA.getPunkte().size() > 0) {
 						System.out.println(ppA.getClass().getName());
 						pictureData.put(bildercount, ppA.getPunkte());
@@ -117,7 +162,7 @@ public class PolygonViewer implements ApplicationListener {
 						bilder.add(f);
 					}
 				} else {
-					ppA = new HorizontalAnalyser(f);
+					ppA = new HorizontalAnalyser(f, pictureData.get(bildercount - 1));
 					pictureData.put(bildercount, ppA.getPunkte());
 					;
 				}
@@ -131,23 +176,34 @@ public class PolygonViewer implements ApplicationListener {
 				}
 				ArrayList<ArrayList<Vec2>> allpoints = new ArrayList<ArrayList<Vec2>>();
 				System.out.println(bildercount);
-				for(int i = 0; i < bildercount; i++){
+				for (int i = 0; i < bildercount; i++) {
 					allpoints.add(pictureData.get(i));
 				}
+				if (allpoints.size() == 0) {
+					System.out.println("Keine Punkte gefunden");
+				}
 				setupModel(vca.genVertices(allpoints));
+				server.closeServer();
 			});
 			server.listen();
 		} catch (
 
-		IOException e)
-
-		{
-			// TODO Auto-generated catch block
+		IOException e) {
 			e.printStackTrace();
 		}
 
 	}
 
+	public void refresh(){
+		
+		Gdx.app.postRunnable(new Runnable() {
+	         @Override
+	         public void run() {
+	     		model.dispose();
+	    		renderNewModell();
+	         }
+	});
+	}
 	/**
 	 * Das Objekt wird mit den übergebenen Eckpunkten erstellt und in der
 	 * Umgebung dargestellt
@@ -190,13 +246,14 @@ public class PolygonViewer implements ApplicationListener {
 	}
 
 	/**
-	 * Bei der Neuberechnung wird Multithreading verwendet, um den Berechnungsvorgang zu beschleunigen.
+	 * Bei der Neuberechnung wird Multithreading verwendet, um den
+	 * Berechnungsvorgang zu beschleunigen.
 	 */
 	public void renderNewModell() {
 		ArrayList<Vertex> list = new ArrayList<Vertex>();
 		pictureData.clear();
 		int threadnumber = bilder.size();
-		if(threadnumber > 100){
+		if (threadnumber > 100) {
 			threadnumber = 100;
 		}
 		ExecutorService executor = Executors.newFixedThreadPool(threadnumber);
@@ -210,8 +267,12 @@ public class PolygonViewer implements ApplicationListener {
 		}
 		System.out.println("\nFinished all threads");
 		ArrayList<ArrayList<Vec2>> allpoints = new ArrayList<ArrayList<Vec2>>();
-		for(int i = 0; i < bildercount; i++){
-			allpoints.add(pictureData.get(i));
+		for (int i = 0; i < bildercount; i++) {
+			if (pictureData.get(i) != null && pictureData.get(i).size() > 0) {
+				allpoints.add(pictureData.get(i));
+			}else{
+				System.out.println("Woops...Ein Bild ist nicht verwendbar");
+			}
 		}
 		list = new VerticalVerticesGeneration().genVertices(allpoints);
 		setupModel(list);
@@ -227,9 +288,8 @@ public class PolygonViewer implements ApplicationListener {
 
 		@Override
 		public void run() {
-			pictureData.put(bildnummer, new VerticalAnalyser(bilder.get(bildnummer)).getPunkte());
-			System.out.println(bildnummer);
-		}
+			ArrayList<Vec2> punkte = new VerticalAnalyser(bilder.get(bildnummer), pictureData.get(bildnummer - 1)).getPunkte();
+			pictureData.put(bildnummer, punkte);}
 	}
 
 	/**
@@ -238,7 +298,7 @@ public class PolygonViewer implements ApplicationListener {
 	@Override
 	public void render() {
 		camController.update();
-
+		
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -247,6 +307,8 @@ public class PolygonViewer implements ApplicationListener {
 			modelBatch.render(instance, environment);
 		}
 		modelBatch.end();
+//		stage.act();
+//		stage.draw();
 	}
 
 	@Override
@@ -265,7 +327,5 @@ public class PolygonViewer implements ApplicationListener {
 
 	@Override
 	public void resume() {
-		model.dispose();
-		renderNewModell();
 	}
 }

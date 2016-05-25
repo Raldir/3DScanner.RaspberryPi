@@ -12,78 +12,132 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="500.0" maxWidth="500.0" minHeight="400.0" minWidth="500.0" prefHeight="400.0" prefWidth="500.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UIController">
-   <children>
-      <MenuBar prefHeight="29.0" prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem fx:id="closeButt" mnemonicParsing="false" text="Close" />
-                  <MenuItem fx:id="saveAs" mnemonicParsing="false" onAction="#hadleSaveAs" text="Save as..." />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Settings">
-            <items>
-              <MenuItem fx:id="saveSettings" mnemonicParsing="false" onAction="#handleSettingsSave" text="Save Settings..." />
-                  <MenuItem fx:id="loadSettings" mnemonicParsing="false" onAction="#handleSettingsLoad" text="Load Settings..." />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-                  <MenuItem fx:id="howToUse" mnemonicParsing="false" onAction="#handleHelp" text="How to use..." />
-              <MenuItem fx:id="about" mnemonicParsing="false" text="About..." />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      
-     <Button fx:id="helpButton" accessibleHelp="Hilfe" alignment="CENTER" contentDisplay="CENTER" layoutX="459.0" layoutY="51.0" maxHeight="26.0" maxWidth="26.0" minHeight="26.0" minWidth="26.0" mnemonicParsing="false" onAction="#handleHelp" prefHeight="26.0" prefWidth="26.0" styleClass="runderKnopf" text="?" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="51.0">
-         <font>
-            <Font name="Times New Roman" size="13.0" />
-         </font></Button>
-         
-      <SplitMenuButton fx:id="dauerChoose" layoutX="111.0" layoutY="51.0" minWidth="141.0" mnemonicParsing="false" AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="51.0">
-         <items>
-            <CheckMenuItem fx:id="highd" mnemonicParsing="false" onAction="#hadleDauerSelect" text="Lang" />
-            <CheckMenuItem fx:id="mediumd" mnemonicParsing="false" onAction="#hadleDauerSelect" text="Mittel" />
-            <CheckMenuItem fx:id="lowd" mnemonicParsing="false" onAction="#hadleDauerSelect" text="Kurz" />
-         </items>
-      </SplitMenuButton>
-      
-      <SplitMenuButton fx:id="qualityChoose" layoutX="111.0" layoutY="51.0" minWidth="141.0" mnemonicParsing="false" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="51.0">
-         <items>
-            <CheckMenuItem fx:id="abnormalHigh" mnemonicParsing="false" onAction="#hadleQualitySelect" text="Ultra Hoch" />
-            <CheckMenuItem fx:id="ultraHigh" mnemonicParsing="false" onAction="#hadleQualitySelect" text="Sehr Hoch" />
-            <CheckMenuItem fx:id="veryHigh" mnemonicParsing="false" onAction="#hadleQualitySelect" text="Hoch" />
-            <CheckMenuItem fx:id="high" mnemonicParsing="false" onAction="#hadleQualitySelect" text="Mittel" />
-            <CheckMenuItem fx:id="medium" mnemonicParsing="false" onAction="#hadleQualitySelect" text="Niedrig" />
-            <CheckMenuItem fx:id="low" mnemonicParsing="false" onAction="#hadleQualitySelect" text="sehr Niedrig" />
-         </items>
-      </SplitMenuButton>
-      
-      <Button fx:id="startButton" alignment="CENTER" defaultButton="true" layoutX="267.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="26.0" prefWidth="93.0" text="" AnchorPane.leftAnchor="340.0" AnchorPane.topAnchor="51.0" />
-      <AnchorPane layoutX="15.0" layoutY="121.0" minHeight="152.0" minWidth="360.0" prefHeight="218.0" prefWidth="462.0" AnchorPane.leftAnchor="15.0">
-         <children>
-            <Slider fx:id="obererSchwellenWert" layoutX="3.0" layoutY="1.0" majorTickUnit="51.0" max="254.0" showTickLabels="true" AnchorPane.leftAnchor="3.0" />
-            <Slider fx:id="skalierungswertX" layoutX="3.0" layoutY="34.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
-            <Slider fx:id="skalierungswertY" layoutX="3.0" layoutY="68.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
-            <Slider fx:id="bildskalierung" blockIncrement="1.0" layoutX="3.0" layoutY="101.0" majorTickUnit="4.9" max="10.0" min="0.5" showTickLabels="true" value="0.1" AnchorPane.leftAnchor="3.0" />
-            <Slider fx:id="polygonAnzahl" layoutX="3.0" layoutY="136.0" majorTickUnit="4900.0" max="100000.0" min="100.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
-            <Slider fx:id="grunddicke" blockIncrement="1.0" layoutX="2.0" layoutY="174.0" majorTickUnit="1.0" max="100.0" min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="2.0" />
-            <Label layoutX="149.0" text="Helligkeitsschwellenwert" AnchorPane.leftAnchor="149.0" />
-            <Label layoutX="149.0" layoutY="68.0" text="StauchungsFaktor" AnchorPane.leftAnchor="149.0" />
-            <Label layoutX="150.0" layoutY="34.0" text="StreckungsFaktor" AnchorPane.leftAnchor="149.0" />
-            <Label layoutX="150.0" layoutY="101.0" text="Berechnungsungenauigkeit" AnchorPane.leftAnchor="149.0" />
-            <Label layoutX="150.0" layoutY="136.0" text="Polygonanzahl" AnchorPane.leftAnchor="149.0" />
-            <Label layoutX="149.0" layoutY="174.0" text="Objektdicke" AnchorPane.leftAnchor="149.0" />
-            <Spinner fx:id="oswSpin" layoutX="291.0" layoutY="-5.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
-            <Spinner fx:id="skalXSpin" layoutX="291.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
-            <Spinner fx:id="skalYSpin" layoutX="292.0" layoutY="63.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
-            <Spinner fx:id="bildSkalSpin" layoutX="292.0" layoutY="96.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
-            <Spinner fx:id="polyAnSpin" layoutX="292.0" layoutY="131.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
-         	<Spinner fx:id="glaetBlenderSpin" layoutX="291.0" layoutY="169.0" prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
-         </children>
-      </AnchorPane>
-      <Button fx:id="resetSliderButton" layoutX="388.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleSliderReset" text="Reset Sliders" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />
-   </children>
+<AnchorPane maxHeight="500.0" maxWidth="500.0" minHeight="400.0"
+	minWidth="500.0" prefHeight="400.0" prefWidth="500.0" stylesheets="@application.css"
+	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="application.UIController">
+	<children>
+		<MenuBar prefHeight="29.0" prefWidth="500.0"
+			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+			<menus>
+				<Menu mnemonicParsing="false" text="File">
+					<items>
+						<MenuItem fx:id="closeButt" mnemonicParsing="false" text="Close" />
+						<MenuItem fx:id="saveAs" mnemonicParsing="false"
+							onAction="#hadleSaveAs" text="Save as..." />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Settings">
+					<items>
+						<MenuItem fx:id="saveSettings" mnemonicParsing="false"
+							onAction="#handleSettingsSave" text="Save Settings..." />
+						<MenuItem fx:id="loadSettings" mnemonicParsing="false"
+							onAction="#handleSettingsLoad" text="Load Settings..." />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Help">
+					<items>
+						<MenuItem fx:id="howToUse" mnemonicParsing="false"
+							onAction="#handleHelp" text="How to use..." />
+						<MenuItem fx:id="about" mnemonicParsing="false" text="About..." />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+
+		<Button fx:id="helpButton" accessibleHelp="Hilfe" alignment="CENTER"
+			contentDisplay="CENTER" layoutX="459.0" layoutY="51.0" maxHeight="26.0"
+			maxWidth="26.0" minHeight="26.0" minWidth="26.0" mnemonicParsing="false"
+			onAction="#handleHelp" prefHeight="26.0" prefWidth="26.0" styleClass="runderKnopf"
+			text="?" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="51.0">
+			<font>
+				<Font name="Times New Roman" size="13.0" />
+			</font>
+		</Button>
+
+		<Button fx:id="refreshButton" layoutX="110.0" layoutY="51.0"
+			mnemonicParsing="false" onAction="#handleRefresh" text="Refresh"
+			AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="51.0" minWidth="141.0"/>
+			
+			
+		<!-- <SplitMenuButton fx:id="dauerChoose" layoutX="111.0" layoutY="51.0" 
+			minWidth="141.0" mnemonicParsing="false" AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="51.0"> 
+			<items> <CheckMenuItem fx:id="highd" mnemonicParsing="false" onAction="#hadleDauerSelect" 
+			text="Lang" /> <CheckMenuItem fx:id="mediumd" mnemonicParsing="false" onAction="#hadleDauerSelect" 
+			text="Mittel" /> <CheckMenuItem fx:id="lowd" mnemonicParsing="false" onAction="#hadleDauerSelect" 
+			text="Kurz" /> </items> </SplitMenuButton> -->
+
+		<SplitMenuButton fx:id="qualityChoose" layoutX="111.0"
+			layoutY="51.0" minWidth="141.0" mnemonicParsing="false"
+			AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="51.0">
+			<items>
+				<CheckMenuItem fx:id="abnormalHigh" mnemonicParsing="false"
+					onAction="#hadleQualitySelect" text="Ultra Hoch" />
+				<CheckMenuItem fx:id="ultraHigh" mnemonicParsing="false"
+					onAction="#hadleQualitySelect" text="Sehr Hoch" />
+				<CheckMenuItem fx:id="veryHigh" mnemonicParsing="false"
+					onAction="#hadleQualitySelect" text="Hoch" />
+				<CheckMenuItem fx:id="high" mnemonicParsing="false"
+					onAction="#hadleQualitySelect" text="Mittel" />
+				<CheckMenuItem fx:id="medium" mnemonicParsing="false"
+					onAction="#hadleQualitySelect" text="Niedrig" />
+				<CheckMenuItem fx:id="low" mnemonicParsing="false"
+					onAction="#hadleQualitySelect" text="sehr Niedrig" />
+			</items>
+		</SplitMenuButton>
+
+		<Button fx:id="startButton" alignment="CENTER" defaultButton="true"
+			layoutX="267.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleStart"
+			prefHeight="26.0" prefWidth="93.0" text="" AnchorPane.leftAnchor="340.0"
+			AnchorPane.topAnchor="51.0" />
+		<AnchorPane layoutX="15.0" layoutY="121.0" minHeight="152.0"
+			minWidth="360.0" prefHeight="218.0" prefWidth="462.0"
+			AnchorPane.leftAnchor="15.0">
+			<children>
+				<Slider fx:id="obererSchwellenWert" layoutX="3.0" layoutY="1.0"
+					majorTickUnit="51.0" max="254.0" showTickLabels="true"
+					AnchorPane.leftAnchor="3.0" />
+				<Slider fx:id="skalierungswertX" layoutX="3.0" layoutY="34.0"
+					min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
+				<Slider fx:id="skalierungswertY" layoutX="3.0" layoutY="68.0"
+					min="1.0" showTickLabels="true" value="1.0" AnchorPane.leftAnchor="3.0" />
+				<Slider fx:id="bildskalierung" blockIncrement="1.0" layoutX="3.0"
+					layoutY="101.0" majorTickUnit="4.9" max="100.0" min="0.5"
+					showTickLabels="true" value="0.1" AnchorPane.leftAnchor="3.0" />
+				<Slider fx:id="polygonAnzahl" layoutX="3.0" layoutY="136.0"
+					majorTickUnit="4900.0" max="100000.0" min="100.0" showTickLabels="true"
+					value="1.0" AnchorPane.leftAnchor="3.0" />
+				<Slider fx:id="grunddicke" blockIncrement="0.2" layoutX="2.0"
+					layoutY="174.0" majorTickUnit="0.1" max="100.0" min="1.0"
+					showTickLabels="true" value="1.0" AnchorPane.leftAnchor="2.0" />
+				<Label layoutX="149.0" text="Helligkeitsschwellenwert"
+					AnchorPane.leftAnchor="149.0" />
+				<Label layoutX="149.0" layoutY="68.0" text="Y-WertReduzierung"
+					AnchorPane.leftAnchor="149.0" />
+				<Label layoutX="150.0" layoutY="34.0" text="X-WertReduzierung"
+					AnchorPane.leftAnchor="149.0" />
+				<Label layoutX="150.0" layoutY="101.0" text="Berechnungsungenauigkeit"
+					AnchorPane.leftAnchor="149.0" />
+				<Label layoutX="150.0" layoutY="136.0" text="Polygonanzahl"
+					AnchorPane.leftAnchor="149.0" />
+				<Label layoutX="149.0" layoutY="174.0" text="Objektdicke"
+					AnchorPane.leftAnchor="149.0" />
+				<Spinner fx:id="oswSpin" layoutX="291.0" layoutY="-5.0"
+					prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
+				<Spinner fx:id="skalXSpin" layoutX="291.0" layoutY="29.0"
+					prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
+				<Spinner fx:id="skalYSpin" layoutX="292.0" layoutY="63.0"
+					prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
+				<Spinner fx:id="bildSkalSpin" layoutX="292.0" layoutY="96.0"
+					prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
+				<Spinner fx:id="polyAnSpin" layoutX="292.0" layoutY="131.0"
+					prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
+				<Spinner fx:id="glaetBlenderSpin" layoutX="291.0" layoutY="169.0"
+					prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
+			</children>
+		</AnchorPane>
+		<Button fx:id="resetSliderButton" layoutX="388.0" layoutY="350.0"
+			mnemonicParsing="false" onAction="#handleSliderReset" text="Reset Sliders"
+			AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="15.0" />
+	</children>
 </AnchorPane>

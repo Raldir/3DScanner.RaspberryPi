@@ -1,18 +1,14 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.serverSystem;
 
 import java.io.IOException;
 import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
+import de.rami.polygonViewer.systemAndSettings.Settings;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.connection.channel.direct.Session.Command;
-import net.schmizz.sshj.connection.channel.direct.Session.Shell;
 
 
 /**
@@ -31,7 +27,7 @@ public class Exec {
         ssh.addHostKeyVerifier(new NullHostKeyVerifier());
 //        for(int i = 0; i < InetAddress.)
 //        ssh.connect("192.168.2.100", 22);
-        ssh.connect("192.168.1.32", 22);
+        ssh.connect(Settings.raspberryIP, 22);
        
         try {
          ssh.authPassword("pi", "raspberry");
@@ -47,6 +43,7 @@ public class Exec {
             }
         } finally {
             ssh.disconnect();
+            ssh.close();
         }
     }
 }

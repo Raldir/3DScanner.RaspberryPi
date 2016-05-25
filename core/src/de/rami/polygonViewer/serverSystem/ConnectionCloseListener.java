@@ -1,4 +1,4 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.serverSystem;
 
 public interface ConnectionCloseListener {
 

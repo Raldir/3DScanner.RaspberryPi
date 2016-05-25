@@ -1,12 +1,14 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.pictureAnalyser;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+
+import de.rami.polygonViewer.materials.Vec2;
+import de.rami.polygonViewer.systemAndSettings.NoPointException;
 
 
 /**
@@ -19,7 +21,19 @@ public abstract class PicturePointsAnalyser {
 	private BufferedImage image;
 	private ArrayList<Vec2> punkte = new ArrayList<Vec2>();
 	private ArrayList<Vec2> punktebefore = new ArrayList<Vec2>();
+	private ArrayList<Vec2>	punkteLastPicture = new ArrayList<Vec2>();
 	
+	public ArrayList<Vec2> getPunkteLastPicture() {
+		return punkteLastPicture;
+	}
+
+	public void setPunkteLastPicture(ArrayList<Vec2> punkteLastPicture) {
+		this.punkteLastPicture = punkteLastPicture;
+	}
+
+	public PicturePointsAnalyser(ArrayList<Vec2> pointsLastPicture){
+		punkteLastPicture = pointsLastPicture;
+	}
 	
 	public static class Point{
 		float v1, v2;
@@ -56,8 +70,9 @@ public abstract class PicturePointsAnalyser {
 	 * @param line
 	 * @param image
 	 * @return
+	 * @throws NoPointException
 	 */
-	public abstract ArrayList<Vec2> PointsinLine(int line);
+	public abstract ArrayList<Vec2> PointsinLine(int line) throws NoPointException;
 	
 	
 	/**
@@ -66,8 +81,9 @@ public abstract class PicturePointsAnalyser {
 	 * @param points
 	 * @param image
 	 * @return
+	 * @throws NoPointException 
 	 */
-	public abstract Vec2 getMiddlePoint(ArrayList<Vec2> points);
+	public abstract Vec2 getMiddlePoint(ArrayList<Vec2> points) throws NoPointException;
 	
 	
 	public abstract Point getLineOfLaser();
@@ -80,8 +96,9 @@ public abstract class PicturePointsAnalyser {
 	 * @param skalierungswert
 	 * @param hoehe
 	 * @return
+	 * @throws NoPointException 
 	 */
-	public abstract ArrayList<Vec2> finalPointCalculation(Point hoehe);
+	public abstract ArrayList<Vec2> finalPointCalculation(Point hoehe) throws NoPointException;
 	
 	/**
 	 * Diese Methode verwendet die binaere Suche, um die RGB-Wert-Grenze fuer eine Line im Bild zu finden. Finden

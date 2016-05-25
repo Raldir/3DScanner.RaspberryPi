@@ -1,14 +1,12 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.pictureAnalyser;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import de.rami.polygonViewer.PicturePointsAnalyser.Point;
+import de.rami.polygonViewer.materials.Vec2;
+import de.rami.polygonViewer.systemAndSettings.Settings;
 
 
 /**
@@ -22,7 +20,8 @@ public class HorizontalAnalyser extends PicturePointsAnalyser{
 	 */
 	
 	
-	public HorizontalAnalyser(File f){
+	public HorizontalAnalyser(File f, ArrayList<Vec2> pointsLastPicture){
+		super(pointsLastPicture);
 		setImage(f);
 		Point hoehe = getLineOfLaser();
 		setPunkte(finalPointCalculation(hoehe));

@@ -1,4 +1,4 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.materials;
 
 /**
  * Wrapper-Klasse fuer einen dreidimensionalen Punkt

@@ -1,4 +1,4 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.systemAndSettings;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.math.Vector3;
+
+import de.rami.polygonViewer.materials.Triangle;
+import de.rami.polygonViewer.materials.Vertex;
 
 /**
  * @author Rami und Anton

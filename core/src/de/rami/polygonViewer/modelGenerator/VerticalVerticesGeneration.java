@@ -1,4 +1,4 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.modelGenerator;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,6 +12,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.math.Vector3;
+
+import de.rami.polygonViewer.materials.Vec2;
+import de.rami.polygonViewer.materials.Vertex;
+import de.rami.polygonViewer.systemAndSettings.Settings;
 
 /**
  * Generierung des 3DModelles der vertikalen Scannung
@@ -44,7 +48,7 @@ public class VerticalVerticesGeneration extends Vertices3DGeneration {
 	 * @return
 	 * @Override
 	 */
-	protected ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
+	public ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
 		ArrayList<Vertex> res = new ArrayList<Vertex>();
 		//Sucht die zwei Vektoren mit den größten bzw. niedrigsten z-Wert und erstellt zwei
 		// Vektoren die sich jeweils mit der gefunden Höhe im Mittelpunkt befinden.
@@ -58,10 +62,10 @@ public class VerticalVerticesGeneration extends Vertices3DGeneration {
 				maxX = Math.max(maxX, vec.x);
 			}
 		}
-		Vertex bot = new Vertex(0, 0, min);
-		Vertex top = new Vertex(0, 0, max);
-		res.add(top);
-		res.add(bot);
+//		Vertex bot = new Vertex(0, 0, min);
+//		Vertex top = new Vertex(0, 0, max);
+//		res.add(top);
+//		res.add(bot);
 		//Berechnet den Winkelabstand zwischen zwei Bildern
 		float angfactor = 360f / (results.size());
 		int i = 0;
@@ -83,17 +87,17 @@ public class VerticalVerticesGeneration extends Vertices3DGeneration {
 				//Erstellt einen Dreidimensionalen Vektor, welcher als z Wert den y Wert der Übergebenen Punkte verwendet
 				Vertex tempVet = new Vertex(buffer.x, buffer.y, vec.y);
 				//Falls erster Punkt im Bild, wird Dreieck mit bot-Eckpunkt erstellt
-				if(j == 0){
-					if(lastPic != null){
-						tempVet.addTriangle(lastPic.get(j), bot);
-					}
-				}
+//				if(j == 0){
+//					if(lastPic != null){
+//						tempVet.addTriangle(lastPic.get(j), bot);
+//					}
+//				}
 				//Falls letzter Punkt im Bild, wird Dreieck mit top-Eckpunkt erstellt
-				if(j == list.size() - 1){
-					if(lastPic != null){
-						lastPic.get(j).addTriangle(tempVet, top);
-					}
-				}
+//				if(j == list.size() - 1){
+//					if(lastPic != null){
+//						lastPic.get(j).addTriangle(tempVet, top);
+//					}
+//				}
 				//Fügt dem vorherigen Eckpunkt zwei Dreiecke hinzu
 				//Die Reihenfolge der angebenen Eckpunkte ist essenziell! Diese beeinflusst die Flächennormalen und das Facing(ggf. falschherum)
 				if(lastPic != null && vet != null){
@@ -108,8 +112,9 @@ public class VerticalVerticesGeneration extends Vertices3DGeneration {
 			}
 			lastPic = curPic;
 		}
-		lastPic.get(results.get(0).size() - 1).addTriangle(firstPic.get(results.get(0).size() - 1), top);
-		firstPic.get(0).addTriangle(lastPic.get(0), bot);
+		//Verbindung mit bot/top für erstes und letztes Bild
+//		lastPic.get(results.get(0).size() - 1).addTriangle(firstPic.get(results.get(0).size() - 1), top);
+//		firstPic.get(0).addTriangle(lastPic.get(0), bot);
 		i = 0;
 		Vertex tempVert = null;
 		//Erstellt die Dreiecke für das erste Bild und dem letzen

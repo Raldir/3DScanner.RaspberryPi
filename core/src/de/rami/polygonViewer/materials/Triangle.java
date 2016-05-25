@@ -1,4 +1,4 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.materials;
 
 import com.badlogic.gdx.math.Vector3;
 

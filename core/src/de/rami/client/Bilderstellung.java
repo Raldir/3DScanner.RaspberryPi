@@ -1,18 +1,6 @@
 package de.rami.client;
 
 
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 /**
  * main-Klasse des raspberry
  * @author Rami und Anton
@@ -44,7 +32,7 @@ public class Bilderstellung {
 		t2.start();
 		try{	
 			//Executes the python script
-			Process p = Runtime.getRuntime().exec("sudo python /home/pi/Desktop/Driver/Java/SchrittUndPhoto2.py" + " " + fotosAnzahl + " " + belichtungsDauer);
+			Runtime.getRuntime().exec("sudo python3 /home/pi/Desktop/Driver/Java/SchrittUndPhoto2.py" + " " + fotosAnzahl + " " + belichtungsDauer);
 			System.out.println("hi2");
 			//p.waitFor();
 //			executePython();

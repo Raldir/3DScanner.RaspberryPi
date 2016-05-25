@@ -1,0 +1,12 @@
+
+black.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+black
+  rotate: false
+  xy: 1, 1
+  size: 760, 728
+  orig: 760, 728
+  offset: 0, 0
+  index: -1

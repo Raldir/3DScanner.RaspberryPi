@@ -1,7 +1,7 @@
 package application;
 
-import de.rami.polygonViewer.FileCreator;
-import de.rami.polygonViewer.Settings;
+import de.rami.polygonViewer.systemAndSettings.FileCreator;
+import de.rami.polygonViewer.systemAndSettings.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

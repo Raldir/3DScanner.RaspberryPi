@@ -1,4 +1,4 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.serverSystem;
 import java.security.PublicKey;
 
 import net.schmizz.sshj.transport.verification.HostKeyVerifier;

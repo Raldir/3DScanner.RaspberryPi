@@ -3,7 +3,8 @@ package de.rami.polygonViewer.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-import de.rami.polygonViewer.PolygonViewer;
+import application.Main;
+import de.rami.polygonViewer.systemAndSettings.PolygonViewer;
 
 public class DesktopLauncher {
 	

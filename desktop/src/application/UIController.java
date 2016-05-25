@@ -7,11 +7,12 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import de.rami.polygonViewer.Exec;
-import de.rami.polygonViewer.FileCreator;
-import de.rami.polygonViewer.PolygonViewer;
-import de.rami.polygonViewer.Settings;
+
 import de.rami.polygonViewer.desktop.DesktopLauncher;
+import de.rami.polygonViewer.serverSystem.Exec;
+import de.rami.polygonViewer.systemAndSettings.FileCreator;
+import de.rami.polygonViewer.systemAndSettings.PolygonViewer;
+import de.rami.polygonViewer.systemAndSettings.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,7 +45,7 @@ import javafx.stage.Stage;
 public class UIController implements Initializable  {
 	
 	@FXML
-	private Button kalibrierenButton, startButton, helpButton, resetSliderButton, SettSaveButton;
+	private Button refreshButton, startButton, helpButton, resetSliderButton, SettSaveButton;
 	@FXML 
 	private SplitMenuButton qualityChoose, dauerChoose;
 	@FXML
@@ -63,11 +64,10 @@ public class UIController implements Initializable  {
 	private Spinner<Double> bildSkalSpin , glaetBlenderSpin;
 	@FXML
 	private MenuItem closeButt, saveAs, saveSettings, loadSettings, howToUse, about;
-	LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 	
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
-	public static int bilderZahl = 8;
+	public static int bilderZahl = Settings.anzahlbilder;
 	public static int beleuchtungsDauer = 0;
 	//final??
 	private float[] backupValues = {Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.bildskalierung, Settings.polygonAnzahl, Settings.grunddicke};
@@ -75,6 +75,8 @@ public class UIController implements Initializable  {
 	private String qualitySelected, dauerSelected;
 	private CheckMenuItem selectedMenuItem, dselectedMenuItem;
 	private Main main;
+	private PolygonViewer pv;
+	private LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 	//fueeeeeer ANTON
 
 	
@@ -241,7 +243,10 @@ public class UIController implements Initializable  {
 		
 	
 		if(startButton.getText() == "Start"){
-			DesktopLauncher.main(null);
+			pv = new PolygonViewer();
+			config.x = Main.xPos;
+			config.y = Main.yPos;
+			new LwjglApplication(pv, config);
 			try {
 				Settings.anzahlbilder = bilderZahl;
 				Exec.connectfromPItoServer(bilderZahl, beleuchtungsDauer);
@@ -260,6 +265,13 @@ public class UIController implements Initializable  {
 	@FXML
 	private void handleHelp(ActionEvent e) throws IOException{
 		showNewDialog("HelpUI.fxml", 300, 400, "Hilfe" );
+	}
+	
+	@FXML
+	private void handleRefresh(ActionEvent e) throws IOException{
+		config.x = Main.xPos;
+		config.y = Main.yPos;
+		pv.refresh();
 	}
 	
 	private void setUpSpinnerInt(Spinner<Integer> spinner, int pos, int min, int max, int increment, int savedSet ){
@@ -344,10 +356,10 @@ public class UIController implements Initializable  {
 		setUpSpinnerInt(oswSpin, 0, 0, 255, 1, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
 		setUpSpinnerInt(skalXSpin, 1, 1, 100, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
 		setUpSpinnerInt(skalYSpin, 2, 1, 100, 1, prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
-		setUpSpinnerDouble(bildSkalSpin, 3, 0.1, 10, 0.01, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
+		setUpSpinnerDouble(bildSkalSpin, 3, 0.1, 100, 0.01, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
 		setUpSpinnerInt(polyAnSpin, 4, 100, 100000, 1, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
 		//HIER GLAETTUNG falls was nicht funzt
-		setUpSpinnerDouble(glaetBlenderSpin, 5, 1, 100, 1, prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke));
+		setUpSpinnerDouble(glaetBlenderSpin, 5, 0.1, 100, 0.2, prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke));
 		
 		setUpSlider(obererSchwellenWert, 0, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
 		setUpSlider(skalierungswertX, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
@@ -388,14 +400,15 @@ public class UIController implements Initializable  {
     	//Auf grund massiver Spackungen muss der Text vom Knopf hier gesetzt werden, das sonst die if nicht funzt.
     	startButton.setText("Start");
     	helpButton.setTooltip(new Tooltip("Hilfe"));
+    	refreshButton.setText("Refresh");
     	//Inizialisiert den QualityChooser, aber irgendwie umstaendlich...
     	low.setSelected(true);
     	selectedMenuItem = low;
     	qualitySelected = low.getId();
     	qualityChoose.setText("Qualit\u00E4t: "+ selectedMenuItem.getText());
-    	dselectedMenuItem = lowd;
-    	dauerSelected = lowd.getId();
-    	dauerChoose.setText("Beleuchtung: "+ dselectedMenuItem.getText());
+//    	dselectedMenuItem = lowd;
+//    	dauerSelected = lowd.getId();
+//    	dauerChoose.setText("Beleuchtung: "+ dselectedMenuItem.getText());
 //    	System.out.println(selectedMenuItem.getText() + qualitySelected );
 //    	System.out.println("haaaaaloooo");
     	prefsSaver = new PreferencesSaver();

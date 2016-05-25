@@ -1,9 +1,13 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.modelGenerator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.math.Vector3;
+
+import de.rami.polygonViewer.materials.Triangle;
+import de.rami.polygonViewer.materials.Vec2;
+import de.rami.polygonViewer.materials.Vertex;
 
 /**
  * 
@@ -17,7 +21,7 @@ public abstract class Vertices3DGeneration{
 	 * @param vertices
 	 * @return
 	 */
-	protected static short[] readTriangleIndicies(ArrayList<Vertex> vertices){
+	public static short[] readTriangleIndicies(ArrayList<Vertex> vertices){
 		ArrayList<Short> res = new ArrayList<Short>();
 		ArrayList<Triangle> tris = new ArrayList<Triangle>();
 		for(Vertex a : vertices){
@@ -47,7 +51,7 @@ public abstract class Vertices3DGeneration{
 	 * @param vertices
 	 * @return
 	 */
-	protected float[] genVertexAndNormalArray(ArrayList<Vertex> vertices){
+	public float[] genVertexAndNormalArray(ArrayList<Vertex> vertices){
 		float[] res = new float[vertices.size() * 6];
 		int i = 0;
 		for(Vertex v : vertices){
@@ -63,7 +67,7 @@ public abstract class Vertices3DGeneration{
 		return res;
 	}
 	
-	protected ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
+	public ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
 		return null;
 	}
 }

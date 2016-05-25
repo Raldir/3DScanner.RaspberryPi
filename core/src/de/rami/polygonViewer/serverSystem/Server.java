@@ -1,4 +1,4 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.serverSystem;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.ServerSocket;
@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 /**
  * Erzeugt Server
  * @author Rami und Anton
+ * Berater: Andre Schurat
  *
  */
 public class Server {
@@ -107,5 +108,12 @@ public class Server {
 		in.writeUTF(s);
 		in.flush();
 	}
-
+	
+	public void closeServer(){
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -1,6 +1,9 @@
-package de.rami.polygonViewer;
+package de.rami.polygonViewer.modelGenerator;
 
 import java.util.ArrayList;
+
+import de.rami.polygonViewer.materials.Vec2;
+import de.rami.polygonViewer.materials.Vertex;
 
 /**
  * Generierung des 3D-Modelles für die Horizontale Messung
@@ -56,7 +59,7 @@ public class HorizontalVerticesGeneration extends Vertices3DGeneration {
 	 * @param results
 	 * @return
 	 */
-	protected ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
+	public ArrayList<Vertex> genVertices(ArrayList<ArrayList<Vec2>> results){
 		ArrayList<Vertex> res = new ArrayList<Vertex>();
 		float min = Float.MAX_VALUE;
 		for(ArrayList<Vec2> list : results){
