@@ -9,8 +9,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import de.rami.polygonViewer.desktop.DesktopLauncher;
+import de.rami.polygonViewer.modelGenerator.FileCreator;
 import de.rami.polygonViewer.serverSystem.Exec;
-import de.rami.polygonViewer.systemAndSettings.FileCreator;
 import de.rami.polygonViewer.systemAndSettings.PolygonViewer;
 import de.rami.polygonViewer.systemAndSettings.Settings;
 import javafx.event.ActionEvent;
@@ -24,12 +24,14 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.SplitMenuButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -53,26 +55,29 @@ public class UIController implements Initializable  {
 	@FXML
 	private TextFlow helpText;
 	@FXML
-	private Text lastCalibrationDate;
+	private Text lastCalibrationDate, actiontarget;
+	@FXML 
+	private TextField ipField;
 	@FXML
 	private Slider obererSchwellenWert, skalierungswertX, skalierungswertY, bildskalierung, polygonAnzahl, grunddicke;
 	@FXML
 	private Text oswVal, swXVal, swYVal, bildsVal, polygonAnzahlT;
 	@FXML
-	private Spinner<Integer> oswSpin, skalXSpin, skalYSpin, polyAnSpin;
+	private Spinner<Integer> oswSpin,  polyAnSpin;
 	@FXML
-	private Spinner<Double> bildSkalSpin , glaetBlenderSpin;
+	private Spinner<Double> bildSkalSpin , glaetBlenderSpin, skalXSpin, skalYSpin;
 	@FXML
 	private MenuItem closeButt, saveAs, saveSettings, loadSettings, howToUse, about;
-	
+//	@FXML
+//	private PasswordField passwordField;
 	//Diese Loesung sind vorlaufig und haengen von der saeteren umsetzung der uebergabe ab
 	
 	public static int bilderZahl = Settings.anzahlbilder;
 	public static int beleuchtungsDauer = 0;
 	//final??
-	private float[] backupValues = {Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.bildskalierung, Settings.polygonAnzahl, Settings.grunddicke};
+	private float[] backupValues = {Settings.obererSchwellenWert, Settings.maxAbstandPunkte, Settings.nearestNeighborDistance, Settings.bildskalierung, Settings.polygonAnzahl, Settings.grunddicke};
 	private PreferencesSaver prefsSaver; 
-	private String qualitySelected, dauerSelected;
+	private String qualitySelected, dauerSelected, ip;
 	private CheckMenuItem selectedMenuItem, dselectedMenuItem;
 	private Main main;
 	private PolygonViewer pv;
@@ -175,25 +180,25 @@ public class UIController implements Initializable  {
 		abnormalHigh.setSelected(false);
 		ultraHigh.setSelected(false);
 		veryHigh.setSelected(false);
-		high.setSelected(false);
-		medium.setSelected(false);
-		low.setSelected(false);
+//		high.setSelected(false);
+//		medium.setSelected(false);
+//		low.setSelected(false);
 		selectedMenuItem.setSelected(true);
 		qualitySelected = selectedMenuItem.getId();
 		switch (qualitySelected.toLowerCase().charAt(0)){
-			case 'l': bilderZahl = 8;
+			case 'l': bilderZahl = 16;
 			System.out.println("hello777");
 			break;
-			case 'm': bilderZahl = 16;
+			case 'm': bilderZahl = 32;
 			System.out.println("hello123");
 			break;
-			case 'h': bilderZahl = 32;
+			case 'h': bilderZahl = 64;
 			break;
-			case 'v': bilderZahl = 64;
+			case 'v': bilderZahl = 128;
 			break;
-			case 'u': bilderZahl = 128;
+			case 'u': bilderZahl = 256;
 			break;
-			case 'a': bilderZahl = 256;
+			case 'a': bilderZahl = 512;
 			break;	
 		}
 		System.out.println(bilderZahl);
@@ -274,6 +279,13 @@ public class UIController implements Initializable  {
 		pv.refresh();
 	}
 	
+	@FXML protected void handleSubmitButtonAction(ActionEvent event) {
+        ip  = ipField.getText().toString();
+        prefsSaver.setPerfString("ip", ip);
+		Settings.raspberryIP = prefsSaver.getPref("ip", Settings.raspberryIP);
+        System.out.println(Settings.raspberryIP);
+    }
+	
 	private void setUpSpinnerInt(Spinner<Integer> spinner, int pos, int min, int max, int increment, int savedSet ){
 		IntegerSpinnerValueFactory oswFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, savedSet, increment);
 		spinner.setValueFactory(oswFactory);
@@ -319,15 +331,15 @@ public class UIController implements Initializable  {
 	    		this.obererSchwellenWert.setValue(newValue.doubleValue());
 	    		this.oswSpin.getValueFactory().setValue(newValue.intValue());
 	    break;
-	    case 1: Settings.skalierungswertX = newValue.intValue();
+	    case 1: Settings.maxAbstandPunkte = newValue.intValue();
 	    		prefsSaver.setPerf("skalierungswertX", newValue.intValue());
 	    		this.skalierungswertX.setValue(newValue.doubleValue());
-	    		this.skalXSpin.getValueFactory().setValue(newValue.intValue());
+	    		this.skalXSpin.getValueFactory().setValue((double) newValue.floatValue());
 	    break;
-	    case 2: Settings.skalierungswertY = newValue.intValue();
+	    case 2: Settings.nearestNeighborDistance = newValue.intValue();
 	    		prefsSaver.setPerf("skalierungswertY", newValue.intValue());
 	    		this.skalierungswertY.setValue(newValue.doubleValue());
-	    		this.skalYSpin.getValueFactory().setValue(newValue.intValue());
+	    		this.skalYSpin.getValueFactory().setValue((double) newValue.floatValue());
 	    break;
 	    case 3: 
 	    		Settings.bildskalierung = newValue.floatValue();
@@ -354,28 +366,29 @@ public class UIController implements Initializable  {
 	private void setUpSettings(){
 		//Spinner muessen zu erst erstellt werden weil Property Factory erstellt werden muss.. zur sicherheit..
 		setUpSpinnerInt(oswSpin, 0, 0, 255, 1, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
-		setUpSpinnerInt(skalXSpin, 1, 1, 100, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
-		setUpSpinnerInt(skalYSpin, 2, 1, 100, 1, prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
+		setUpSpinnerDouble(skalXSpin, 1, 0.02, 1000, 0.01, prefsSaver.getPrefFloat("skalierungswertX", Settings.maxAbstandPunkte));
+		setUpSpinnerDouble(skalYSpin, 2, 1, 1000, 1, prefsSaver.getPrefFloat("skalierungswertY", Settings.nearestNeighborDistance));
 		setUpSpinnerDouble(bildSkalSpin, 3, 0.1, 100, 0.01, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
 		setUpSpinnerInt(polyAnSpin, 4, 100, 100000, 1, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
 		//HIER GLAETTUNG falls was nicht funzt
 		setUpSpinnerDouble(glaetBlenderSpin, 5, 0.1, 100, 0.2, prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke));
 		
 		setUpSlider(obererSchwellenWert, 0, prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert));
-		setUpSlider(skalierungswertX, 1, prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX));
-		setUpSlider(skalierungswertY, 2, prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY));
+		setUpSlider(skalierungswertX, 1, prefsSaver.getPrefFloat("skalierungswertX", Settings.maxAbstandPunkte));
+		setUpSlider(skalierungswertY, 2, prefsSaver.getPrefFloat("skalierungswertY", Settings.nearestNeighborDistance));
 		setUpSlider(bildskalierung, 3, prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung));
 		setUpSlider(polygonAnzahl, 4, prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl));
 		//HIER GLAETTUNG falls was nicht funzt --again eddited by Rami zu grunddicke
 		setUpSlider(grunddicke, 5, prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke));
 		
 		Settings.obererSchwellenWert = prefsSaver.getPref("obererSchwellenWert", Settings.obererSchwellenWert);
-		Settings.skalierungswertX = prefsSaver.getPref("skalierungswertX", Settings.skalierungswertX);
-		Settings.skalierungswertY = prefsSaver.getPref("skalierungswertY", Settings.skalierungswertY);
+		Settings.maxAbstandPunkte = prefsSaver.getPrefFloat("skalierungswertX", Settings.maxAbstandPunkte);
+		Settings.nearestNeighborDistance = prefsSaver.getPrefFloat("skalierungswertY", Settings.nearestNeighborDistance);
 		Settings.bildskalierung = prefsSaver.getPrefFloat("bildskalierung", Settings.bildskalierung);
 		Settings.polygonAnzahl = prefsSaver.getPref("polygonAnzahl", Settings.polygonAnzahl);
 		//HIER GLAETTUNG falls was nicht funzt --again eddited by Rami zu grunddicke
 		Settings.grunddicke = prefsSaver.getPrefFloat("grunddicke", Settings.grunddicke);
+		Settings.raspberryIP = prefsSaver.getPref("ip", Settings.raspberryIP);
 	}
 	
 	/**
@@ -402,9 +415,9 @@ public class UIController implements Initializable  {
     	helpButton.setTooltip(new Tooltip("Hilfe"));
     	refreshButton.setText("Refresh");
     	//Inizialisiert den QualityChooser, aber irgendwie umstaendlich...
-    	low.setSelected(true);
-    	selectedMenuItem = low;
-    	qualitySelected = low.getId();
+    	ultraHigh.setSelected(true);
+    	selectedMenuItem = ultraHigh;
+    	qualitySelected = ultraHigh.getId();
     	qualityChoose.setText("Qualit\u00E4t: "+ selectedMenuItem.getText());
 //    	dselectedMenuItem = lowd;
 //    	dauerSelected = lowd.getId();

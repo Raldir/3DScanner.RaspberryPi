@@ -81,7 +81,7 @@ public class HorizontalAnalyser extends PicturePointsAnalyser{
 		for(int i = 0; i < values.size(); i++){
 			gesamtvalue += values.get(i);
 		}
-		return new Vec2((points.get(0).x) /  Settings.skalierungswertX,  (gesamtvalue / values.size()) /  Settings.skalierungswertY);
+		return new Vec2((points.get(0).x) ,  (gesamtvalue / values.size()));
 	}
 	
 	@Override

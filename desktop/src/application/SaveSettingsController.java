@@ -1,6 +1,6 @@
 package application;
 
-import de.rami.polygonViewer.systemAndSettings.FileCreator;
+import de.rami.polygonViewer.modelGenerator.FileCreator;
 import de.rami.polygonViewer.systemAndSettings.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,7 +34,7 @@ public class SaveSettingsController {
 			}
 		}
 		if(allreadyExists == false){
-			savedSetts = new SettingsSaver(Settings.obererSchwellenWert, Settings.skalierungswertX, Settings.skalierungswertY, Settings.polygonAnzahl, Settings.bildskalierung, Settings.grunddicke);
+			savedSetts = new SettingsSaver(Settings.obererSchwellenWert, Settings.maxAbstandPunkte, Settings.nearestNeighborDistance, Settings.polygonAnzahl, Settings.bildskalierung, Settings.grunddicke);
 			savedSetts.saveSettings(saveName.getText());
 			prefsSaver.savePreset(prefsSaver.getAmountPrefsSaved("key")+1, saveName.getText());
 			prefsSaver.setAmountPrefsSaved("key", prefsSaver.getAmountPrefsSaved("key")+1);

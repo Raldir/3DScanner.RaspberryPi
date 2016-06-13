@@ -1,4 +1,4 @@
-package de.rami.polygonViewer.systemAndSettings;
+package de.rami.polygonViewer.modelGenerator;
 
 import java.io.BufferedWriter;
 import java.io.File;

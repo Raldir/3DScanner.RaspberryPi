@@ -147,6 +147,8 @@ public class PolygonViewer implements ApplicationListener {
 	 * festgelegt, was auf dem Server mit den Bild- daten passieren soll.
 	 */
 	public void setupServer() {
+//		vca = new VerticalVerticesGeneration();
+//		setupModel(vca.genVertices(null));
 		try {
 			Server server = new Server(1234);
 			server.setReceiveAction((File f) -> {

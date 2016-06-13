@@ -24,7 +24,7 @@ import de.rami.polygonViewer.systemAndSettings.Settings;
  * @author Rami und Anton
  *
  */
-public class VerticalAnalyser extends PicturePointsAnalyser {
+public class VerticalAnalyser2 extends PicturePointsAnalyser {
 
 	/**
 	 * Bestimmt die benötigte Helligkeit[genauer RGB Wert], damit ein Pixel vom
@@ -33,7 +33,7 @@ public class VerticalAnalyser extends PicturePointsAnalyser {
 	 * @throws NoPointException
 	 */
 
-	public VerticalAnalyser(File f, ArrayList<Vec2> pointsLastPicture) {
+	public VerticalAnalyser2(File f, ArrayList<Vec2> pointsLastPicture) {
 		super(pointsLastPicture);
 		setImage(f);
 		Point hoehe = getLineOfLaser();
@@ -42,11 +42,23 @@ public class VerticalAnalyser extends PicturePointsAnalyser {
 	}
 
 	@Override
-	public ArrayList<Vec2> PointsinLine(int line) {
+	public ArrayList<Vec2> PointsinLine(int line) throws NoPointException {
+		int oSchwellenWert = getLinieSchwellenWert(line, getImage(), 250, 1);
+		int uschwellenWert = (int) (0.5 * oSchwellenWert) + 1;
+		 if(oSchwellenWert <= Settings.obererSchwellenWert * 3/5){
+		 if(getPunktebefore().size() != 0){
+		 return getPunktebefore();
+		 }else{
+		 throw new NoPointException();
+		 }
+		 }
+		System.out.println(oSchwellenWert);
+		// Es wird nach dem ersten Punkt gesucht, welcher den erforderten
+		// RGB-Wert erfüllt.
 		int ausgangspunkt = 0;
 		ArrayList<Vec2> punkteLine = new ArrayList<Vec2>();
 		for (int j = 0; j < getImage().getWidth(); j++) {
-			if (higherThanSchwellenwert(Settings.obererSchwellenWert, j, line)) {
+			if (higherThanSchwellenwert(oSchwellenWert, j, line)) {
 				// System.out.println("punkt gespeichert");
 				ausgangspunkt = j;
 				punkteLine.add(new Vec2((j), line));
@@ -59,22 +71,30 @@ public class VerticalAnalyser extends PicturePointsAnalyser {
 		// entstandene Liste wird zurückgegeben
 		int i = 0;
 		while (ausgangspunkt + i < getImage().getWidth()
-				&& higherThanSchwellenwert(Settings.obererSchwellenWert / 2, ausgangspunkt + i, line)) {
+				&& higherThanSchwellenwert(uschwellenWert, ausgangspunkt + i, line)) {
 			punkteLine.add(new Vec2((ausgangspunkt + i), line));
 			i++;
 		}
 
 		i = 0;
-		while (ausgangspunkt - i > 0
-				&& higherThanSchwellenwert(Settings.obererSchwellenWert / 2, ausgangspunkt - i, line)) {
+		while (ausgangspunkt - i > 0 && higherThanSchwellenwert(uschwellenWert, ausgangspunkt - i, line)) {
 			punkteLine.add(new Vec2((ausgangspunkt - i), line));
 			i++;
+		}
+		if (punkteLine.size() == 0) {
+			if (getPunktebefore().size() != 0) {
+				return getPunktebefore();
+			} else {
+				throw new NoPointException();
+			}
+		} else {
+			setPunktebefore(punkteLine);
 		}
 		return punkteLine;
 	}
 
 	@Override
-	public Vec2 getMiddlePoint(ArrayList<Vec2> points) throws NoPointException {
+	public Vec2 getMiddlePoint(ArrayList<Vec2> points) {
 		float gesamthelligkeit = 0;
 		for (int i = 0; i < points.size(); i++) {
 			gesamthelligkeit += getImage().getRGB((int) (points.get(i).x), (int) (points.get(i).y));
@@ -95,10 +115,8 @@ public class VerticalAnalyser extends PicturePointsAnalyser {
 		for (int i = 0; i < values.size(); i++) {
 			gesamtvalue += values.get(i);
 		}
-		if (values.size() > 0) {
-			return new Vec2((((gesamtvalue / values.size()))) / 200, ((points.get(0).y)) / 200);
-		}
-		return null;
+		return new Vec2((((gesamtvalue / values.size()))) / 200,
+				((points.get(0).y)) / 200);
 	}
 
 	private boolean higherThanSchwellenwert(int value, int x, int y) {
@@ -158,20 +176,34 @@ public class VerticalAnalyser extends PicturePointsAnalyser {
 			Point p = new Point();
 			for (float j = 0; j < punktabstand; j += Settings.bildskalierung) {
 				if ((int) i + j < getImage().getHeight()) {
-					if ((temp = getMiddlePoint(PointsinLine(((int) i + (int) j)))) == null) {
-						continue;
+					try {
+						temp = getMiddlePoint(PointsinLine(((int) i + (int) j)));
+					} catch (NoPointException e) {
+						temp = getPunkteLastPicture().get(counter);
+						e.printStackTrace();
 					}
 					counter++;
 					p.v1 += temp.x;
 					p.v2 += temp.y;
 				}
 			}
-			// System.out.println(p.v1 / counter + " " + p.v2 / counter);
-			if (counter > 0) {
-				float p1 = p.v1 / counter;
-				float p2 = (p.v2 / counter);
-				list.add(new Vec2((p1), (p2)));
+			System.out.println(p.v1 / counter + " " + p.v2 / counter);
+			float p1 = p.v1 / counter;
+			float p2 = (p.v2 / counter);
+			if (p1 < 15) {
+				if (list.size() - 1 > 0) {
+					list.add(getPunkteLastPicture().get(list.size() - 1));
+					continue;
+				} else {
+					list.add(getPunkteLastPicture().get(0));
+					continue;
+				}
 			}
+			list.add(new Vec2((p1), (p2)));
+		}
+		int difference = list.size() - anzahlPunkte;
+		if (list.size() > 0 && difference > 0) {
+			list.remove(list.size() - 1);
 		}
 		return list;
 	}

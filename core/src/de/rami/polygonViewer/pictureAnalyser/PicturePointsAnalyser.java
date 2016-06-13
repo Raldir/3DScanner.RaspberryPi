@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import de.rami.polygonViewer.materials.Vec2;
-import de.rami.polygonViewer.systemAndSettings.NoPointException;
 
 
 /**

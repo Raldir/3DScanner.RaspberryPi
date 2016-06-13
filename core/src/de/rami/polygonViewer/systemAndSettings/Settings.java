@@ -22,12 +22,13 @@ public class Settings {
 	/**
 	 * Anpassung der Verhaeltnisse von den X und Y Werten der Punkte
 	 */
-	public static int skalierungswertX = 80;
-	public static int skalierungswertY = 20;
+	public static float maxAbstandPunkte = 0.025f;
+	public static float nearestNeighborDistance = 2.5f;
 	
 	public static int polygonAnzahl = 100;
 	
-	public static int anzahlbilder = 512;
+	public static int anzahlbilder = 8;
+	//256
 	
 	public static int belichtungsDauer = 0;
 	

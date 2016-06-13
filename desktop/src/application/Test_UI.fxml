@@ -57,9 +57,9 @@
 
 		<Button fx:id="refreshButton" layoutX="110.0" layoutY="51.0"
 			mnemonicParsing="false" onAction="#handleRefresh" text="Refresh"
-			AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="51.0" minWidth="141.0"/>
-			
-			
+			AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="51.0" minWidth="141.0" />
+
+
 		<!-- <SplitMenuButton fx:id="dauerChoose" layoutX="111.0" layoutY="51.0" 
 			minWidth="141.0" mnemonicParsing="false" AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="51.0"> 
 			<items> <CheckMenuItem fx:id="highd" mnemonicParsing="false" onAction="#hadleDauerSelect" 
@@ -77,12 +77,12 @@
 					onAction="#hadleQualitySelect" text="Sehr Hoch" />
 				<CheckMenuItem fx:id="veryHigh" mnemonicParsing="false"
 					onAction="#hadleQualitySelect" text="Hoch" />
-				<CheckMenuItem fx:id="high" mnemonicParsing="false"
+<!-- 				<CheckMenuItem fx:id="high" mnemonicParsing="false"
 					onAction="#hadleQualitySelect" text="Mittel" />
 				<CheckMenuItem fx:id="medium" mnemonicParsing="false"
 					onAction="#hadleQualitySelect" text="Niedrig" />
 				<CheckMenuItem fx:id="low" mnemonicParsing="false"
-					onAction="#hadleQualitySelect" text="sehr Niedrig" />
+					onAction="#hadleQualitySelect" text="sehr Niedrig" /> -->
 			</items>
 		</SplitMenuButton>
 
@@ -112,9 +112,9 @@
 					showTickLabels="true" value="1.0" AnchorPane.leftAnchor="2.0" />
 				<Label layoutX="149.0" text="Helligkeitsschwellenwert"
 					AnchorPane.leftAnchor="149.0" />
-				<Label layoutX="149.0" layoutY="68.0" text="Y-WertReduzierung"
+				<Label layoutX="149.0" layoutY="68.0" text="ConnectMaxPunkteAbst"
 					AnchorPane.leftAnchor="149.0" />
-				<Label layoutX="150.0" layoutY="34.0" text="X-WertReduzierung"
+				<Label layoutX="150.0" layoutY="34.0" text="ConnectMaxNeighborAbst"
 					AnchorPane.leftAnchor="149.0" />
 				<Label layoutX="150.0" layoutY="101.0" text="Berechnungsungenauigkeit"
 					AnchorPane.leftAnchor="149.0" />
@@ -122,6 +122,12 @@
 					AnchorPane.leftAnchor="149.0" />
 				<Label layoutX="149.0" layoutY="174.0" text="Objektdicke"
 					AnchorPane.leftAnchor="149.0" />
+				<TextField fx:id="ipField"  layoutX="50.0" layoutY="244.0"
+					GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				<HBox layoutX="215.0" layoutY="244.0" spacing="10" alignment="bottom_right">
+					<Button text="Aktuallisiere IP" onAction="#handleSubmitButtonAction" />
+				</HBox>
+				<Text fx:id="actiontarget" />
 				<Spinner fx:id="oswSpin" layoutX="291.0" layoutY="-5.0"
 					prefHeight="26.0" prefWidth="100.0" AnchorPane.rightAnchor="71.0" />
 				<Spinner fx:id="skalXSpin" layoutX="291.0" layoutY="29.0"

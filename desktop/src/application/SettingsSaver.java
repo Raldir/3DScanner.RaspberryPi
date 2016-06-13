@@ -21,10 +21,10 @@ public class SettingsSaver implements java.io.Serializable{
 	protected static String settingsSavePath;
 	
 	private static final long serialVersionUID = -3705430483055238924L;
-	int obererSchwellenWert, skalierungswertX, skalierungswertY, polygonAnzahl;
-	float bildskalierung, grunddicke;
+	int obererSchwellenWert, polygonAnzahl;
+	float bildskalierung, grunddicke, skalierungswertX, skalierungswertY;
 	
-	public SettingsSaver(int obererSchwellenWert, int skalierungswertX, int skalierungswertY, int polygonAnzahl, float bildskalierung, float grunddicke) {
+	public SettingsSaver(int obererSchwellenWert, float skalierungswertX, float skalierungswertY, int polygonAnzahl, float bildskalierung, float grunddicke) {
 		settingsSavePath = System.getProperty("user.home");
 		this.grunddicke = grunddicke;
 		this.obererSchwellenWert = obererSchwellenWert;
@@ -77,7 +77,7 @@ public class SettingsSaver implements java.io.Serializable{
 	
 	public SettingsSaver loadSettings(String nameOfSett){
 		 try{
-			   FileInputStream fin = new FileInputStream(settingsSavePath + "\\" + nameOfSett + ".pref");
+			   FileInputStream fin = new FileInputStream(settingsSavePath + "//" + nameOfSett + ".pref");
 			   ObjectInputStream ois = new ObjectInputStream(fin);
 			   SettingsSaver savedSetts = (SettingsSaver) ois.readObject();
 			   
@@ -102,11 +102,11 @@ public class SettingsSaver implements java.io.Serializable{
 		return obererSchwellenWert;
 	}
 
-	public int getSkalierungswertX() {
+	public float getSkalierungswertX() {
 		return skalierungswertX;
 	}
 
-	public int getSkalierungswertY() {
+	public float getSkalierungswertY() {
 		return skalierungswertY;
 	}
 

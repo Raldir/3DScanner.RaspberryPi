@@ -59,6 +59,7 @@ public abstract class Vertices3DGeneration{
 			res[i + 1] 	= v.getY();
 			res[i + 2] 	= v.getZ();
 			Vector3 vec = v.genNormal();
+//			System.out.println(vec.x + " " + vec.y + " " + vec.z);
 			res[i + 3]  = vec.x;
 			res[i + 4]  = vec.y;
 			res[i + 5]  = vec.z;
