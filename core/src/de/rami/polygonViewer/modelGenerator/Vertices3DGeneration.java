@@ -11,7 +11,7 @@ import de.rami.polygonViewer.materials.Vertex;
 
 /**
  * 
- * @author Andre Schurat, Anton von Weltzien, Rami Aly
+ * @author Andre Schurat, Rami Aly, Anton von Weltzien
  *
  */
 public abstract class Vertices3DGeneration{

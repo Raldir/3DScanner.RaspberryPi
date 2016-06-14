@@ -27,7 +27,7 @@ public class Settings {
 	
 	public static int polygonAnzahl = 100;
 	
-	public static int anzahlbilder = 8;
+	public static int anzahlbilder = 256;
 	//256
 	
 	public static int belichtungsDauer = 0;

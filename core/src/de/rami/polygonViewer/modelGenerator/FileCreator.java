@@ -59,8 +59,4 @@ public class FileCreator {
 			e.printStackTrace();
 		}
 	}
-	
-//	public static void main(String[] args){
-//		createFile(VerticesGenerationTest.testVerts2());
-//	}
 }

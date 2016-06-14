@@ -22,6 +22,11 @@ import de.rami.polygonViewer.materials.Vertex;
 import de.rami.polygonViewer.systemAndSettings.PolygonViewer;
 import de.rami.polygonViewer.systemAndSettings.Settings;
 
+/**
+ * Doing the necassairy steps to integrate the Lib into our Program.
+ * @author Rami, anton
+ *
+ */
 public class FileGeneratorPCD {
 	/// Eventuell sollte man hier den default pfad rausnehmen?
 	public static String pfad = System.getProperty("user.home") + "\\temp.pcd";
@@ -154,7 +159,8 @@ public class FileGeneratorPCD {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		Process process = new ProcessBuilder(pathToJar.substring(0, pathToJar.length() - 11) + "\\Release\\greedy_projection.exe", pfad,
+		//Beim export in ne jar den Wert hier von -9 auf - 11 ändern.
+		Process process = new ProcessBuilder(pathToJar.substring(0, pathToJar.length() - 9) + "\\Release\\greedy_projection.exe", pfad,
 				Settings.maxAbstandPunkte + "", Settings.nearestNeighborDistance + "").start();
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
